@@ -6,11 +6,12 @@ const JWT = {
 const SPOTIFY = {
   CLIENT_ID: 'b827857528e14d8a99da774dcf0bf269',
   SECRET: '56f115f43f9d4f85888ccf2967ead93f',
-  REDIRECT_URI: 'http://93.46.103.3:7777/api/spotify/auth/callback',
+  REDIRECT_URI: 'localhost:8080/api/auth/spotify/callback',
   SCOPES: ['user-read-private', 'user-read-email'],
   STATE: {
     NAME: 'state',
     LENGTH: 32,
+    COOKIE_MAX_AGE: 60 * 1000,
   },
 };
 
