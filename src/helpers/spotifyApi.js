@@ -3,11 +3,24 @@ import crypto from 'crypto';
 import { SPOTIFY } from '../config/constants';
 
 class customSpotifyApi extends SpotifyWebApi {
+    genState() {
+        return crypto.randomBytes(SPOTIFY.STATE.LENGTH).toString('hex');
+    }
     createAuthorizeURL(state) {
         return super.createAuthorizeURL(SPOTIFY.SCOPES, state);
     }
-    genState() {
-        return crypto.randomBytes(SPOTIFY.STATE.LENGTH).toString('hex');
+    getProfileFromCodeGrant(code) {
+        return this.authorizationCodeGrant(code)
+            .then((codeGrantRes) => {
+                return codeGrantRes.body;
+            })
+            .then((codeGrant) => {
+                this.setAccessToken(codeGrant.access_token);
+                return this.getMe();
+            })
+            .then((profileRes) => {
+                return profileRes.body;
+            })
     }
 }
 
