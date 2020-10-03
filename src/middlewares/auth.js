@@ -1,18 +1,16 @@
-import jwt from '../helpers/jwt';
+import jwt from '../helpers/Jwt';
 
 const authMiddleware = (req, res, next) => {
-    const bearer = req.header('Bearer') || null;
+    if (!req.headers.authorization || req.headers.authorization.split(' ')[0] !== 'Bearer') 
+        return res.status(403).send('Forbidden');
+    
+    const bearer = req.headers.authorization.split(' ')[1];
 
-    if (bearer === null) return res.status(403).send('Forbidden');
-
-    jwt.verify(token)
-    .then((verified) => {
+    jwt.verify(bearer, (error, verified) => {
+        if (error) return res.status(401).send('Unauthorized');
         req.user = verified;
         next();
     })
-    .catch(() => {
-        res.status(401).send('Unauthorized');
-    });
 };
 
 export default authMiddleware;
