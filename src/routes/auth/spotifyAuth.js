@@ -1,20 +1,20 @@
 import Router from 'express';
 import cookieParser from 'cookie-parser';
-import User from '../models/user.model';
-import { SPOTIFY } from '../config/constants';
-import spotifyApi from '../helpers/spotifyApi';
-import jwt from '../helpers/jwt';
+import { SPOTIFY } from '../../config/constants';
+import usersHelper from '../../helpers/Users';
+import jwt from '../../helpers/Jwt';
+import spotifyApi from '../../helpers/SpotifyApi';
 
 const router = Router().use(cookieParser());
 
-router.get('/auth', (req, res) => {
+router.get('/spotify', (req, res) => {
     var state = spotifyApi.genState();
 
-    res.cookie(SPOTIFY.STATE.NAME, state, { maxAge: 60 * 1000, httpOnly: true });
+    res.cookie(SPOTIFY.STATE.NAME, state, { maxAge: SPOTIFY.STATE.COOKIE_MAX_AGE, httpOnly: true });
     return res.redirect(spotifyApi.createAuthorizeURL(state));
 });
 
-router.get('/auth/callback', (req, res) => {
+router.get('/spotify/callback', (req, res) => {
     const code = req.query.code || null;
     const state = req.query.state || null;
     const storedState = req.cookies ? req.cookies[SPOTIFY.STATE.NAME] : null;
@@ -23,23 +23,12 @@ router.get('/auth/callback', (req, res) => {
     if (state !== storedState) return res.status(403).send('Forbidden');
     else res.clearCookie(SPOTIFY.STATE.NAME);
 
-    spotifyApi.authorizationCodeGrant(req.query.code)
-    .then((codeGrantRes) => {
-        return codeGrantRes.body;
-    })
-    .then((codeGrant) => {
-        spotifyApi.setAccessToken(codeGrant.access_token);
-        return spotifyApi.getMe();
-    })
-    .then((profileRes) => {
-        return profileRes.body;
-    })
+    spotifyApi.getProfileFromCodeGrant(req.query.code)
     .then((profile) => {
-        var user = new User({
-            username: profile.id,
+        return usersHelper.createUser({ 
+            username: profile.id, 
             email: profile.email,
-        });
-        return user.save();
+        })
     })
     .then((doc) => {
         const access_token = jwt.sign({ _id : doc._id });
@@ -55,4 +44,4 @@ router.get('/auth/callback', (req, res) => {
     })
 });
 
-module.exports = router;
+export default router;
