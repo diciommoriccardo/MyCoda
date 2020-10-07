@@ -1,6 +1,6 @@
 import authMiddleware from '../middlewares/auth';
 import notFoundMiddleware from '../middlewares/notFound';
-import spotifyAuth from '../routes/auth/spotify/get';
+import spotifyRedirect from '../routes/auth/spotify/redirect';
 import spotifyCallback from '../routes/auth/spotify/callback';
 
 
@@ -11,7 +11,7 @@ class Router {
             '/api': {
                 '/auth': {
                     '/spotify': [
-                        spotifyAuth,
+                        spotifyRedirect,
                         spotifyCallback,
                     ]
                 },
