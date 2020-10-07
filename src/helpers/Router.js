@@ -1,17 +1,25 @@
-import spotifyAuth from '../routes/auth/spotifyAuth';  
 import authMiddleware from '../middlewares/auth';
+import notFoundMiddleware from '../middlewares/notFound';
+import spotifyAuth from '../routes/auth/spotify/get';
+import spotifyCallback from '../routes/auth/spotify/callback';
+
 
 class Router {
     constructor( app ){
         this.app = app;
         this.routerSchema = {
             '/api': {
-                '/auth': [
-                    spotifyAuth,
+                '/auth': {
+                    '/spotify': [
+                        spotifyAuth,
+                        spotifyCallback,
+                    ]
+                },
+                '/users': [
+                    authMiddleware,
                 ],
-                '/groups': {
-                }
             },
+            '*': notFoundMiddleware,
         };
     }
     
