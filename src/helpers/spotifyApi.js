@@ -1,26 +1,27 @@
 import SpotifyWebApi from 'spotify-web-api-node';
-import crypto from 'crypto';
+import randomString from '../utils/string/random';
 import { SPOTIFY } from '../config/constants';
 
 class customSpotifyApi extends SpotifyWebApi {
     genState() {
-        return crypto.randomBytes(SPOTIFY.STATE.LENGTH).toString('hex');
+        return randomString(SPOTIFY.STATE.LENGTH);
     }
     createAuthorizeURL(state) {
         return super.createAuthorizeURL(SPOTIFY.SCOPES, state);
     }
     getProfileFromCodeGrant(code) {
-        return this.authorizationCodeGrant(code)
-            .then((codeGrantRes) => {
-                return codeGrantRes.body;
-            })
-            .then((codeGrant) => {
-                this.setAccessToken(codeGrant.access_token);
-                return this.getMe();
-            })
-            .then((profileRes) => {
-                return profileRes.body;
-            })
+        return new Promise((resolve, reject) => {
+            this.authorizationCodeGrant(code)
+                .then((codeGrantRes) => {
+                    return codeGrantRes.body;
+                })
+                .then((codeGrant) => {
+                    this.setAccessToken(codeGrant.access_token);
+                    return this.getMe();
+                })
+                .then((profileRes) => { resolve(profileRes.body); })
+                .catch((error) => { reject(error); });
+        })
     }
 }
 
