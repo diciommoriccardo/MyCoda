@@ -1,12 +1,15 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 const JWT = {
-  SECRET_KEY: 'WEJQOEJQOEJOQJOEIJQWOEJOQWJEOJQWOEJOQWJEOQWJEOJQWOIEOIQWEKP',
+  SECRET_KEY: process.env.JWT_SECRET,
   EXPIRES_IN: '1d',
 };
 
 const SPOTIFY = {
-  CLIENT_ID: 'b827857528e14d8a99da774dcf0bf269',
-  SECRET: '56f115f43f9d4f85888ccf2967ead93f',
-  REDIRECT_URI: 'localhost:8080/api/auth/spotify/callback',
+  CLIENT_ID: process.env.SPOTIFY_CLIENT,
+  SECRET: process.env.SPOTIFY_SECRET,
+  REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
   SCOPES: ['user-read-private', 'user-read-email'],
   STATE: {
     NAME: 'state',
