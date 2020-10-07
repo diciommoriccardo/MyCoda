@@ -1,23 +1,37 @@
-import Users from '../models/user.model'
+import User from '../models/user.model'
 
 class UsersHelper {
-    createUser( userInfo ) {
+    constructor({ _id, username, email, password }) {
+        this.user = new User({
+            _id,
+            username,
+            email,
+            password,
+        });
+    }
+
+    findOrSave() {
         return new Promise((resolve, reject) => {
-            Users.findOne({ email: userInfo.email})
-            .then((doc) => {
-                if (doc) return resolve(doc);
-                var userRecord = new User({
-                    username: userInfo.username,
-                    email: userInfo.email,
-                    hash: userInfo.hash,
-                }); 
-                return userRecord.save();
-            })
-            .then((doc) => {
-                return resolve(doc);
-            })
-            .catch((error) => { reject(error); })
-        }) 
+            User.findOne({ username: this.user.username })
+                .then((doc) => { resolve(doc ? doc : this.user.save()); })
+                .catch((error) => { reject(error); });
+        });
+    }
+
+    findById() {
+        return new Promise((resolve, reject) => {
+            User.findById(this.user._id)
+                .then((doc) => { doc ? resolve(doc) : reject(new Error('User not found')); })
+                .catch((error) => { reject(error); });
+        });
+    }
+
+    updateById() {
+        return new Promise((resolve, reject) => {
+            User.findByIdAndUpdate(this.user._id, this.user)
+                .then((doc) => { doc ? resolve(doc) : reject(new Error('User not found')); })
+                .catch((error) => { reject(error); });
+        });
     }
 }
 
