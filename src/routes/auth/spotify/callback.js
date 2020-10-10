@@ -1,6 +1,6 @@
 import Router from 'express';
 import cookieParser from 'cookie-parser';
-import { SPOTIFY } from '../../../config/constants';
+import { SPOTIFY, JWT } from '../../../config/constants';
 import UsersHelper from '../../../helpers/Users';
 import jwt from '../../../helpers/Jwt';
 import spotifyApi from '../../../helpers/SpotifyApi';
@@ -12,7 +12,7 @@ router.get('/callback', (req, res) => {
     const state = req.query.state || null;
     const storedState = req.cookies ? req.cookies[SPOTIFY.STATE.NAME] : null;
 
-    if (code === null || state === null) return res.status(400).json({ error: 'Invalid Request' });
+    if (code === null || state === null) return res.status(400).json({ error: 'Invalid request' });
     if (state !== storedState) return res.status(403).json({ error: 'Forbidden' });
     else res.clearCookie(SPOTIFY.STATE.NAME);
 
@@ -24,12 +24,13 @@ router.get('/callback', (req, res) => {
             }).findOrSave();
         })
         .then(({ _id, username, email }) => {
-            const bearer_token = jwt.sign({ _id });
-            return res.status(201).json({ username, email, bearer_token });
+            const access_token = jwt.signAccessToken(_id);
+            const refresh_token = jwt.signRefreshToken(_id);
+            return res.status(201).json({ username, email, access_token, expires_in: JWT.TYPES.ACCESS_TOKEN.EXPIRES_IN, refresh_token });
         })
         .catch((error) => {
             console.error(error);
-            return res.status(500).send({ error: 'Internal Server Error' });
+            return res.status(500).send({ error: 'Internal server error' });
         })
 });
 

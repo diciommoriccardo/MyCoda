@@ -2,11 +2,18 @@ import jwt from 'jsonwebtoken';
 import { JWT } from '../config/constants';
 
 const jwtHelper = {
-    sign: (payload) => {
-        return jwt.sign(payload, JWT.SECRET_KEY, { expiresIn: JWT.EXPIRES_IN });
+    signAccessToken: (_id) => {
+        return jwt.sign({ _id, type: JWT.TYPES.ACCESS_TOKEN.NAME }, JWT.SECRET_KEY, { expiresIn: JWT.TYPES.ACCESS_TOKEN.EXPIRES_IN });
     },
-    verify: (token, callback) => {
-        return jwt.verify(token, JWT.SECRET_KEY, callback);
+    signRefreshToken: (_id) => {
+        return jwt.sign({ _id, type: JWT.TYPES.REFRESH_TOKEN.NAME }, JWT.SECRET_KEY);
+    },
+    verify: (token) => {
+        return new Promise((resolve, reject) => {
+            jwt.verify(token, JWT.SECRET_KEY, (error, verified) => {
+                error ? reject(error) : resolve(verified);
+            });
+        });
     },
 };
 

@@ -1,4 +1,5 @@
 import authMiddleware from '../middlewares/auth';
+import tokenRenewal from '../routes/token';
 import notFoundMiddleware from '../middlewares/notFound';
 import spotifyRedirect from '../routes/auth/spotify/redirect';
 import spotifyCallback from '../routes/auth/spotify/callback';
@@ -9,6 +10,7 @@ class Router {
         this.app = app;
         this.routerSchema = {
             '/api': {
+                '/token': tokenRenewal,
                 '/auth': {
                     '/spotify': [
                         spotifyRedirect,

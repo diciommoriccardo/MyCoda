@@ -3,7 +3,15 @@ dotenv.config();
 
 const JWT = {
   SECRET_KEY: process.env.JWT_SECRET,
-  EXPIRES_IN: '1d',
+  TYPES: {
+    ACCESS_TOKEN: {
+      NAME: 'access',
+      EXPIRES_IN: 10
+    },
+    REFRESH_TOKEN: {
+      NAME: 'refresh'
+    },
+  }
 };
 
 const SPOTIFY = {
@@ -25,7 +33,9 @@ const BOUNDARY_VALUES = {
 
 const ERRORS = {
   INVALID_REQUEST: 'Invalid request',
-  TOKEN_EXPIRED: 'Token does not exist or it\'s expired',
+  INVALID_ACCESS_TOKEN: 'Invalid access token',
+  INVALID_REFRESH_TOKEN: 'Invalid refresh token',
+  TOKEN_EXPIRED: 'Access token expired',
 };
 
 export {
