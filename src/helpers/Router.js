@@ -17,9 +17,6 @@ class Router {
                         spotifyCallback,
                     ]
                 },
-                '/users': [
-                    authMiddleware,
-                ],
             },
             '*': notFoundMiddleware,
         };
