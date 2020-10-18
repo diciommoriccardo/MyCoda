@@ -17,7 +17,7 @@ class UsersHelper {
 
     login() {
         return new Promise((resolve, reject) => {
-            User.findOneAndUpdate({ username: this.username }, { refresh_token})
+            User.findOneAndUpdate({ username: this.username }, { refresh_token: this.refresh_token }, {new: true})
                 .then((doc) => { resolve(doc ? doc : this.user.save()); })
                 .catch((error) => { reject(error); });
         });
