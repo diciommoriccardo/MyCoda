@@ -9,7 +9,6 @@ const authMiddleware = (req, res, next) => {
 
     jwt.verify(bearer)
         .then((verified) => {
-            if (verified.type && verified.type !== JWT.TYPES.ACCESS_TOKEN.NAME) throw new Error(ERRORS.INVALID_ACCESS_TOKEN);
             req.user = verified;
             next();
         })

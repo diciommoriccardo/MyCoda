@@ -21,12 +21,11 @@ router.get('/callback', (req, res) => {
             return new UsersHelper({
                 username: profile.id,
                 email: profile.email,
-            }).findOrSave();
+            }).login();
         })
-        .then(({ _id, username, email }) => {
+        .then(({ _id, username, email, refresh_token }) => {
             const access_token = jwt.signAccessToken(_id);
-            const refresh_token = jwt.signRefreshToken(_id);
-            return res.status(201).json({ username, email, access_token, expires_in: JWT.TYPES.ACCESS_TOKEN.EXPIRES_IN, refresh_token });
+            return res.status(201).json({ username, email, access_token, expires_in: JWT.EXPIRES_IN, refresh_token });
         })
         .catch((error) => {
             console.error(error);

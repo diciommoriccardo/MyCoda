@@ -1,18 +1,23 @@
 import User from '../models/user.model'
+import randomString from '../utils/string/random';
+import { REFRESH_TOKEN } from '../config/constants';
+
+const getRefreshToken = () => {
+    return randomString(REFRESH_TOKEN.LENGTH);
+}
 
 class UsersHelper {
-    constructor({ _id, username, email, password }) {
-        this.user = new User({
-            _id,
-            username,
-            email,
-            password,
-        });
+    constructor(userInformation) {
+        this._id = userInformation._id;
+        this.username = userInformation.username;
+        this.email = userInformation.email;
+        this.password = userInformation.password;
+        this.refresh_token = userInformation.refresh_token || getRefreshToken();
     }
 
-    findOrSave() {
+    login() {
         return new Promise((resolve, reject) => {
-            User.findOne({ username: this.user.username })
+            User.findOneAndUpdate({ username: this.username }, { refresh_token})
                 .then((doc) => { resolve(doc ? doc : this.user.save()); })
                 .catch((error) => { reject(error); });
         });
@@ -20,15 +25,15 @@ class UsersHelper {
 
     findById() {
         return new Promise((resolve, reject) => {
-            User.findById(this.user._id)
+            User.findById(this._id)
                 .then((doc) => { doc ? resolve(doc) : reject(new Error('User not found')); })
                 .catch((error) => { reject(error); });
         });
     }
 
-    updateById() {
+    findByRefreshToken() {
         return new Promise((resolve, reject) => {
-            User.findByIdAndUpdate(this.user._id, this.user)
+            User.findOne({ refresh_token: this.refresh_token })
                 .then((doc) => { doc ? resolve(doc) : reject(new Error('User not found')); })
                 .catch((error) => { reject(error); });
         });
