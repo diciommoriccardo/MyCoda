@@ -14,7 +14,7 @@ const SPOTIFY = {
   CLIENT_ID: process.env.SPOTIFY_CLIENT,
   SECRET: process.env.SPOTIFY_SECRET,
   REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
-  SCOPES: ['user-read-private', 'user-read-email'],
+  SCOPES: ['user-read-private', 'user-read-email', 'app-remote-control'],
   STATE: {
     NAME: 'state',
     LENGTH: 32,
