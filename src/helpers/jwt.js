@@ -2,8 +2,8 @@ import jwt from 'jsonwebtoken';
 import { JWT } from '../config/constants';
 
 const jwtHelper = {
-    signAccessToken: (_id) => {
-        return jwt.sign({ _id }, JWT.SECRET_KEY, { expiresIn: JWT.EXPIRES_IN });
+    signAccessToken: (payload) => {
+        return jwt.sign( payload, JWT.SECRET_KEY, { expiresIn: JWT.EXPIRES_IN });
     },
 
     verify: (token) => {
