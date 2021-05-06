@@ -1,5 +1,6 @@
 import authMiddleware from '../middlewares/auth.js';
 import tokenRenewal from '../routes/token.js';
+import getUser from '../routes/getUser';
 import notFoundMiddleware from '../middlewares/notFound.js';
 //import redirect from '../routes/auth/redirect';
 //import callback from '../routes/auth/callback';
@@ -13,8 +14,8 @@ class Router {
                 '/token': tokenRenewal
             },
             '/user': {
-                '/:id': 
-            }
+                '/:id': getUser
+            },
             '*': notFoundMiddleware,
         };
     }

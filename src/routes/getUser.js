@@ -5,6 +5,10 @@ import JWT from '../config/constants.js';
 import ERRORS from '../config/constants.js';
 import router from './token.js';
 
+const router = Router();
+
 router.get('/user/:id', (req, res) => {
     if (!req.body.refresh_token) return res.status(403).send({ error: 'Forbidden' });
 })
+
+export default router;
