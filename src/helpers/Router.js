@@ -1,8 +1,8 @@
-import authMiddleware from '../middlewares/auth';
-import tokenRenewal from '../routes/token';
-import notFoundMiddleware from '../middlewares/notFound';
-import spotifyRedirect from '../routes/auth/spotify/redirect';
-import spotifyCallback from '../routes/auth/spotify/callback';
+import authMiddleware from '../middlewares/auth.js';
+import tokenRenewal from '../routes/token.js';
+import notFoundMiddleware from '../middlewares/notFound.js';
+//import redirect from '../routes/auth/redirect';
+//import callback from '../routes/auth/callback';
 
 
 class Router {
@@ -10,14 +10,11 @@ class Router {
         this.app = app;
         this.routerSchema = {
             '/api': {
-                '/token': tokenRenewal,
-                '/auth': {
-                    '/spotify': [
-                        spotifyRedirect,
-                        spotifyCallback,
-                    ]
-                },
+                '/token': tokenRenewal
             },
+            '/user': {
+                '/:id': 
+            }
             '*': notFoundMiddleware,
         };
     }
