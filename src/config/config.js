@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({path: 'process.env' });
 
-const environment = process.env.NODE_ENV || 'production';
+const environment = process.env.NODE_ENV || 'development';
 console.log(`Server environment is ${environment}.`);
 
 const SERVER = {
@@ -17,7 +17,7 @@ const DATABASE = {
   NAME: process.env.DATABASE_NAME,
   USER: process.env.DATABASE_USER,
   PASS: process.env.DATABASE_PASS,
-  URI: process.env.DATABASE_URI || `mongodb://${USER}:${PASS}@${HOST}:${PORT}/${NAME}`,
+  URI: process.env.DATABASE_URI || `mysql://${USER}:${PASS}@${HOST}:${PORT}/${NAME}`,
   OPTIONS: {
     useNewUrlParser: true,
     useFindAndModify: false,

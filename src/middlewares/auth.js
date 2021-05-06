@@ -1,5 +1,6 @@
-import jwt from '../helpers/Jwt';
-import { JWT, ERRORS } from '../config/constants';
+import jwt from '../helpers/jwt.js';
+import  JWT from '../config/constants.js';
+import  ERRORS from '../config/constants.js';
 
 const authMiddleware = (req, res, next) => {
     if (!req.headers.authorization || req.headers.authorization.split(' ')[0] !== 'Bearer') 

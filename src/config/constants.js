@@ -7,19 +7,7 @@ const JWT = {
 };
 
 const REFRESH_TOKEN = {
-  LENGTH: 64,
-}
-
-const SPOTIFY = {
-  CLIENT_ID: process.env.SPOTIFY_CLIENT,
-  SECRET: process.env.SPOTIFY_SECRET,
-  REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
-  SCOPES: ['user-read-private', 'user-read-email', 'app-remote-control'],
-  STATE: {
-    NAME: 'state',
-    LENGTH: 32,
-    COOKIE_MAX_AGE: 60 * 60 * 1000,
-  },
+  LENGTH: 64
 };
 
 const ERRORS = {
@@ -29,9 +17,26 @@ const ERRORS = {
   TOKEN_EXPIRED: 'Access token expired',
 };
 
-export {
+const SUCCESS_ITA = {
+  DEFAULT: 'Operazione effettuata con successo',
+  REGISTER: 'Registrazione avvenuta con successo!',
+  PAYMENT: 'Pagamento avvenuto con successo!',
+  CONNECTION: 'Connessione andata a buon fine!',
+  LOGIN: "Login effettuato!"
+}
+
+const SUCCESS_EN = {
+  DEFAULT: 'Operation succesfully complete',
+  REGISTER: 'Registration was successful',
+  PAYMENT: 'Payment successful',
+  CONNECTION: 'Connection successful'
+}
+
+export default {
   JWT,
   REFRESH_TOKEN,
   ERRORS,
-  SPOTIFY,
+  SUCCESS_ITA,
+  SUCCESS_EN
+  //SPOTIFY,
 };

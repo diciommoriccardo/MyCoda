@@ -1,17 +1,17 @@
 import http from 'http';
 import https from 'https';
 import express from 'express';
-import MongoDb from './src/helpers/MongoDb';
-import Router from './src/helpers/Router';
-import getCertificate from './src/utils/ssl/getCertificate';
-import { SERVER } from './src/config/config';
+import MysqlDb from './src/helpers/MysqlDb.js';
+import Router from './src/helpers/Router.js';
+import getCertificate from './src/utils/ssl/getCertificate.js';
+import { SERVER } from './src/config/config.js';
 
 class WebServer {
     constructor({ ssl_certificate }) {
         this.app = express();
         this.app.use(express.json());
         this.router = new Router(this.app).setAllRoutes();
-        this.mongodb = new MongoDb();
+        this.mysql = new MysqlDb();
         this.http = http.Server(this.app);
         if (ssl_certificate) this.https = https.Server(ssl_certificate, this.app);
     }

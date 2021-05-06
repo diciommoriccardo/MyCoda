@@ -1,7 +1,8 @@
 import Router from 'express';
-import jwt from '../helpers/Jwt';
-import UsersHelper from '../helpers/Users';
-import { JWT, ERRORS } from '../config/constants';
+import jwt from '../helpers/jwt.js';
+import UsersHelper from '../helpers/Users.js';
+import JWT from '../config/constants.js';
+import ERRORS from '../config/constants.js';
 
 const router = Router();
 

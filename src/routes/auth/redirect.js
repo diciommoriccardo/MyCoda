@@ -1,7 +1,7 @@
 import Router from 'express';
 import cookieParser from 'cookie-parser';
-import { SPOTIFY } from '../../../config/constants';
-import spotifyApi from '../../../helpers/SpotifyApi';
+import { SPOTIFY } from '../../config/constants';
+import spotifyApi from '../../helpers/SpotifyApi';
 
 const router = Router().use(cookieParser());
 

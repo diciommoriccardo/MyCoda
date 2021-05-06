@@ -1,20 +1,20 @@
 import Router from 'express';
 import cookieParser from 'cookie-parser';
-import { SPOTIFY, JWT } from '../../../config/constants';
-import UsersHelper from '../../../helpers/Users';
-import jwt from '../../../helpers/Jwt';
-import spotifyApi from '../../../helpers/SpotifyApi';
+import { SPOTIFY, JWT } from '../../config/constants';
+import UsersHelper from '../../helpers/Users';
+import jwt from '../../helpers/Jwt';
+//import spotifyApi from '../../helpers/SpotifyApi';
 
 const router = Router().use(cookieParser());
 
 router.get('/callback', (req, res) => {
     const code = req.query.code || null;
     const state = req.query.state || null;
-    const storedState = req.cookies ? req.cookies[SPOTIFY.STATE.NAME] : null;
+    //const storedState = req.cookies ? req.cookies[SPOTIFY.STATE.NAME] : null;
 
     if (code === null || state === null) return res.status(400).json({ error: 'Invalid request' });
     if (state !== storedState) return res.status(403).json({ error: 'Forbidden' });
-    else res.clearCookie(SPOTIFY.STATE.NAME);
+    //else res.clearCookie(SPOTIFY.STATE.NAME);
 
     spotifyApi.getProfileFromCodeGrant(req.query.code)
         .then((profile) => {
