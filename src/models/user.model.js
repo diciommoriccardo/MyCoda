@@ -48,20 +48,25 @@ const getRefreshToken = () => {
     return randomString(REFRESH_TOKEN.LENGTH);
 }
 
-const getSalt = () => {
+async function getSalt(){
     try{
-        return await bcrypt.genSalt();
+        await bcrypt.genSalt()
+        .then( (salt) => { return resolve(salt) })
+        .catch( (err) => { reject(err) })
     } catch (err) {
         return err
     }
 }
 
-const getHashedPassword = (password) => {
+async function getHashedPassword(password){
     try {
-        return await bcrypt.hash(password, getSalt())
+        await bcrypt.hash(password, getSalt())
+        .then( (result) => {return resolve(result)})
+        .catch( (err) => {reject(err)})
     } catch (err) {
         return err
     }
+
 }
 
 class user{
@@ -98,7 +103,15 @@ class user{
     login(){
         return new Promise( (resolve, reject) => {
             user.findByCf(this.cf)
-            .then( (row) => { row.password == this.password ? resolve(row) : reject()})
+            .then( (row) => { 
+                bcrypt.compare(this.password, row.password)
+                .then( (result) =>{
+                    resolve(result)
+                })
+                .catch( (err) => {
+                    reject(err)
+                })
+            })
             .catch( (err) => {reject(err)})
         })
     }
