@@ -1,14 +1,12 @@
 import Router from 'express';
 import jwt from '../helpers/jwt.js';
-import user from '../controller/user.controller';
+import controller from '../controller/user.controller.js';
 import JWT from '../config/constants.js';
 import ERRORS from '../config/constants.js';
-import router from './token.js';
+//import router from './token.js';
 
 const router = Router();
 
-router.get('/user/:id', (req, res) => {
-    if (!req.body.refresh_token) return res.status(403).send({ error: 'Forbidden' });
-})
+router.get('/users/:id', user.findAll)
 
 export default router;

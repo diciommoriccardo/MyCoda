@@ -4,6 +4,7 @@ import SUCCESS_EN from '../config/constants.js';
 import MysqlDb from '../helpers/MysqlDb.js';
 import  REFRESH_TOKEN from '../config/constants.js';
 import validate from 'validate.js';
+import bcrypt from 'bcrypt';
 
 var costraints = {
     cf: {
@@ -47,6 +48,22 @@ const getRefreshToken = () => {
     return randomString(REFRESH_TOKEN.LENGTH);
 }
 
+const getSalt = () => {
+    try{
+        return await bcrypt.genSalt();
+    } catch (err) {
+        return err
+    }
+}
+
+const getHashedPassword = (password) => {
+    try {
+        return await bcrypt.hash(password, getSalt())
+    } catch (err) {
+        return err
+    }
+}
+
 class user{
     constructor({ user }){
         validate({ user }, costraints)
@@ -65,10 +82,10 @@ class user{
 
     register(){
         return new Promise((resolve, reject) => {
-            let sql = 'INSERT INTO utente (cf, nome, cognome, numTel, email) VALUES(?,?,?,?);';
+            let sql = 'INSERT INTO utente SET ?';
 
             this.MysqlDb.query(sql, [MysqlDb.escape(this.cf), this.nome, this.cognome, 
-                this.numTel, MysqlDb.escape(this.email)],
+                this.numTel, MysqlDb.escape(this.email), MysqlDb.escape(getHashedPassword(this.password))],
                 function(err, result){
                     if(err) return reject(error);
 
@@ -87,9 +104,15 @@ class user{
     }
 
     updateByCf(cf, data){
-        var column = Object.keys(data);
+        return new Promise( (resolve, reject) => {
+            var column = Object.keys(data);
 
-        let sql = "UPDATE user SET "
+            let sql = "UPDATE user SET ? WHERE cf = ?";
+            this.MysqlDb.query(sql, data, cf, function(err, result){
+                if(err) return reject(err)
+                resolve(result)
+            })
+        })
     }
 
     findByCf(cf){
@@ -99,6 +122,25 @@ class user{
             MysqlDb.query(sql, cf)
             .then((row) => {row ? resolve(row) : reject()})
             .catch((err) => {reject(err);});
+        })
+    }
+
+    findByRefreshToken(refresh_token){
+        let sql = "SELECT * FROM user WHERE refresh_token = ?";
+
+        MysqlDb.query(sql, refresh_token, function(err, result){
+            if(err) return reject(err)
+            resolve(result)
+        })
+    }
+
+    findAll(){
+        let sql = "SELECT * FROM user";
+
+        MysqlDb.query(sql, function(err, result){
+            if(err) return reject(err)
+
+            resolve(result)
         })
     }
 }

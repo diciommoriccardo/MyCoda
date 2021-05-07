@@ -1,6 +1,6 @@
 import authMiddleware from '../middlewares/auth.js';
 import tokenRenewal from '../routes/token.js';
-import getUser from '../routes/getUser';
+import getUser from '../routes/getUser.js';
 import notFoundMiddleware from '../middlewares/notFound.js';
 //import redirect from '../routes/auth/redirect';
 //import callback from '../routes/auth/callback';
@@ -13,7 +13,7 @@ class Router {
             '/api': {
                 '/token': tokenRenewal
             },
-            '/user': {
+            '/users': {
                 '/:id': getUser
             },
             '*': notFoundMiddleware,
