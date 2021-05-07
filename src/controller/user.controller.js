@@ -1,5 +1,5 @@
-import user from '../models/user.model';
+import user from '../models/user.model.js';
 
-exports.Create = (req, res) => {
-
+class controller{
+    
 }
