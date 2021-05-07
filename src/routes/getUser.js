@@ -5,6 +5,6 @@ import ERRORS from '../config/constants.js';
 import controller from '../controller/user.controller.js'
 const router = Router();
 
-router.get('/users/:id', controller.findAll);
+router.get('/users/:cf', controller.findByCf);
 
 export default router;
