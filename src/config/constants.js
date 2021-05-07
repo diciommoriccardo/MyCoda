@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const JWT = {
-  SECRET_KEY: process.env.JWT_SECRET,
+  SECRET_KEY: process.env.ACCESS_TOKEN_SECRET,
   EXPIRES_IN: 3600,
 };
 
@@ -15,6 +15,7 @@ const ERRORS = {
   INVALID_ACCESS_TOKEN: 'Invalid access token',
   INVALID_REFRESH_TOKEN: 'Invalid refresh token',
   TOKEN_EXPIRED: 'Access token expired',
+  LOGIN: 'Login failed'
 };
 
 const SUCCESS_ITA = {
