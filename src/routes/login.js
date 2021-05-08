@@ -1,11 +1,11 @@
-import Router from 'express';
+import express from 'express';
 import jwt from '../helpers/jwt.js';
 import JWT from '../config/constants.js';
 import ERRORS from '../config/constants.js';
 import controller from '../controller/user.controller.js'
 
-const router = Router();
+const app = express();
 
-router.post('/users/login', controller.login);
+app.post('/users/login', controller.login);
 
-export default router;
+export default app;

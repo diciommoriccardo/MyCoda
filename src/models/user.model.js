@@ -118,9 +118,8 @@ class user{
 
     updateByCf(cf, data){
         return new Promise( (resolve, reject) => {
-            var column = Object.keys(data);
-
             let sql = "UPDATE user SET ? WHERE cf = ?";
+            
             this.MysqlDb.query(sql, data, cf, function(err, result){
                 if(err) return reject(err)
                 resolve(result)

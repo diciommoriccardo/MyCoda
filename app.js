@@ -24,7 +24,7 @@ class WebServer {
             this.https.listen(SERVER.HOST_SECURE, SERVER.PORT_SECURE, () => {
                 console.log(`Listening with SSL on https://${SERVER.HOST_SECURE}:${SERVER.PORT_SECURE}`);
             });  
-        }              
+        }           
     }
 }
 

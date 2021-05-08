@@ -15,7 +15,8 @@ const ERRORS = {
   INVALID_ACCESS_TOKEN: 'Invalid access token',
   INVALID_REFRESH_TOKEN: 'Invalid refresh token',
   TOKEN_EXPIRED: 'Access token expired',
-  LOGIN: 'Login failed'
+  LOGIN: 'Login failed',
+  REGISTRATION: 'Registration failed'
 };
 
 const SUCCESS_ITA = {
