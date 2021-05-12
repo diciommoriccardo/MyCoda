@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import JWT  from '../config/constants.js';
+import {JWT}  from '../config/constants.js';
 
 const jwtHelper = {
     signAccessToken: (payload) => {

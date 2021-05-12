@@ -1,8 +1,8 @@
 import Router from 'express';
 import jwt from '../helpers/jwt.js';
 import User from '../models/user.model.js';
-import JWT from '../config/constants.js';
-import ERRORS from '../config/constants.js';
+import {JWT} from '../config/constants.js';
+import {ERRORS} from '../config/constants.js';
 
 let tokenRenewal = (req, res) =>{
     if (!req.body.refresh_token) return res.status(403).send({ error: 'Forbidden' });

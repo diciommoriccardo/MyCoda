@@ -1,6 +1,8 @@
 import authMiddleware from '../middlewares/auth.js';
 import tokenRenewal from '../routes/token.js';
-import controller from '../controller/user.controller.js'
+import getUser from '../routes/getUser.js';
+import login from '../routes/login.js';
+import register from '../routes/register.js';
 import notFoundMiddleware from '../middlewares/notFound.js';
 //import redirect from '../routes/auth/redirect';
 //import callback from '../routes/auth/callback';
@@ -11,15 +13,11 @@ class Router {
         this.app = app;
         this.routerSchema = {
             '/api': {
-                '/token': tokenRenewal
+                "/token" : tokenRenewal
             },
-            '/users': {
-                '/:id': controller.findByCf,
-                '/login': controller.login,
-                '/register': controller.register
-            },
+            '/users': [getUser,login,register],
             '*': notFoundMiddleware,
-        };
+        }
     }
     
     setAllRoutes(_route = '', routerSchema = this.routerSchema) {

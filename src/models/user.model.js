@@ -1,20 +1,20 @@
 import randomString from '../utils/string/random.js';
-import SUCCESS_ITA from '../config/constants.js';
-import SUCCESS_EN from '../config/constants.js';
-import MysqlDb from '../helpers/MysqlDb.js';
-import  REFRESH_TOKEN from '../config/constants.js';
+import {SUCCESS_ITA} from '../config/constants.js';
+import {SUCCESS_EN} from '../config/constants.js';
+import pool from '../helpers/MysqlDb.js';
+import { REFRESH_TOKEN } from '../config/constants.js';
 import validate from 'validate.js';
-import bcrypt from 'bcrypt';
+import bcrypt, { hash } from 'bcrypt';
+
 
 var costraints = {
     cf: {
-        presence: true,
         type: "string",
-        lenght: {
+        /*lenght: {
             minimum: 16,
             maximum: 16,
             message: "Il Codice Fiscale deve essere composto da 16 cifre"
-        }    
+        } */   
     },
     nome: {
         type: "string"
@@ -28,16 +28,14 @@ var costraints = {
     },
     email: {
         type: "string",
-        from: {
-            email: true
-        }
+        email: true
     },
     password: {
         type: "string",
-        lenght: {
+        /*lenght: {
             minimum: 8,
             message: "La password deve contenere almeno 8 caratteri"
-        }
+        }*/
     },
     refresh_token: {
         type: "string"
@@ -48,31 +46,27 @@ const getRefreshToken = () => {
     return randomString(REFRESH_TOKEN.LENGTH);
 }
 
-async function getSalt(){
-    try{
-        await bcrypt.genSalt()
-        .then( (salt) => { return resolve(salt) })
-        .catch( (err) => { reject(err) })
-    } catch (err) {
-        return err
-    }
-}
-
 async function getHashedPassword(password){
-    try {
-        await bcrypt.hash(password, getSalt())
-        .then( (result) => {return resolve(result)})
-        .catch( (err) => {reject(err)})
-    } catch (err) {
-        return err
-    }
-
+    return new Promise((resolve, reject) => {
+        try {
+            bcrypt.genSalt(10)
+            .then(salt => {
+                bcrypt.hash(password, salt)
+                .then(hash => resolve(hash))
+                .catch(err => reject(err))
+            })
+            .catch(err => reject(err))
+        } catch (err) {
+            return err
+        }
+    })
 }
+
 
 class user{
-    constructor({ user }){
-        validate({ user }, costraints)
-        .then( ({ user }) => {
+    constructor( user){
+        //validate({ user }, costraints)
+        //.then( ( user ) => {
             this.cf = user.cf;
             this.nome = user.nome;
             this.cognome = user.cognome;
@@ -80,35 +74,45 @@ class user{
             this.email = user.email;
             this.password = user.password;
             this.refresh_token = user.refresh_token || getRefreshToken();
-            resolve(this)
-        })
-        .catch( (err) => reject(err) )
+        //})
     }
 
     register(){
-        return new Promise((resolve, reject) => {
-            let sql = 'INSERT INTO utente SET ?';
+        return new Promise( (resolve, reject) => {
+            let sql = 'INSERT INTO user SET ?';
 
-            this.MysqlDb.query(sql, [MysqlDb.escape(this.cf), this.nome, this.cognome, 
-                this.numTel, MysqlDb.escape(this.email), MysqlDb.escape(getHashedPassword(this.password))],
-                function(err, result){
-                    if(err) return reject(error);
+            getHashedPassword(this.password).then(hash => {
+                this.password=hash
 
-                    console.log(SUCCESS_ITA.REGISTER);
-                    resolve(result);
+                pool.getConnection( (err, connection) => {
+                    if(err) throw err
+                
+                    connection.query(sql, [this],
+                        function(err, result){
+                            if(err) throw err
+    
+                            console.log(SUCCESS_ITA.REGISTER);
+                            resolve(result)
+                    })
+                })
             })
         });
     }
 
     login(){
         return new Promise( (resolve, reject) => {
-            user.findByCf(this.cf)
+            console.log("Okay promise login")
+            this.findByCf(this.cf)
             .then( (row) => { 
+                console.log(row)
+                console.log(this.password)
                 bcrypt.compare(this.password, row.password)
                 .then( (result) =>{
+                    console.log(result)
                     resolve(result)
                 })
                 .catch( (err) => {
+                    console.log(err)
                     reject(err)
                 })
             })
@@ -129,11 +133,20 @@ class user{
 
     findByCf(cf){
         return new Promise ( (resolve, reject) => {
+            console.log("Okay findByCf")
             let sql = "SELECT * FROM user WHERE cf = ?";
 
-            MysqlDb.query(sql, cf)
-            .then((row) => {row ? resolve(row) : reject()})
-            .catch((err) => {reject(err);});
+            pool.getConnection( (err, connection) =>{
+                if(err) throw err
+                
+                connection.query(sql, [cf],
+                    function(err, result){
+                        if(err) throw err
+
+                        console.log("Operazione effettuata con successo")
+                        resolve(result)
+                    })
+            })
         })
     }
 

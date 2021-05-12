@@ -34,7 +34,7 @@ const SUCCESS_EN = {
   CONNECTION: 'Connection successful'
 }
 
-export default {
+export {
   JWT,
   REFRESH_TOKEN,
   ERRORS,
