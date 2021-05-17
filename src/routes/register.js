@@ -19,8 +19,8 @@ router.post('/register', function(req, res){
         })
         
         user.register()
-        .then( (result) => {res.status(201).end("Registration confirmed")})
-        .catch( (err) => {res.status(500).end(err.toString())})
+        .then( (result) => {res.status(201).json({result})})
+        .catch( (err) => {res.status(500).json({error: err.toString()})})
 });
 
 export default router;

@@ -91,7 +91,6 @@ class user{
                         function(err, result){
                             if(err) throw err
     
-                            console.log(SUCCESS_ITA.REGISTER);
                             resolve(result)
                     })
                 })
@@ -101,22 +100,16 @@ class user{
 
     login(){
         return new Promise( (resolve, reject) => {
-            console.log("Okay promise login")
             this.findByCf(this.cf)
-            .then( (row) => { 
-                console.log(row)
-                console.log(this.password)
-                bcrypt.compare(this.password, row.password)
-                .then( (result) =>{
-                    console.log(result)
-                    resolve(result)
-                })
-                .catch( (err) => {
-                    console.log(err)
-                    reject(err)
-                })
+            .then( ([row]) => { 
+                return bcrypt.compare(this.password, row.password)
             })
-            .catch( (err) => {reject(err)})
+            .then( (result) =>{
+                resolve(result)
+            })
+            .catch( (err) => {
+                reject(err)
+            })
         })
     }
 
@@ -133,7 +126,6 @@ class user{
 
     findByCf(cf){
         return new Promise ( (resolve, reject) => {
-            console.log("Okay findByCf")
             let sql = "SELECT * FROM user WHERE cf = ?";
 
             pool.getConnection( (err, connection) =>{

@@ -15,11 +15,10 @@ router.post('/login', function(req, res){
 
         user.login()
         .then(result => {
-            console.log(result)
-            var userAccessToken = jwt.signAccessToken(result.cf)
-            res.status(201).end(userAccessToken);
+            var userAccessToken = jwt.signAccessToken({user: user.cf})
+            res.status(201).json({accessToken: userAccessToken});
         })
-        .catch( (err) => {res.status(500).end(ERRORS.LOGIN)})
+        .catch( (err) => {res.status(500).json({message: err})})
 });
 
 export default router;
