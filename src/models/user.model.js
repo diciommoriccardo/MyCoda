@@ -3,44 +3,10 @@ import {SUCCESS_ITA} from '../config/constants.js';
 import {SUCCESS_EN} from '../config/constants.js';
 import pool from '../helpers/MysqlDb.js';
 import { REFRESH_TOKEN } from '../config/constants.js';
-import validate from 'validate.js';
+import Validate from '../helpers/inputValidate.js';
 import bcrypt, { hash } from 'bcrypt';
 
-
-var costraints = {
-    cf: {
-        type: "string",
-        /*lenght: {
-            minimum: 16,
-            maximum: 16,
-            message: "Il Codice Fiscale deve essere composto da 16 cifre"
-        } */   
-    },
-    nome: {
-        type: "string"
-    },
-    cognome: {
-        type: "string"
-    },
-    numTel: {
-        type: "string",
-        numericality: true
-    },
-    email: {
-        type: "string",
-        email: true
-    },
-    password: {
-        type: "string",
-        /*lenght: {
-            minimum: 8,
-            message: "La password deve contenere almeno 8 caratteri"
-        }*/
-    },
-    refresh_token: {
-        type: "string"
-    }
-}
+const validate = new Validate();
 
 const getRefreshToken = () => {
     return randomString(REFRESH_TOKEN.LENGTH);
@@ -64,37 +30,44 @@ async function getHashedPassword(password){
 
 
 class user{
-    constructor( user){
-        //validate({ user }, costraints)
-        //.then( ( user ) => {
-            this.cf = user.cf;
-            this.nome = user.nome;
-            this.cognome = user.cognome;
-            this.numTel = user.numTel;
-            this.email = user.email;
-            this.password = user.password;
-            this.refresh_token = user.refresh_token || getRefreshToken();
-        //})
+    constructor( user ){
+        return new Promise((resolve, reject) =>{
+            validate.validateInput(user)
+            .then( (user)  => {
+                this.cf = user.cf;
+                this.nome = user.nome;
+                this.cognome = user.cognome;
+                this.numTel = user.numTel;
+                this.email = user.email;
+                this.password = user.password;
+                this.refresh_token = user.refresh_token || getRefreshToken();
+                resolve(this)
+            })
+            .catch( (err) => { reject(err) })
+        })    
     }
 
     register(){
         return new Promise( (resolve, reject) => {
             let sql = 'INSERT INTO user SET ?';
 
-            getHashedPassword(this.password).then(hash => {
+            getHashedPassword(this.password)
+            .then(hash => {
                 this.password=hash
 
                 pool.getConnection( (err, connection) => {
-                    if(err) throw err
+                    if(err) reject(err)
                 
                     connection.query(sql, [this],
                         function(err, result){
-                            if(err) throw err
+                            if(err) reject(err)
     
-                            resolve(result)
+                            //resolve(result)
                     })
                 })
             })
+            .then( () => {resolve(this)})
+            .catch( (err) => reject(err))
         });
     }
 
@@ -102,9 +75,12 @@ class user{
         return new Promise( (resolve, reject) => {
             this.findByCf(this.cf)
             .then( ([row]) => { 
+                resolve([row])
                 return bcrypt.compare(this.password, row.password)
             })
-            .then( (result) =>{
+            .then( (row, result) =>{
+                console.log(row)
+                console.log(result)
                 resolve(result)
             })
             .catch( (err) => {
@@ -128,14 +104,13 @@ class user{
         return new Promise ( (resolve, reject) => {
             let sql = "SELECT * FROM user WHERE cf = ?";
 
-            pool.getConnection( (err, connection) =>{
+            pool.getConnection( (err, connection) => {
                 if(err) throw err
                 
                 connection.query(sql, [cf],
                     function(err, result){
-                        if(err) throw err
+                        if(err) reject(err)
 
-                        console.log("Operazione effettuata con successo")
                         resolve(result)
                     })
             })
