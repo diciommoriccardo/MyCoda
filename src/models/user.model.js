@@ -32,7 +32,7 @@ async function getHashedPassword(password){
 class user{
     constructor( user ){
         return new Promise((resolve, reject) =>{
-            validate.validateInput(user)
+            validate.validateUserInput(user)
             .then( (user)  => {
                 this.cf = user.cf;
                 this.nome = user.nome;
@@ -53,20 +53,19 @@ class user{
 
             getHashedPassword(this.password)
             .then(hash => {
-                this.password=hash
-
-                pool.getConnection( (err, connection) => {
-                    if(err) reject(err)
+                this.password = hash
                 
+                pool.getConnection( (err, connection) => {
+                    if(err) return reject(err)
+                    
                     connection.query(sql, [this],
                         function(err, result){
-                            if(err) reject(err)
-    
-                            //resolve(result)
+                            if(err) return reject(err)
+                            
+                            resolve(this.values)
                     })
                 })
             })
-            .then( () => {resolve(this)})
             .catch( (err) => reject(err))
         });
     }
@@ -75,13 +74,7 @@ class user{
         return new Promise( (resolve, reject) => {
             this.findByCf(this.cf)
             .then( ([row]) => { 
-                resolve([row])
-                return bcrypt.compare(this.password, row.password)
-            })
-            .then( (row, result) =>{
-                console.log(row)
-                console.log(result)
-                resolve(result)
+                bcrypt.compare(this.password, row.password) ? resolve(row) : reject()
             })
             .catch( (err) => {
                 reject(err)

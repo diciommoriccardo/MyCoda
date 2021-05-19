@@ -3,7 +3,7 @@ import validate from 'validate.js';
 
 class inputValidate{
     constructor(){
-       this.costraints = {
+       this.userCostraints = {
             cf: {
                 type: "string",
                 /*lenght: {
@@ -30,21 +30,62 @@ class inputValidate{
                 type: "string",
                 /*lenght: {
                     minimum: 8,
-                    message: "La password deve contenere almeno 8 caratteri"
+                    message: "La password deve contenere almeno 8 caratteri, massimo 16"
                 }*/
             },
             refresh_token: {
                 type: "string"
             }
-        } 
+        }
+        
+        this.pharmaCostraints = {
+            piva: {
+                type: "string",
+                /*lenght: {
+                    minimum: 11,
+                    maximum: 11,
+                    message: "La partita IVA deve contenere 11 caratteri per essere valida!"
+                }*/
+            },
+            ragSociale: {
+                type: "string"
+            },
+            iban: {
+                type: "string",
+                /*lenght: {
+                    minimum: 27,
+                    maximum: 27,
+                    message: "L'IBAN deve contenere 27 caratteri per essere valido!"
+                }*/
+            },
+            password: {
+                type: "string",
+                /*lenght: {
+                    minimum: 8,
+                    maximum: 16,
+                    message: "La password deve contenere almeno 8 caratteri, massimo 16"
+                }*/
+            },
+            refresh_token: {
+                type: "string"
+            }
+        }
     }
     
-    validateInput(data){
+    validateUserInput(data){
         return new Promise( (resolve, reject) => {
-            validate.async(data, this.costraints)
+            validate.async(data, this.userCostraints)
             .then( (data) => { resolve(data) })
             .catch( (err) => { reject(err)})
         }) 
+    }
+
+    validatePharmaInput(data){
+        return new Promise( (resolve, reject) => {
+            validate.async(data, this.pharmaCostraints)
+            .then( (data) => { resolve(data) })
+            .catch( (err) => { reject(err)})
+        })
     }
 
     

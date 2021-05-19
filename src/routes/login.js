@@ -16,8 +16,7 @@ router.post('/login', function(req, res){
             user.login()
             .then((row) => {
                 var userAccessToken = jwt.signAccessToken({user: user.cf})
-                var userOut = JSON.stringify(row)
-                res.status(201).json({accessToken: userAccessToken, userOut});
+                res.status(201).json({accessToken: userAccessToken, row});
             })
         })
         .catch( (err) => {res.status(500).json({message: err})})

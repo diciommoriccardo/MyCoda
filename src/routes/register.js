@@ -1,6 +1,6 @@
 import Router from 'express';
 import jwt from '../helpers/jwt.js';
-import {JWT} from '../config/constants.js';
+import {JWT, SUCCESS_ITA} from '../config/constants.js';
 import {ERRORS} from '../config/constants.js';
 import {SUCCESS_EN} from '../config/constants.js';
 import User from '../models/user.model.js'
@@ -13,13 +13,14 @@ router.post('/register', function(req, res){
         new User(req.body)
         .then((user) => {
             user.register()
+            .then((result) => {
+            res.status(201).json({result, message: SUCCESS_ITA.REGISTER})
+            })
+            .catch((err) => {
+                res.status(500).json({error: err})
+            })            
         })
-        .then((result) => {
-            res.status(201).json({result, message: SUCCESS_EN.REGISTER})
-        })
-        .catch((err) => {
-            res.status(500).json({error: err.toString()})
-        })
+        
 });
 
 export default router;
