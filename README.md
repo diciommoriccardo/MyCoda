@@ -1,2 +1,2 @@
-# doq-api
-REST API implementation for DoQ app.
+# MyCoda
+REST API implementation for MyCoda app.
