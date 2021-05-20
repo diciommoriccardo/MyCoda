@@ -1,9 +1,8 @@
 import Router from 'express';
-import User from '../models/user.model.js';
-import jwt from '../helpers/jwt.js';
-import {JWT} from '../config/constants.js';
-import {ERRORS} from '../config/constants.js';
-import controller from '../controller/user.controller.js'
+import User from '../../models/user.model.js';
+import jwt from '../../helpers/jwt.js';
+import {JWT} from '../../config/constants.js';
+import {ERRORS} from '../../config/constants.js';
 const router = Router();
 
 router.get('/:cf', function(req, res){

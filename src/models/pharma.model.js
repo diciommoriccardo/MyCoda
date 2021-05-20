@@ -1,6 +1,4 @@
 import randomString from '../utils/string/random.js';
-import {SUCCESS_ITA} from '../config/constants.js';
-import {SUCCESS_EN} from '../config/constants.js';
 import pool from '../helpers/MysqlDb.js';
 import { REFRESH_TOKEN } from '../config/constants.js';
 import Validate from '../helpers/inputValidate.js';
@@ -48,22 +46,97 @@ class pharma{
 
             getHashedPassword(this.password)
             .then(hash => {
-                this.password=hash
-
-                pool.getConnection( (err, connection) => {
-                    if(err) reject(err)
+                this.password = hash
                 
+                pool.getConnection( (err, connection) => {
+                    if(err) return reject(err)
+                    
                     connection.query(sql, [this],
                         function(err, result){
-                            if(err) reject(err)
-    
-                            //resolve(result)
+                            if(err) return reject(err)
+                            
+                            resolve(this.values)
                     })
                 })
             })
-            .then( () => {resolve(this)})
             .catch( (err) => reject(err))
         });
     }
 
+    login(){
+        return new Promise( (resolve, reject) => {
+            this.findByCf(this.piva)
+            .then( ([row]) => { 
+                bcrypt.compare(this.password, row.password) ? resolve(row) : reject()
+            })
+            .catch( (err) => {
+                reject(err)
+            })
+        })
+    }
+
+    findByCf(piva){
+        return new Promise ( (resolve, reject) => {
+            let sql = "SELECT * FROM farma WHERE piva = ?";
+
+            pool.getConnection( (err, connection) => {
+                if(err) return reject(err)
+                
+                connection.query(sql, [piva],
+                    function(err, result){
+                        if(err) return reject(err)
+
+                        resolve(result)
+                    })
+            })
+        })
+    }
+
+    updateByPiva(piva, data){
+        return new Promise( (resolve, reject) => {
+            let sql = "UPDATE farma SET ? WHERE piva = ?";
+            
+            pool.getConnection( (err, connection) => {
+                if(err) return reject(err)
+
+                connection.query(sql, data, piva, 
+                    function(err, piva){
+                        if(err) return reject(err)
+
+                        resolve(findByPiva(piva))
+                    })
+
+            })
+        })
+    }
+    
+    findByRefreshToken(refresh_token){
+        let sql = "SELECT * FROM farma WHERE refresh_token = ?";
+
+        pool.getConnection( (err, connection) => {
+            if(err) return reject(err)
+
+            connection.query(sql, refresh_token,
+                function(err, result){
+                    if(err) return reject(err)
+
+                    resolve(result)
+                })
+        })
+    }
+
+    findAll(){
+        let sql = "SELECT * FROM farma";
+
+        pool.getConnection( (err, connection) => {
+            if(err) return reject(err)
+
+            connection.query(sql, 
+                function(err, result){
+                    if(err) return reject(err)
+
+                    resolve(result)
+                })
+        })
+    }
 }

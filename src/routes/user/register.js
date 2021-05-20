@@ -1,9 +1,9 @@
 import Router from 'express';
-import jwt from '../helpers/jwt.js';
-import {JWT, SUCCESS_ITA} from '../config/constants.js';
-import {ERRORS} from '../config/constants.js';
-import {SUCCESS_EN} from '../config/constants.js';
-import User from '../models/user.model.js'
+import jwt from '../../helpers/jwt.js';
+import {JWT, SUCCESS_ITA} from '../../config/constants.js';
+import {ERRORS} from '../../config/constants.js';
+import {SUCCESS_EN} from '../../config/constants.js';
+import User from '../../models/user.model.js'
 
 const router = Router();
 

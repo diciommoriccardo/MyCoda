@@ -1,11 +1,14 @@
 import authMiddleware from '../middlewares/auth.js';
 import tokenRenewal from '../routes/token.js';
-import getUser from '../routes/getUser.js';
-import login from '../routes/login.js';
-import register from '../routes/register.js';
+import getUser from '../routes/user/getUser.js';
+import userLogin from '../routes/user/login.js';
+import userRegister from '../routes/user/register.js';
+import getPharma from '../routes/pharma/getPharma.js';
+import pharmaLogin from '../routes/pharma/login.js';
+import pharmaRegister from '../routes/pharma/register.js';
+import getAllPharma from '../routes/pharma/getAll.js';
 import notFoundMiddleware from '../middlewares/notFound.js';
-//import redirect from '../routes/auth/redirect';
-//import callback from '../routes/auth/callback';
+
 
 
 class Router {
@@ -15,7 +18,8 @@ class Router {
             '/api': {
                 "/token" : tokenRenewal
             },
-            '/users': [getUser,login,register],
+            '/users': [getUser,userLogin,userRegister],
+            '/pharma': [getPharma,pharmaLogin,pharmaRegister,getAllPharma],
             '*': notFoundMiddleware,
         }
     }
