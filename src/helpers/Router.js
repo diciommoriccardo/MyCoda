@@ -9,7 +9,7 @@ import pharmaRegister from '../routes/pharma/register.js';
 import getAllPharma from '../routes/pharma/getAll.js';
 import notFoundMiddleware from '../middlewares/notFound.js';
 
-
+//test commit
 
 class Router {
     constructor( app ){
