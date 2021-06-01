@@ -1,5 +1,6 @@
 import jwt from '../../helpers/jwt.js';
 import User from '../../models/user.model.js';
+import Router from 'express';
 
 const router = Router();
 

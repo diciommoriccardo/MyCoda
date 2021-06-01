@@ -6,7 +6,6 @@ import userRegister from '../routes/user/register.js';
 import getPharma from '../routes/pharma/getPharma.js';
 import pharmaLogin from '../routes/pharma/login.js';
 import pharmaRegister from '../routes/pharma/register.js';
-import getAllPharma from '../routes/pharma/getAll.js';
 import notFoundMiddleware from '../middlewares/notFound.js';
 
 //test commit
@@ -19,7 +18,7 @@ class Router {
                 "/token" : tokenRenewal
             },
             '/users': [getUser,userLogin,userRegister],
-            '/pharma': [getPharma,pharmaLogin,pharmaRegister,getAllPharma],
+            '/pharma': [getPharma,pharmaLogin,pharmaRegister],
             '*': notFoundMiddleware,
         }
     }

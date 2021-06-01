@@ -140,3 +140,5 @@ class pharma{
         })
     }
 }
+
+export default pharma
