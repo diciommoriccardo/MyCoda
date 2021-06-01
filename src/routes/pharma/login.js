@@ -5,8 +5,8 @@ import Pharma from '../../models/pharma.model.js';
 const router = Router();
 
 router.post('/login', function(req, res){
-    if(!req.body){ res.status(400).end('Content cannot be empty')}
-    if(!((req.body.piva) && (req.body.password))){ res.status(400).end('P.IVA and password are required')}
+    if(!req.body){ res.status(400).json({message: 'Content cannot be empty'})}
+    if(!((req.body.piva) && (req.body.password))){ res.status(400).json({message: 'P.IVA and password are required'})}
 
         new Pharma( req.body )
         .then( (pharma) => {

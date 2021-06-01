@@ -8,7 +8,7 @@ import User from '../../models/user.model.js'
 const router = Router();
 
 router.post('/register', function(req, res){
-    if(!req.body){res.status(400).send('Content cannot be empty')}
+    if(!req.body){res.status(400).json({message: 'Content cannot be empty'})}
 
         new User(req.body)
         .then((user) => {
