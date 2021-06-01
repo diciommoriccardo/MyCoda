@@ -5,7 +5,7 @@
   "description": "REST API implementation for the DoQ app.",
   "main": "app.js",
   "scripts": {
-    "start": "node -r esm app.js",
+    "start": "node --experimental-modules app.js",
     "dev": "SET NODE_ENV=development&& nodemon -r esm app.js",
     "prod": "SET NODE_ENV=production&& node -r esm app.js"
   },
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/AriciducaZagaria/doq-api.git"
   },
-  "author": "Pierluigi Zagaria",
+  "author": "Riccardo Di Ciommo, Pierluigi Zagaria",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/AriciducaZagaria/doq-api/issues"
