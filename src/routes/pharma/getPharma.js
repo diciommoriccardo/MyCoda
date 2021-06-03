@@ -3,8 +3,8 @@ import Pharma from '../../models/pharma.model.js';
 const router = Router();
 
 router.get('/:piva', function(req, res){
-    if(!req.body){res.status(400).json({message:'Content cannot be empty'})}
-        if(!req.body.piva){ res.status(400).json({message: 'P.IVA are required'})}
+    if(!req.body){res.status(400).json({error: {message:'Content cannot be empty'}})}
+        if(!req.body.piva){ res.status(400).json({error: {message: 'P.IVA are required'}})}
 
         var pharma = new Pharma({
             piva: req.body.piva
@@ -14,7 +14,7 @@ router.get('/:piva', function(req, res){
         .then( (result) =>{
             res.status(201).send(result)
         })
-        .catch( (err) => {res.status(500).json({ message: err})})
+        .catch( (err) => {res.status(500).json({error: { message: err}})})
 });
 
 export default router;

@@ -5,7 +5,7 @@ import Pharma from '../../models/pharma.model.js'
 const router = Router();
 
 router.post('/register', function(req, res){
-    if(!req.body){res.status(400).json({message: 'Content cannot be empty'})}
+    if(!req.body){res.status(400).json({error: {message: 'Content cannot be empty'}})}
 
         new Pharma(req.body)
         .then((pharma) => {
@@ -14,7 +14,7 @@ router.post('/register', function(req, res){
             res.status(201).json({result, message: SUCCESS_ITA.REGISTER})
             })
             .catch((err) => {
-                res.status(500).json({error: err})
+                res.status(500).json({error: {message: err}})
             })            
         })
         
