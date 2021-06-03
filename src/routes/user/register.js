@@ -14,7 +14,7 @@ router.post('/register', function(req, res){
         .then((user) => {
             user.register()
             .then((result) => {
-            res.status(201).json({result, message: SUCCESS_ITA.REGISTER})
+                res.status(201).json({result, message: SUCCESS_ITA.REGISTER})
             })
             .catch((err) => {
                 res.status(500).json({error: {message: err}})

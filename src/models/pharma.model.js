@@ -125,18 +125,20 @@ class pharma{
         })
     }
 
-    findAll(){
-        let sql = "SELECT * FROM farma";
+    getAll(){
+        return new Promise( (resolve, reject) =>{
+            let sql = "SELECT * FROM farma";
 
-        pool.getConnection( (err, connection) => {
-            if(err) return reject(err)
+            pool.getConnection( (err, connection) => {
+                if(err) return reject(err)
 
-            connection.query(sql, 
-                function(err, result){
-                    if(err) return reject(err)
+                connection.query(sql, 
+                    function(err, result){
+                        if(err) return reject(err)
 
-                    resolve(result)
-                })
+                        resolve(result)
+                    })
+            })
         })
     }
 }
