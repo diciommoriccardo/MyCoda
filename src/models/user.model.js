@@ -120,7 +120,7 @@ class user{
     }
 
     findAll(){
-        let sql = "SELECT * FROM user";
+        let sql = "START TRANSACTION; SELECT * FROM user LOCK FOR READ; COMMIT;";
 
         MysqlDb.query(sql, function(err, result){
             if(err) return reject(err)

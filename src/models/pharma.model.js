@@ -28,16 +28,18 @@ async function getHashedPassword(password){
 
 class pharma{
     constructor(pharma){
-        validate.validatePharmaInput(pharma)
-        .then( (pharma) => {
-            this.piva = pharma.piva
-            this.ragSociale = pharma.ragSociale
-            this.iban = pharma.iban
-            this.password = pharma.password
-            this.refresh_token = pharma.refresh_token || getRefreshToken()
-            resolve(this)
+        return new Promise( (resolve, reject) =>{
+            validate.validatePharmaInput(pharma)
+            .then( (pharma) => {
+                this.piva = pharma.piva
+                this.ragSociale = pharma.ragSociale
+                this.iban = pharma.iban
+                this.password = pharma.password
+                this.refresh_token = pharma.refresh_token || getRefreshToken()
+                resolve(this)
+            })
+            .catch( (err) => {reject(err)})
         })
-        .catch( (err) => {reject(err)})
     }
 
     register(){

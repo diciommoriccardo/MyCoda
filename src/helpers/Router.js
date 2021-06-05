@@ -7,8 +7,7 @@ import getPharma from '../routes/pharma/getPharma.js';
 import pharmaLogin from '../routes/pharma/login.js';
 import pharmaRegister from '../routes/pharma/register.js';
 import notFoundMiddleware from '../middlewares/notFound.js';
-
-//test commit
+import getAll from '../routes/pharma/getAll.js';
 
 class Router {
     constructor( app ){
@@ -18,7 +17,7 @@ class Router {
                 "/token" : tokenRenewal
             },
             '/users': [getUser,userLogin,userRegister],
-            '/pharma': [getPharma,pharmaLogin,pharmaRegister],
+            '/pharma': [getPharma,pharmaLogin,pharmaRegister,getAll],
             '*': notFoundMiddleware,
         }
     }
