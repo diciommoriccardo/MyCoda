@@ -57,6 +57,7 @@ class pharma{
                         function(err, result){
                             if(err) return reject(err)
                             
+                            connection.release()
                             resolve(this.values)
                     })
                 })
@@ -74,12 +75,13 @@ class pharma{
             .catch( (err) => {
                 reject(err)
             })
+            connection.release()
         })
     }
 
     findByCf(piva){
         return new Promise ( (resolve, reject) => {
-            let sql = "SELECT * FROM farma WHERE piva = ?";
+            let sql = "SELECT * FROM farma WHERE piva = ? LOCK FOR READ";
 
             pool.getConnection( (err, connection) => {
                 if(err) return reject(err)
@@ -88,6 +90,7 @@ class pharma{
                     function(err, result){
                         if(err) return reject(err)
 
+                        connection.release()
                         resolve(result)
                     })
             })
@@ -96,7 +99,7 @@ class pharma{
 
     updateByPiva(piva, data){
         return new Promise( (resolve, reject) => {
-            let sql = "UPDATE farma SET ? WHERE piva = ?";
+            let sql = "UPDATE farma SET ? WHERE piva = ? LOCK FOR WRITE";
             
             pool.getConnection( (err, connection) => {
                 if(err) return reject(err)
@@ -105,6 +108,7 @@ class pharma{
                     function(err, piva){
                         if(err) return reject(err)
 
+                        connection.release()
                         resolve(findByPiva(piva))
                     })
 
@@ -113,7 +117,7 @@ class pharma{
     }
     
     findByRefreshToken(refresh_token){
-        let sql = "SELECT * FROM farma WHERE refresh_token = ?";
+        let sql = "SELECT * FROM farma WHERE refresh_token = ? LOCK FOR READ";
 
         pool.getConnection( (err, connection) => {
             if(err) return reject(err)
@@ -122,6 +126,7 @@ class pharma{
                 function(err, result){
                     if(err) return reject(err)
 
+                    connection.release()
                     resolve(result)
                 })
         })
@@ -129,7 +134,7 @@ class pharma{
 
     getAll(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM farma";
+            let sql = "SELECT * FROM farma LOCK FOR READ";
 
             pool.getConnection( (err, connection) => {
                 if(err) return reject(err)
@@ -138,6 +143,7 @@ class pharma{
                     function(err, result){
                         if(err) return reject(err)
 
+                        connection.release()
                         resolve(result)
                     })
             })

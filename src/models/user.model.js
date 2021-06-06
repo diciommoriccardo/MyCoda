@@ -49,7 +49,7 @@ class user{
 
     register(){
         return new Promise( (resolve, reject) => {
-            let sql = 'INSERT INTO user SET ?';
+            let sql = 'INSERT INTO user SET ? LOCK FOR WRITE';
 
             getHashedPassword(this.password)
             .then(hash => {
@@ -59,9 +59,10 @@ class user{
                     if(err) return reject(err)
                     
                     connection.query(sql, [this],
-                        function(err, result){
+                        function(err){
                             if(err) return reject(err)
                             
+                            connection.release()
                             resolve(this.values)
                     })
                 })
@@ -79,15 +80,18 @@ class user{
             .catch( (err) => {
                 reject(err)
             })
+            connection.release()
         })
     }
 
     updateByCf(cf, data){
         return new Promise( (resolve, reject) => {
-            let sql = "UPDATE user SET ? WHERE cf = ?";
+            let sql = "UPDATE user SET ? WHERE cf = ? LOCK FOR WRITE";
             
             this.MysqlDb.query(sql, data, cf, function(err, result){
                 if(err) return reject(err)
+
+                connection.release()
                 resolve(result)
             })
         })
@@ -95,7 +99,7 @@ class user{
 
     findByCf(cf){
         return new Promise ( (resolve, reject) => {
-            let sql = "SELECT * FROM user WHERE cf = ?";
+            let sql = "SELECT * FROM user WHERE cf = ? LOCK FOR READ";
 
             pool.getConnection( (err, connection) => {
                 if(err) throw err
@@ -104,28 +108,46 @@ class user{
                     function(err, result){
                         if(err) reject(err)
 
+                        connection.release()
                         resolve(result)
                     })
             })
         })
     }
 
-    findByRefreshToken(refresh_token){
-        let sql = "SELECT * FROM user WHERE refresh_token = ?";
+    findByRefreshToken(){
+        return new Promise( (resolve, reject) =>{
+            let sql = "SELECT * FROM user WHERE refresh_token = ? LOCK FOR READ";
 
-        MysqlDb.query(sql, refresh_token, function(err, result){
-            if(err) return reject(err)
-            resolve(result)
+            pool.getConnection( (err, connection) =>{
+                if(err) return reject(err)
+
+                connection.query(sql, this.refresh_token,
+                    function(err, result){
+                        if(err) return reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
+            })
         })
     }
 
     findAll(){
-        let sql = "START TRANSACTION; SELECT * FROM user LOCK FOR READ; COMMIT;";
+        return new Promise( (resolve, reject) =>{
+            let sql = "SELECT * FROM user LOCK FOR READ";
 
-        MysqlDb.query(sql, function(err, result){
-            if(err) return reject(err)
+            pool.getConnection( (err, connection) =>{
+                if(err) return reject(err)
 
-            resolve(result)
+                connection.query(sql, 
+                    function(err, result){
+                        if(err) return reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
+            })
         })
     }
 }
