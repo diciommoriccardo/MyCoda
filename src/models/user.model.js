@@ -27,7 +27,7 @@ async function getHashedPassword(password){
 }
 
 
-class user{
+class User {
     constructor( user ){
         return new Promise((resolve, reject) =>{
             validate.validateUserInput(user)
@@ -78,7 +78,6 @@ class user{
             .catch( (err) => {
                 reject(err)
             })
-            connection.release()
         })
     }
 
@@ -150,4 +149,4 @@ class user{
     }
 }
 
-export default user;
+export default User;

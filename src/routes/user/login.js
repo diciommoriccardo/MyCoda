@@ -10,12 +10,10 @@ router.post('/login', function(req, res){
         return res.status(400).json({error: {message:  'Cf and password are required'}});
 
     new User ( req.body )
-    .then( (user) => {
-        user.login()
-        .then((row) => {
-            var userAccessToken = jwt.signAccessToken({user: user.cf})
-            res.status(201).json({accessToken: userAccessToken, row});
-        })
+    .then((user) => user.login())
+    .then((row) => {
+        var userAccessToken = jwt.signAccessToken({ user: user.cf })
+        res.status(201).json({ accessToken: userAccessToken, row });
     })
     .catch( (err) => {res.status(500).json({error: {message: err}})})
 });
