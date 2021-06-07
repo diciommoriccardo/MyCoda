@@ -17,7 +17,7 @@ class Router {
                 tokenRenewal,
                 {
                     '/users': [userLogin, userRegister, authMiddleware, getUser],
-                    '/pharma': [getPharmacy, pharmacyLogin, pharmacyRegister, getAll],
+                    '/pharmacy': [getPharmacy, pharmacyLogin, pharmacyRegister, getAll],
                 }
             ],
             '*': notFoundMiddleware,
