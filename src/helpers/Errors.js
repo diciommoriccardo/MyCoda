@@ -1,4 +1,4 @@
-class Errors extends Error{
+class Errors extends Error {
     constructor(message){
         super(message)
         this.name = this.constructor.name
@@ -6,7 +6,7 @@ class Errors extends Error{
     }
 }
 
-class ResourceNotFound extends Errors{
+class ResourceNotFound extends Errors {
     constructor(resource, query) {
         super(`Resource ${resource} was not found.`);
         this.data = { resource, query };
