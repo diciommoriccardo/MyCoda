@@ -1,6 +1,6 @@
-import pool from '../helpers/MysqlDb.js';
+import pool from '../helpers/mysql.js';
 
-class session{
+class Session {
     constructor(session){
         this.cfUtente = session.cfUtente
         this.time = session.time

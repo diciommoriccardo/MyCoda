@@ -1,6 +1,6 @@
-import pool from '../helpers/MysqlDb.js';
+import pool from '../helpers/mysql.js';
 
-class payment{
+class Payment {
     constructor(payment){
         this.somma = payment.somma
         this.time = payment.time

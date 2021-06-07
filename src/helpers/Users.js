@@ -1,6 +1,6 @@
 import User from '../models/user.model.js'
 import randomString from '../utils/string/random.js';
-import  REFRESH_TOKEN from '../config/constants.js';
+import REFRESH_TOKEN from '../config/constants.js';
 
 const getRefreshToken = () => {
     return randomString(REFRESH_TOKEN.LENGTH);

@@ -1,8 +1,8 @@
 import randomString from '../utils/string/random.js';
-import pool from '../helpers/MysqlDb.js';
+import pool from '../helpers/mysql.js';
 import { REFRESH_TOKEN } from '../config/constants.js';
-import Validate from '../helpers/inputValidate.js';
-import bcrypt, { hash } from 'bcrypt';
+import Validate from '../helpers/InputValidator.js';
+import bcrypt from 'bcrypt';
 
 const validate = new Validate();
 
@@ -26,7 +26,7 @@ async function getHashedPassword(password){
     })
 }
 
-class pharma{
+class Pharmacy {
     constructor(pharma){
         return new Promise( (resolve, reject) =>{
             validate.validatePharmaInput(pharma)
@@ -142,7 +142,6 @@ class pharma{
                 connection.query(sql, 
                     function(err, result){
                         if(err) return reject(err)
-
                         connection.release()
                         resolve(result)
                     })
@@ -151,4 +150,4 @@ class pharma{
     }
 }
 
-export default pharma
+export default Pharmacy;

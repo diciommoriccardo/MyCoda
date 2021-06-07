@@ -1,7 +1,6 @@
 import validate from 'validate.js';
 
-
-class inputValidate{
+class InputValidator {
     constructor(){
        this.userCostraints = {
             cf: {
@@ -87,7 +86,6 @@ class inputValidate{
             .catch( (err) => { reject(err)})
         })
     }
-
-    
 }
-export default inputValidate;
+
+export default InputValidator;

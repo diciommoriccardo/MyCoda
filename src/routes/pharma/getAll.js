@@ -1,11 +1,11 @@
 import Router from 'express';
-import Pharma from '../../models/pharma.model.js';
+import Pharmacy from '../../models/pharmacy.model.js';
 import {SUCCESS_ITA} from '../../config/constants.js';
 
 const router = new Router()
 
-router.post('/all', function(req, res){
-    new Pharma(req.body)
+router.get('/', function(req, res){
+    new Pharmacy (req.body)
     .then((pharma) =>{
         pharma.getAll()
         .then((result) =>{

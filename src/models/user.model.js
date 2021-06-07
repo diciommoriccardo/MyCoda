@@ -1,10 +1,8 @@
+import bcrypt from 'bcrypt';
 import randomString from '../utils/string/random.js';
-import {SUCCESS_ITA} from '../config/constants.js';
-import {SUCCESS_EN} from '../config/constants.js';
-import pool from '../helpers/MysqlDb.js';
+import pool from '../helpers/mysql.js';
 import { REFRESH_TOKEN } from '../config/constants.js';
-import Validate from '../helpers/inputValidate.js';
-import bcrypt, { hash } from 'bcrypt';
+import Validate from '../helpers/InputValidator.js';
 
 const validate = new Validate();
 

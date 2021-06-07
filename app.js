@@ -1,16 +1,13 @@
 import http from 'http';
 import https from 'https';
 import express from 'express';
-import MysqlDb from './src/helpers/MysqlDb.js';
 import Router from './src/helpers/Router.js';
 import getCertificate from './src/utils/ssl/getCertificate.js';
 import { SERVER } from './src/config/config.js';
-import connection from './src/helpers/MysqlDb.js'
 
 class WebServer {
     constructor({ ssl_certificate }) {
         this.app = express();
-        this.app.use(express.urlencoded());
         this.app.use(express.json());
         this.router = new Router(this.app).setAllRoutes();
         this.http = http.Server(this.app);

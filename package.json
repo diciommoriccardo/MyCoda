@@ -1,11 +1,10 @@
 {
-  "type": "module",
   "name": "mycoda",
   "version": "1.0.0",
-  "description": "REST API implementation for the DoQ app.",
+  "description": "REST API implementation for the MyCoda app.",
   "main": "app.js",
   "scripts": {
-    "start": "node --experimental-modules app.js",
+    "start": "node -r esm app.js",
     "dev": "SET NODE_ENV=development&& nodemon -r esm app.js",
     "prod": "SET NODE_ENV=production&& node -r esm app.js"
   },
@@ -22,20 +21,14 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "http": "0.0.1-security",
-    "https": "^1.0.0",
-    "i": "^0.3.6",
     "jsonwebtoken": "^8.5.1",
     "mysql": "github:mysqljs/mysql",
-    "mysql2": "^2.2.5",
-    "dotenv": "^8.2.0",
     "validate.js": "^0.13.1"
   },
   "devDependencies": {
-    "bufferutil": "^4.0.1",
-    "nodemon": "^2.0.7",
-    "utf-8-validate": "^5.0.2"
+    "nodemon": "^2.0.7"
   }
 }
