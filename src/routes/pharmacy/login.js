@@ -10,14 +10,12 @@ router.post('/login', function(req, res){
         return res.status(400).json({error: {message: 'P.IVA and password are required'}});
 
     new Pharmacy ( req.body )
-    .then( (pharma) => {
-        user.login()
-        .then((row) => {
-            var userAccessToken = jwt.signAccessToken({user: pharma.piva})
-            res.status(201).json({accessToken: userAccessToken, row});
+        .then(pharmacy => pharmacy.login())
+        .then(row => {
+            var userAccessToken = jwt.signAccessToken({ user: pharmacy.piva })
+            res.status(201).json({ accessToken: userAccessToken, row });
         })
-    })
-    .catch( (err) => {res.status(500).json({error: {message: err}})})
+        .catch(err => { return res.status(500).json({error: {message: err}}); });
 });
 
 export default router;
