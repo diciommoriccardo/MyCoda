@@ -81,7 +81,7 @@ class Pharmacy {
 
     findByCf(piva){
         return new Promise ( (resolve, reject) => {
-            let sql = "SELECT * FROM farma WHERE piva = ? LOCK FOR READ";
+            let sql = "SELECT * FROM farma WHERE piva = ?";
 
             pool.getConnection( (err, connection) => {
                 if(err) return reject(err)
@@ -99,7 +99,7 @@ class Pharmacy {
 
     updateByPiva(piva, data){
         return new Promise( (resolve, reject) => {
-            let sql = "UPDATE farma SET ? WHERE piva = ? LOCK FOR WRITE";
+            let sql = "UPDATE farma SET ? WHERE piva = ?";
             
             pool.getConnection( (err, connection) => {
                 if(err) return reject(err)
@@ -117,7 +117,7 @@ class Pharmacy {
     }
     
     findByRefreshToken(refresh_token){
-        let sql = "SELECT * FROM farma WHERE refresh_token = ? LOCK FOR READ";
+        let sql = "SELECT * FROM farma WHERE refresh_token = ?";
 
         pool.getConnection( (err, connection) => {
             if(err) return reject(err)
@@ -134,7 +134,7 @@ class Pharmacy {
 
     getAll(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM farma LOCK FOR READ";
+            let sql = "SELECT * FROM farma";
 
             pool.getConnection( (err, connection) => {
                 if(err) return reject(err)

@@ -10,7 +10,7 @@ class Payment {
 
     create(){
         return new Promise( (resolve, reject) =>{
-            let sql = "INSERT INTO farma SET ? LOCK FOR WRITE";
+            let sql = "INSERT INTO farma SET ?";
 
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
@@ -28,7 +28,7 @@ class Payment {
 
     findByUser(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM payment WHERE cfUtente = ? LOCK FOR READ"
+            let sql = "SELECT * FROM payment WHERE cfUtente = ?"
 
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
@@ -46,7 +46,7 @@ class Payment {
 
     findByPharma(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM payment WHERE pivaFarm = ? LOCK FOR READ"
+            let sql = "SELECT * FROM payment WHERE pivaFarm = ?"
 
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)

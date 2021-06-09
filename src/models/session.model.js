@@ -9,7 +9,7 @@ class Session {
 
     create(){
         return new Promise( (resolve, reject) =>{
-            let sql = "INSERT INTO msg SET ? LOCK FOR WRITE"
+            let sql = "INSERT INTO msg SET ?"
 
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
@@ -27,7 +27,7 @@ class Session {
 
     findByUser(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM msg WHERE cfUtente = ? LOCK FOR READ"
+            let sql = "SELECT * FROM msg WHERE cfUtente = ?"
 
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
@@ -45,7 +45,7 @@ class Session {
 
     findByPharma(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM msg WHERE pivaFarm = ? LOCK FOR READ"
+            let sql = "SELECT * FROM msg WHERE pivaFarm = ?"
 
             pool.getConnection((err, connection) =>{
                 if(err) return reject(err)

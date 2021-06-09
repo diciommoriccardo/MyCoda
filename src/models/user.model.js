@@ -47,7 +47,7 @@ class User {
 
     register(){
         return new Promise( (resolve, reject) => {
-            let sql = 'INSERT INTO user SET ? LOCK FOR WRITE';
+            let sql = 'INSERT INTO user SET ?';
 
             getHashedPassword(this.password)
             .then(hash => {
@@ -83,7 +83,7 @@ class User {
 
     updateByCf(cf, data){
         return new Promise( (resolve, reject) => {
-            let sql = "UPDATE user SET ? WHERE cf = ? LOCK FOR WRITE";
+            let sql = "UPDATE user SET ? WHERE cf = ?";
             
             this.MysqlDb.query(sql, data, cf, function(err, result){
                 if(err) return reject(err)
@@ -96,7 +96,7 @@ class User {
 
     findByCf(cf){
         return new Promise ( (resolve, reject) => {
-            let sql = "SELECT * FROM user WHERE cf = ? LOCK FOR READ";
+            let sql = "SELECT * FROM user WHERE cf = ?";
 
             pool.getConnection( (err, connection) => {
                 if(err) throw err
@@ -114,7 +114,7 @@ class User {
 
     findByRefreshToken(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM user WHERE refresh_token = ? LOCK FOR READ";
+            let sql = "SELECT * FROM user WHERE refresh_token = ?";
 
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
@@ -132,7 +132,7 @@ class User {
 
     findAll(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM user LOCK FOR READ";
+            let sql = "SELECT * FROM user";
 
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
