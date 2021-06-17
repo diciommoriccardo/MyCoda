@@ -1,11 +1,11 @@
 import Router from 'express';
-import Pharmacy from '../../models/pharmacy.model.js';
+import User from '../../models/user.model.js';
 
 const router = new Router();
 
-router.get('/all', (req, res) => {
-    new Pharmacy()
-        .then(pharmacy => pharmacy.getAll())
+router.get('/', (req, res) => {
+    new User(req.user)
+        .then(user => user.getAll())
         .then(result => { return res.status(201).json(result); })
         .catch(err => { return res.status(500).json({ error: { message: err } }); });
 })
