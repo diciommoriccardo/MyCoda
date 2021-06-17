@@ -79,14 +79,14 @@ class Pharmacy {
         })
     }
 
-    findByCf(piva){
+    findByCf(){
         return new Promise ( (resolve, reject) => {
             let sql = "SELECT * FROM farma WHERE piva = ?";
 
             pool.getConnection( (err, connection) => {
                 if(err) return reject(err)
                 
-                connection.query(sql, [piva],
+                connection.query(sql, [this.piva],
                     function(err, result){
                         if(err) return reject(err)
 
@@ -97,7 +97,7 @@ class Pharmacy {
         })
     }
 
-    updateByPiva(piva, data){
+    /*updateByPiva(piva, data){
         return new Promise( (resolve, reject) => {
             let sql = "UPDATE farma SET ? WHERE piva = ?";
             
@@ -114,7 +114,7 @@ class Pharmacy {
 
             })
         })
-    }
+    }*/
     
     findByRefreshToken(refresh_token){
         let sql = "SELECT * FROM farma WHERE refresh_token = ?";
