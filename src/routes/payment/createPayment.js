@@ -9,7 +9,7 @@ router.get('/:id', (req, res) => {
 
     new Payment({
         pivaFarm: req.user.piva,
-        cfUtente: req.params.cf,
+        cfUtente: req.params.id,
         somma: req.body.somma
     })
     .then(payment => payment.create())
