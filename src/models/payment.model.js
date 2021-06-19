@@ -3,7 +3,7 @@ import pool from '../helpers/mysql.js';
 class Payment {
     constructor(payment){
         this.somma = payment.somma
-        this.time = payment.time
+        this.time = Math.floor(Date.now())
         this.cfUtente = payment.cfUtente
         this.pivaFarm = payment.pivaFarm
     }
@@ -62,3 +62,5 @@ class Payment {
         })
     }
 }
+
+export default Payment
