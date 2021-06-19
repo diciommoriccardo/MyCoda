@@ -8,7 +8,7 @@ import pharmacyLogin from '../routes/pharmacy/login.js';
 import pharmacyRegister from '../routes/pharmacy/register.js';
 import notFoundMiddleware from '../middlewares/notFound.js';
 import getAll from '../routes/pharmacy/getAll.js';
-import createSession from '../routes/pharmacy/createSession.js';
+import createSession from '../routes/session/createSession.js';
 import getUserPayments from '../routes/user/getPayments.js';
 import getPharmacyPayment from '../routes/pharmacy/getPayments.js';
 import createPayment from '../routes/payment/createPayment.js';
@@ -23,6 +23,7 @@ class Router {
                     '/users': [userLogin, userRegister, authMiddleware, getUser, getUserPayments],
                     '/pharmacy': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, getPharmacy, createSession, getPharmacyPayment],
                     '/payment' : [authMiddleware, createPayment],
+                    'session' : [authMiddleware, createSession],
                 }
             ],
             '*': notFoundMiddleware,
