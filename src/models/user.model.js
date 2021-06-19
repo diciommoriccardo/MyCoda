@@ -94,14 +94,14 @@ class User {
         })
     }
 
-    findByCf(cf){
+    findByCf(){
         return new Promise ( (resolve, reject) => {
             let sql = "SELECT * FROM user WHERE cf = ?";
 
             pool.getConnection( (err, connection) => {
                 if(err) throw err
                 
-                connection.query(sql, [cf],
+                connection.query(sql, [this.cf],
                     function(err, result){
                         if(err) reject(err)
 
