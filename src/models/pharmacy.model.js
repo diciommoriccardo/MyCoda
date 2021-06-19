@@ -33,7 +33,8 @@ class Pharmacy {
             .then( (pharma) => {
                 this.piva = pharma.piva
                 this.ragSociale = pharma.ragSociale
-                this.iban = pharma.iban
+                this.indirizzo = pharma.indirizzo
+                this.email = pharma.email
                 this.password = pharma.password
                 this.refresh_token = pharma.refresh_token || getRefreshToken()
                 resolve(this)
