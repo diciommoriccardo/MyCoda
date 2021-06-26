@@ -24,7 +24,7 @@ class Router {
                     '/users': [userLogin, userRegister, authMiddleware, getUser, getUserPayments],
                     '/pharmacy': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, getPharmacy, createSession, getPharmacyPayment],
                     '/payment' : [authMiddleware, createPayment],
-                    '/session' : [authMiddleware, createSession, saveMessage],
+                    '/session' : [authMiddleware, createSession, saveMessage],           
                 }
             ],
             '*': notFoundMiddleware,
