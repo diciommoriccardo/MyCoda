@@ -4,7 +4,7 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 
 const router = Router();
 
-router.get('/session/:id', (req, res) => {
+router.post('/session/:id', (req, res) => {
     if(!req.body.piva) { return res.status(400).json({error: {message: "P. IVA required"}}) }
 
     new Session({

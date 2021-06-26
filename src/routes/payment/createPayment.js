@@ -4,7 +4,7 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 
 const router = Router();
 
-router.get('/:id', (req, res) => {
+router.post('/:id', (req, res) => {
     if(!req.body.id) { return res.status(400).json({error: {message: "CF is required"}}) }
 
     new Payment({
