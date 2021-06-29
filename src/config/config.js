@@ -17,7 +17,6 @@ const DATABASE = {
   NAME: process.env.DATABASE_NAME,
   USER: process.env.DATABASE_USER,
   PASS: process.env.DATABASE_PASS,
-  URI: process.env.DATABASE_URI || `mysql://${USER}:${PASS}@${HOST}:${PORT}/${NAME}`,
   OPTIONS: {
     useNewUrlParser: true,
     useFindAndModify: false,

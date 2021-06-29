@@ -73,7 +73,9 @@ class User {
         return new Promise( (resolve, reject) => {
             this.findByCf(this.cf)
             .then( ([row]) => { 
-                bcrypt.compare(this.password, row.password) ? resolve(row) : reject()
+                bcrypt.compare(this.password, row.password)
+                    .then((valid) => valid ? resolve(row) : reject())
+                    .catch( error => reject(error));
             })
             .catch( (err) => {
                 reject(err)
@@ -102,11 +104,11 @@ class User {
                 if(err) throw err
                 
                 connection.query(sql, [this.cf],
-                    function(err, result){
+                    function(err, [row]){
                         if(err) reject(err)
 
                         connection.release()
-                        resolve(result)
+                        resolve(row)
                     })
             })
         })
