@@ -13,7 +13,7 @@ const SERVER = {
 
 const DATABASE = {
   HOST: process.env.DATABASE_HOST || '127.0.0.1',
-  PORT: process.env.DATABASE_PORT || '27017',
+  PORT: process.env.DATABASE_PORT || '3306',
   NAME: process.env.DATABASE_NAME,
   USER: process.env.DATABASE_USER,
   PASS: process.env.DATABASE_PASS,
