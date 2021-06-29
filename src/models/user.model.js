@@ -39,7 +39,6 @@ class User {
                 this.email = user.email;
                 this.password = user.password;
                 this.refresh_token = user.refresh_token || getRefreshToken();
-                console.log(this)
                 resolve(this)
             })
             .catch(err => reject(err))
@@ -84,7 +83,7 @@ class User {
             this.findByCf(this.cf)
             .then( ([row]) => { 
                 bcrypt.compare(this.password, row.password)
-                    .then((valid) => valid ? resolve(row) : reject("Utente non trovato"))
+                    .then((valid) => valid ? resolve(row) : reject())
                     .catch( error => reject(error));
             })
             .catch( (err) => {
