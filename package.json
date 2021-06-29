@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "REST API implementation for the MyCoda app.",
   "main": "app.js",
-  "type": "module",
   "scripts": {
     "start": "node -r esm app.js",
     "dev": "SET NODE_ENV=development&& nodemon -r esm app.js",
