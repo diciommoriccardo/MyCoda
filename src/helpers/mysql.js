@@ -5,6 +5,7 @@ import {SUCCESS_ITA} from '../config/constants.js';
 var pool = mysql.createPool({
     connectionLimit : 10,
     host : DATABASE.HOST,
+    port: DATABASE.PORT,
     user : DATABASE.USER,
     password : DATABASE.PASS,
     database : DATABASE.NAME
