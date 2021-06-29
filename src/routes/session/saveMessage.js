@@ -5,7 +5,7 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 
 const router = Router();
 
-router.get('/session/:id/message', (req, res) => {
+router.post('/session/:id/message', (req, res) => {
     if(!req.body.piva) { return res.status(400).json({error: {message: "P. IVA required"}}) }
 
     new Session({
@@ -21,7 +21,7 @@ router.get('/session/:id/message', (req, res) => {
             time: req.body.time
         })
     })
-    .then(message => { message.create()})
+    .then(message => message.create())
     .then(resultMessage => { return res.status(201).json({result: resultMessage, message: SUCCESS_ITA.DEFAULT}) })
     .catch(err => { return res.status(500).json({error: {message: err}})})
 })

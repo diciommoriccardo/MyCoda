@@ -49,14 +49,6 @@ class InputValidator {
             ragSociale: {
                 type: "string"
             },
-            iban: {
-                type: "string",
-                /*lenght: {
-                    minimum: 27,
-                    maximum: 27,
-                    message: "L'IBAN deve contenere 27 caratteri per essere valido!"
-                }*/
-            },
             password: {
                 type: "string",
                 /*lenght: {
@@ -74,16 +66,16 @@ class InputValidator {
     validateUserInput(data){
         return new Promise( (resolve, reject) => {
             validate.async(data, this.userCostraints)
-            .then( (data) => { resolve(data) })
-            .catch( (err) => { reject(err)})
+            .then(data => resolve(data))
+            .catch(err => reject(err))
         }) 
     }
 
     validatePharmaInput(data){
         return new Promise( (resolve, reject) => {
             validate.async(data, this.pharmaCostraints)
-            .then( (data) => { resolve(data) })
-            .catch( (err) => { reject(err)})
+            .then(data => resolve(data))
+            .catch(err => reject(err))
         })
     }
 }

@@ -39,9 +39,10 @@ class User {
                 this.email = user.email;
                 this.password = user.password;
                 this.refresh_token = user.refresh_token || getRefreshToken();
+                console.log(this)
                 resolve(this)
             })
-            .catch( (err) => { reject(err) })
+            .catch(err => reject(err))
         })    
     }
 
@@ -51,12 +52,21 @@ class User {
 
             getHashedPassword(this.password)
             .then(hash => {
-                this.password = hash
+                const {cf, nome, cognome, numTel, email, password, refresh_token} = this;
+                password = hash;
                 
                 pool.getConnection( (err, connection) => {
                     if(err) return reject(err)
                     
-                    connection.query(sql, [this],
+                    connection.query(sql, [
+                        connection.escape(cf),
+                        nome,
+                        cognome,
+                        connection.escape(numTel),
+                        connection.escape(email),
+                        connection.escape(password),
+                        connection.escape(refresh_token)
+                    ],
                         function(err){
                             if(err) return reject(err)
                             
@@ -65,7 +75,7 @@ class User {
                     })
                 })
             })
-            .catch( (err) => reject(err))
+            .catch( (err) => {console.log(err); return reject(err)})
         });
     }
 
@@ -74,7 +84,7 @@ class User {
             this.findByCf(this.cf)
             .then( ([row]) => { 
                 bcrypt.compare(this.password, row.password)
-                    .then((valid) => valid ? resolve(row) : reject())
+                    .then((valid) => valid ? resolve(row) : reject("Utente non trovato"))
                     .catch( error => reject(error));
             })
             .catch( (err) => {
@@ -83,7 +93,7 @@ class User {
         })
     }
 
-    updateByCf(cf, data){
+    /*updateByCf(cf, data){
         return new Promise( (resolve, reject) => {
             let sql = "UPDATE user SET ? WHERE cf = ?";
             
@@ -94,20 +104,21 @@ class User {
                 resolve(result)
             })
         })
-    }
+    }*/
 
     findByCf(){
         return new Promise ( (resolve, reject) => {
             let sql = "SELECT * FROM user WHERE cf = ?";
 
             pool.getConnection( (err, connection) => {
-                if(err) throw err
+                if(err) reject(err)
                 
                 connection.query(sql, [this.cf],
                     function(err, [row]){
                         if(err) reject(err)
 
                         connection.release()
+                        console.log(row);
                         resolve(row)
                     })
             })

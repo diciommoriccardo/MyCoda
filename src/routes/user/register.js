@@ -1,7 +1,5 @@
 import Router from 'express';
-import authMiddleware from '../../middlewares/auth.js';
-import jwt from '../../helpers/jwt.js';
-import {JWT, SUCCESS_ITA} from '../../config/constants.js';
+import {SUCCESS_ITA} from '../../config/constants.js';
 import User from '../../models/user.model.js'
 
 const router = Router();
