@@ -9,8 +9,17 @@ const router = Router();
 
 router.get('/me', function(req, res) {
     new User({cf: req.user.cf})
-    .then(user => { user.findByCf(user.cf) })
-    .then(result =>{ return res.status(201).json({message: SUCCESS_ITA.DEFAULT, result: result}); })
+    .then(user => user.findByCf(user.cf))
+    .then(row => {
+        const { cf, nome, cognome, numTel, email } = row;
+        return res.status(201).json({
+            cf,
+            nome,
+            cognome,
+            numTel,
+            email,
+        });
+    })
     .catch(err => { return res.status(500).json({error: { message: err}})})
 });
 
