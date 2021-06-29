@@ -51,21 +51,12 @@ class User {
 
             getHashedPassword(this.password)
             .then(hash => {
-                const {cf, nome, cognome, numTel, email, password, refresh_token} = this;
-                password = hash;
+                this.password = hash
                 
                 pool.getConnection( (err, connection) => {
                     if(err) return reject(err)
                     
-                    connection.query(sql, [
-                        connection.escape(cf),
-                        nome,
-                        cognome,
-                        connection.escape(numTel),
-                        connection.escape(email),
-                        connection.escape(password),
-                        connection.escape(refresh_token)
-                    ],
+                    connection.query(sql, [this],
                         function(err){
                             if(err) return reject(err)
                             
@@ -113,12 +104,11 @@ class User {
                 if(err) reject(err)
                 
                 connection.query(sql, [this.cf],
-                    function(err, [row]){
+                    function(err, result){
                         if(err) reject(err)
 
                         connection.release()
-                        console.log(row);
-                        resolve(row)
+                        resolve(result)
                     })
             })
         })
