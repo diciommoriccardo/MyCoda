@@ -3,13 +3,12 @@ import pool from '../helpers/mysql.js';
 class Message {
     constructor(message){
         return new Promise( (resolve) =>{
-            this.cfUtente = session.cfUtente
-            this.time = message.time
+            this.cfUtente = message.cfUtente
+            this.time = new Date(Date.now())
             this.content = message.content
-            this.pivaFarm = session.pivaFarm
+            this.pivaFarm = message.pivaFarm
             resolve(this)
-        })
-        
+        })  
     }
 
     create(){

@@ -55,7 +55,7 @@ class Pharmacy {
                     if(err) return reject(err)
                     
                     connection.query(sql, [this],
-                        function(err, result){
+                        function(err){
                             if(err) return reject(err)
                             
                             connection.release()
@@ -70,9 +70,8 @@ class Pharmacy {
     login(){
         return new Promise( (resolve, reject) => {
             this.findByCf(this.piva)
-            .then( ([row]) => { 
-                bcrypt.compare(this.password, row.password) ? resolve(row) : reject()
-            })
+            .then( ([row]) => bcrypt.compare(this.password, row.password))
+            .then( (valid) => valid ? resolve(row) : reject())
             .catch( (err) => {
                 reject(err)
             })

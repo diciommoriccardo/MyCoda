@@ -36,7 +36,7 @@ class Session {
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err);
 
-                connection.query(sql, this.cfUtente, this.pivaFarm, 
+                connection.query(sql, [this.cfUtente, this.pivaFarm], 
                     function(err, result){
                         if(err) return reject(err);
                         

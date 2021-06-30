@@ -5,20 +5,19 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 
 const router = Router();
 
-router.post('/session/:id/message', (req, res) => {
-    if(!req.body.piva) { return res.status(400).json({error: {message: "P. IVA required"}}) }
-
+router.post('/:id/message', (req, res) => {
     new Session({
         pivaFarm: req.params.id,
         cfUtente: req.user.cf
     })
     .then(session => session.findById())
-    .then(result => { 
+    .then(([result]) => {
+        console.log(result)
+        
         new Message({
             cfUtente: result.cfUtente,
             pivaFarm: result.pivaFarm,
-            content: req.body.content,
-            time: req.body.time
+            content: req.body.content
         })
     })
     .then(message => message.create())

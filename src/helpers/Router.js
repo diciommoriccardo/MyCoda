@@ -12,7 +12,9 @@ import createSession from '../routes/session/createSession.js';
 import getUserPayments from '../routes/user/getPayments.js';
 import getPharmacyPayment from '../routes/pharmacy/getPayments.js';
 import createPayment from '../routes/payment/createPayment.js';
-import saveMessage from '../routes/session/saveMessage.js';
+import saveMessagePharmacy from '../routes/pharmacy/saveMessage.js';
+import saveMessageUser from '../routes/user/saveMessage.js';
+
 
 class Router {
     constructor( app ){
@@ -21,10 +23,10 @@ class Router {
             '/api': [
                 tokenRenewal,
                 {
-                    '/users': [userLogin, userRegister, authMiddleware, getUser, getUserPayments],
-                    '/pharmacy': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, getPharmacy, getPharmacyPayment],
+                    '/users': [userLogin, userRegister, authMiddleware, getUser, getUserPayments, saveMessageUser],
+                    '/pharmacy': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, getPharmacy, getPharmacyPayment, saveMessagePharmacy],
                     '/payment' : [authMiddleware, createPayment],
-                    '/session' : [authMiddleware, createSession, saveMessage]           
+                    '/session' : [authMiddleware, createSession]           
                 }
             ],
             '*': notFoundMiddleware,
