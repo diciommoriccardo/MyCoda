@@ -5,8 +5,8 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 const router = Router();
 
 router.get('/me/payments', function(req, res) {
-    new Payment({cfUtente: req.user.cf})
-    .then(payment => { payment.findByUser() })
+    new Payment(req.user)
+    .then(payment => payment.findByUser())
     .then(result =>{ return res.status(201).json({message: SUCCESS_ITA.DEFAULT, result: result}); })
     .catch(err => { return res.status(500).json({error: { message: err}})})
 });
