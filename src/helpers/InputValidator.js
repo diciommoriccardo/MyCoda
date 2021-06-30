@@ -49,6 +49,13 @@ class InputValidator {
             ragSociale: {
                 type: "string"
             },
+            indirizzo: {
+                type: "string",
+            },
+            email: {
+                type: "string",
+                email: true
+            },
             password: {
                 type: "string",
                 /*lenght: {
