@@ -4,7 +4,7 @@ class Session {
     constructor(session){
         return new Promise( (resolve) =>{
             this.cfUtente = session.cfUtente
-            this.time = Math.floor(Date.now())
+            this.time = new Date(Date.now())
             this.pivaFarm = session.pivaFarm
             resolve(this)
         })
