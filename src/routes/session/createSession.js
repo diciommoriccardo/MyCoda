@@ -4,9 +4,7 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 
 const router = Router();
 
-router.post('/session/:id', (req, res) => {
-    if(!req.body.piva) { return res.status(400).json({error: {message: "P. IVA required"}}) }
-
+router.post('/:id', (req, res) => {
     new Session({
         pivaFarm: req.params.id,
         cfUtente: req.user.cf
