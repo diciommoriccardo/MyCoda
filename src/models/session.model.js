@@ -72,7 +72,25 @@ class Session {
             pool.getConnection((err, connection) =>{
                 if(err) return reject(err)
 
-                connection.query(sql, connection.escape(this.pivaFarm),
+                connection.query(sql, [this.pivaFarma],
+                    function(err, result){
+                        if(err) return reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
+            })
+        })
+    }
+
+    findOpenSession(){
+        return new Promise( (resolve, reject) => {
+            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? ORDER BY time DESC LIMIT 1";
+
+            pool.getConnection( (err, connection) => {
+                if(err) return reject(err)
+
+                connection.query(sql, [this.cfUtente,this.pivaFarma],
                     function(err, result){
                         if(err) return reject(err)
 
