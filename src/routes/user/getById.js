@@ -8,8 +8,8 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 const router = Router();
 
 router.get('/me', function(req, res) {
-    new User({cf: req.user.cf})
-    .then(user => user.findByCf(user.cf))
+    new User({cf: req.user.id})
+    .then(user => user.findByCf())
     .then(row => {
         const { cf, nome, cognome, numTel, email } = row;
         return res.status(201).json({

@@ -12,7 +12,7 @@ router.post('/login', function(req, res){
     .then(user => user.login())
     .then(row => {
         const { cf, nome, cognome, numTel, email } = row;
-        var accessToken = jwt.signAccessToken({ cf })
+        var accessToken = jwt.signAccessToken({ id: cf })
         return res.status(201).json({ 
             cf,
             nome,
