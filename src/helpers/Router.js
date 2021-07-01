@@ -1,9 +1,9 @@
 import authMiddleware from '../middlewares/auth.js';
 import tokenRenewal from '../routes/token.js';
-import getUser from '../routes/user/getById.js';
+import userMe from '../routes/user/getById.js';
 import userLogin from '../routes/user/login.js';
 import userRegister from '../routes/user/register.js';
-import getPharmacy from '../routes/pharmacy/getById.js';
+import pharmacyMe from '../routes/pharmacy/getById.js';
 import pharmacyLogin from '../routes/pharmacy/login.js';
 import pharmacyRegister from '../routes/pharmacy/register.js';
 import notFoundMiddleware from '../middlewares/notFound.js';
@@ -22,10 +22,10 @@ class Router {
             '/api': [
                 tokenRenewal,
                 {
-                    '/users': [userLogin, userRegister, authMiddleware, getUser, getUserPayments],
-                    '/pharmacy': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, getPharmacy, getPharmacyPayment],
-                    '/payment' : [authMiddleware, createPayment],
-                    '/session' : [authMiddleware, createSession, saveMessage]           
+                    '/users': [userLogin, userRegister, authMiddleware, userMe, getUserPayments],
+                    '/pharmacyes': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, pharmacyMe, getPharmacyPayment],
+                    '/payments' : [authMiddleware, createPayment],
+                    '/sessions' : [authMiddleware, createSession, saveMessage]           
                 }
             ],
             '*': notFoundMiddleware,
