@@ -7,7 +7,16 @@ router.get('/me', function(req, res) {
 
     new Pharmacy({piva: req.user.id})
         .then(pharmacy => pharmacy.findByCf())
-        .then(result => { return res.status(201).json({pharmacy: result}); })
+        .then(result => {
+            
+            const {ragSociale, indirizzo, email} = result[0]
+            
+            return res.status(201).json({
+                ragSociale,
+                indirizzo,
+                email
+            });
+        })
         .catch(err => { return res.status(500).json({ error: { message: err } }); });
 });
 

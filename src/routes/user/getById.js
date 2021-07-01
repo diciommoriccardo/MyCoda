@@ -11,7 +11,9 @@ router.get('/me', function(req, res) {
     new User({cf: req.user.id})
     .then(user => user.findByCf())
     .then(row => {
-        const { cf, nome, cognome, numTel, email } = row;
+        const { cf, nome, cognome, numTel, email } = row[0];
+
+        console.log(row.cf)
         return res.status(201).json({
             cf,
             nome,
