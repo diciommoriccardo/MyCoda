@@ -23,7 +23,7 @@ class Router {
                 tokenRenewal,
                 {
                     '/users': [userLogin, userRegister, authMiddleware, userMe, getUserPayments],
-                    '/pharmacyes': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, pharmacyMe, getPharmacyPayment],
+                    '/pharmacies': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, pharmacyMe, getPharmacyPayment],
                     '/payments' : [authMiddleware, createPayment],
                     '/sessions' : [authMiddleware, createSession, saveMessage]           
                 }
