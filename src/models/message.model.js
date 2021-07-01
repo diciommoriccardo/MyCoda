@@ -4,9 +4,9 @@ class Message {
     constructor(message){
         return new Promise( (resolve) =>{
             this.cfUtente = message.cfUtente
+            this.pivaFarma = message.pivaFarma
             this.time = new Date(Date.now())
             this.content = message.content
-            this.pivaFarm = message.pivaFarm
             resolve(this)
         })  
     }
@@ -31,12 +31,12 @@ class Message {
 
     findById(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM msg WHERE cfUtente = ? AND pivaFarm = ?";
+            let sql = "SELECT * FROM msg WHERE cfUtente = ? AND pivaFarma = ?";
 
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err);
 
-                connection.query(sql, [connection.escape(this.cfUtente),connection.escape(this.pivaFarm)], 
+                connection.query(sql, [this.cfUtente, this.pivaFarma], 
                     function(err, result){
                         if(err) return reject(err);
                         
@@ -67,7 +67,7 @@ class Message {
 
     findByPharma(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM msg WHERE pivaFarm = ?"
+            let sql = "SELECT * FROM msg WHERE pivaFarma = ?"
 
             pool.getConnection((err, connection) =>{
                 if(err) return reject(err)
