@@ -12,9 +12,8 @@ router.post('/login', function(req, res){
     new Pharmacy ( req.body )
         .then(pharmacy => pharmacy.login())
         .then(row => {
-            const {piva, ragSociale, indirizzo, email, password} = row
-            
-            var accessToken = jwt.signAccessToken({ id: pharmacy.piva })
+            const {piva, ragSociale, indirizzo, email, password} = row;
+            var accessToken = jwt.signAccessToken({ id: piva })
             return res.status(201).json({
                 piva,
                 ragSociale,
