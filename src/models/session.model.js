@@ -5,7 +5,7 @@ class Session {
         return new Promise( (resolve) =>{
             this.cfUtente = session.cfUtente
             this.time = new Date(Date.now())
-            this.pivaFarm = session.pivaFarm
+            this.pivaFarma = session.pivaFarma
             resolve(this)
         })
         
@@ -31,12 +31,12 @@ class Session {
 
     findById(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarm = ?";
+            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ?";
 
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err);
 
-                connection.query(sql, [this.cfUtente, this.pivaFarm], 
+                connection.query(sql, [this.cfUtente, this.pivaFarma], 
                     function(err, result){
                         if(err) return reject(err);
                         
@@ -67,7 +67,7 @@ class Session {
 
     findByPharma(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM session WHERE pivaFarm = ?"
+            let sql = "SELECT * FROM session WHERE pivaFarma = ?"
 
             pool.getConnection((err, connection) =>{
                 if(err) return reject(err)
