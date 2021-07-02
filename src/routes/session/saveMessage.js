@@ -29,7 +29,7 @@ router.post('/:id/message', (req, res) => {
     console.log(s)
 
     new Session( s )
-    .then(session => session.findOpenSession())
+    .then(session => session.findOpenSessionById())
     .then(([result]) => {
         console.log(result)
         
