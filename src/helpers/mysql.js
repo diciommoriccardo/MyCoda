@@ -3,7 +3,7 @@ import { DATABASE } from '../config/config.js';
 import {SUCCESS_ITA} from '../config/constants.js';
 
 var pool = mysql.createPool({
-    connectionLimit : 10,
+    connectionLimit : 100,
     host : DATABASE.HOST,
     port: DATABASE.PORT,
     user : DATABASE.USER,
