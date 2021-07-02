@@ -6,6 +6,7 @@ class Session {
             this.cfUtente = session.cfUtente
             this.time = new Date(Date.now())
             this.pivaFarma = session.pivaFarma
+            this.status = "OPEN"
             resolve(this)
         })
         
@@ -47,23 +48,30 @@ class Session {
         })
     }
 
-    findByUser(){
-        return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM session WHERE cfUtente = ?"
+    // findByUser(){
+    //     return new Promise( (resolve, reject) =>{
+    //         pool.getConnection( (err, connection) =>{
+    //             if(err) return reject(err)
 
-            pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+    //             connection.beginTransaction(err =>{
+    //                 if(err) return reject(err)
 
-                connection.query(sql, connection.escape(this.cfUtente), 
-                    function(err, result){
-                        if(err) return reject(err)
+    //                 let sql = "SELECT * FROM session WHERE cfUtente = ? GROUP BY cfUtente, pivaFarma, time"
 
-                        connection.release()
-                        resolve(result)
-                    })
-            })
-        })
-    }
+    //                 connection.query(sql, connection.escape(this.cfUtente), 
+    //                     function(err, result){
+    //                         if(err){
+    //                             connection.rollback(err =>{
+    //                                 return reject(err)
+    //                             })
+    //                         }
+
+    //                         var 
+    //                 })
+    //             })  
+    //         })
+    //     })
+    // }
 
     findByPharma(){
         return new Promise( (resolve, reject) =>{
@@ -83,9 +91,9 @@ class Session {
         })
     }
 
-    findOpenSession(){
+    findOpenSessionById(){
         return new Promise( (resolve, reject) => {
-            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? ORDER BY time DESC LIMIT 1";
+            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? AND status = 'OPEN'";
 
             pool.getConnection( (err, connection) => {
                 if(err) return reject(err)
@@ -98,6 +106,46 @@ class Session {
                         resolve(result)
                     })
             })
+        })
+    }
+
+    findOpenSessionByUser(){
+        return new Promise((resolve, reject) => {
+            let sql = "SELECT * FROM session WHERE cfUtente = ? AND status = 'OPEN'";
+
+
+            pool.getConnection((err, connection) => {
+                if(err) return reject(err)
+                
+                connection.query(sql, [this.cfUtente],
+                    function(err, result){
+                        if(err) return reject(err)
+
+                        console.log(result)
+                        connection.release()
+                        resolve(result)
+                })
+            })
+                
+        })
+    }
+
+    findOpenSessionByPharma(){
+        return new Promise((resolve, reject)=>{
+            let sql = "SELECT * FROM session WHERE pivaFarma = ? AND status = 'OPEN'";
+
+            pool.getConnection((err, connection)=>{
+                if(err) return reject(err)
+
+                connection.query(sql, [this.pivaFarma],
+                    function(err, result){
+                        if(err) return reject(err)
+
+                        connection.release()
+                        resolve(result)
+                })
+            })
+                
         })
     }
 }
