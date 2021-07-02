@@ -6,17 +6,17 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 const router = Router();
 
 router.post('/:id/message', (req, res) => {
-    const id = req.user.id
-    console.log(id)
+    const type = req.user.type;
+    const id = req.user.id;
 
-    switch (id.length) {
-        case 11:
+    switch (type) {
+        case 'pharmacy':
             var s= {
                 pivaFarma: id,
                 cfUtente: req.params.id
             }
             break;
-        case 16:
+        case 'user':
             var s = {
                 pivaFarma: req.params.id,
                 cfUtente: id
