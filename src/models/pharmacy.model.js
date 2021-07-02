@@ -28,7 +28,7 @@ async function getHashedPassword(password){
 
 class Pharmacy {
     constructor(pharma){
-        return new Promise( (resolve, reject) =>{
+        return new Promise((resolve, reject) => {
             validate.validatePharmaInput(pharma)
             .then( (pharma) => {
                 this.piva = pharma.piva
@@ -49,7 +49,7 @@ class Pharmacy {
 
             getHashedPassword(this.password)
             .then(hash => {
-                this.password = hash
+                this.password = hash;
                 
                 pool.getConnection( (err, connection) => {
                     if(err) return reject(err)
@@ -70,12 +70,10 @@ class Pharmacy {
     login(){
         return new Promise( (resolve, reject) => {
             this.findByCf(this.piva)
-            .then( ([row]) => {
+            .then(([row]) => {
                 bcrypt.compare(this.password, row.password)
                 .then((valid) => {
-                    if(!valid) reject()
-
-                    resolve(row)
+                    valid ? resolve(row) : reject()
                 })
                 .catch( (err) => reject(err))
             })
