@@ -48,30 +48,44 @@ class Session {
         })
     }
 
-    // findByUser(){
-    //     return new Promise( (resolve, reject) =>{
-    //         pool.getConnection( (err, connection) =>{
-    //             if(err) return reject(err)
+    findByUser(){
+        return new Promise( (resolve, reject) =>{
+            pool.getConnection( (err, connection) =>{
+                if(err) return reject(err)
 
-    //             connection.beginTransaction(err =>{
-    //                 if(err) return reject(err)
-
-    //                 let sql = "SELECT * FROM session WHERE cfUtente = ? GROUP BY cfUtente, pivaFarma, time"
-
-    //                 connection.query(sql, connection.escape(this.cfUtente), 
-    //                     function(err, result){
-    //                         if(err){
-    //                             connection.rollback(err =>{
-    //                                 return reject(err)
-    //                             })
-    //                         }
-
-    //                         var 
-    //                 })
-    //             })  
-    //         })
-    //     })
-    // }
+                let sqlSession = "SELECT cfUtente, pivaFarma, time FROM session WHERE cfUtente = ? GROUP BY cfUtente, pivaFarma, time ORDER BY time DESC"
+                let sqlMsg = "SELECT * FROM msg WHERE cfUtente = ? AND pivaFarma = ? ORDER BY time DESC LIMIT 1";
+                
+                var res = [];
+                
+                connection.query(sqlSession, [this.cfUtente], 
+                    function(err, result){
+                        if(err) reject(err)
+                        result.forEach(row => {
+                            connection.query(sqlMsg, [row.cfUtente, row.pivaFarma],
+                                function(err, result){
+                                    if(err) reject(err)
+                                    
+                                    var temp = {
+                                        session: {
+                                            cfUtente: row.cfUtente,
+                                            pivaFarma: row.pivaFarma,
+                                            time: row.time,
+                                            message: { content: result[0].content}
+                                        }
+                                    }
+                                    res.push(temp);
+                                    console.log(res)
+                                })
+                            });
+                    })
+                    
+                        
+                        connection.release();
+                        resolve(res);
+                })
+            })
+        }
 
     findByPharma(){
         return new Promise( (resolve, reject) =>{
