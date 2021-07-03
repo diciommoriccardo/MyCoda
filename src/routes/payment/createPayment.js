@@ -7,7 +7,7 @@ const router = Router();
 router.post('/:id', (req, res) => {
 
     new Payment({
-        pivaFarm: req.user.piva,
+        pivaFarma: req.user.piva,
         cfUtente: req.params.id,
         somma: req.body.somma
     })

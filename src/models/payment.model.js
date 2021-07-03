@@ -6,7 +6,7 @@ class Payment {
             this.somma = payment.somma
             this.time = new Date(Date.now())
             this.cfUtente = payment.cfUtente
-            this.pivaFarm = payment.pivaFarm
+            this.pivaFarma = payment.pivaFarm
             resolve(this)
         })
     }
