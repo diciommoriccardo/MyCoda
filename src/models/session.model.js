@@ -6,7 +6,7 @@ class Session {
             this.cfUtente = session.cfUtente
             this.time = new Date(Date.now())
             this.pivaFarma = session.pivaFarma
-            this.status = "OPEN"
+            this.status = "open"
             resolve(this)
         })
         
@@ -22,7 +22,7 @@ class Session {
                 connection.query(sqlExist, this.pivaFarma, 
                     (err, result)=>{
                         if(err) reject(err)
-                        if(result.length==0) reject(new Error("Farmacia non esistente"))
+                        if(result.length==0) return reject()
 
                         connection.query('INSERT INTO session SET ?', [this],
                             (err) => {
@@ -83,38 +83,48 @@ class Session {
                         .then(result => resolve(result))
                         .catch(error => reject(error));
                     })
-<<<<<<< HEAD
                 connection.release();
-=======
-                        connection.release();
-                        resolve(res);
-                })
->>>>>>> b28a36e337e82e2d3afb51fa9ea57d7d4cf26163
             })
         })
     }
 
-    findByPharma(){
+    findByUser(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM session WHERE pivaFarma = ?"
-
-            pool.getConnection((err, connection) =>{
+            pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
 
-                connection.query(sql, [this.pivaFarma],
-                    function(err, result){
-                        if(err) return reject(err)
+                let sqlSession = "SELECT cfUtente, pivaFarma, time FROM session WHERE cfUtente = ? GROUP BY cfUtente, pivaFarma, time ORDER BY time DESC"
+                let sqlMsg = "SELECT * FROM msg WHERE cfUtente = ? AND pivaFarma = ? ORDER BY time DESC LIMIT 1";
 
-                        connection.release()
-                        resolve(result)
+                connection.query(sqlSession, [this.pivaFarma], 
+                    function(err, sessions) {
+                        if(err) reject (err)
+                        Promise.all(sessions.map(({ cfUtente, pivaFarma, time }) => 
+                            new Promise((resolve, reject) => {
+                                connection.query(sqlMsg, [cfUtente, pivaFarma, time],
+                                    (err, msg) => {
+                                        if (err) reject(err)
+                                        resolve({
+                                            cfUtente,
+                                            pivaFarma,
+                                            time,
+                                            message: msg,
+                                        });
+                                    }
+                                );
+                            }
+                        )))
+                        .then(result => resolve(result))
+                        .catch(error => reject(error));
                     })
+                connection.release();
             })
         })
     }
 
     findOpenSessionById(){
         return new Promise( (resolve, reject) => {
-            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? AND status = 'OPEN'";
+            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? AND status = 'open'";
 
             pool.getConnection( (err, connection) => {
                 if(err) return reject(err)
