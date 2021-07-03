@@ -55,37 +55,32 @@ class Session {
 
                 let sqlSession = "SELECT cfUtente, pivaFarma, time FROM session WHERE cfUtente = ? GROUP BY cfUtente, pivaFarma, time ORDER BY time DESC"
                 let sqlMsg = "SELECT * FROM msg WHERE cfUtente = ? AND pivaFarma = ? ORDER BY time DESC LIMIT 1";
-                
-                var res = [];
-                
+
                 connection.query(sqlSession, [this.cfUtente], 
-                    function(err, result){
-                        if(err) reject(err)
-                        result.forEach(row => {
-                            connection.query(sqlMsg, [row.cfUtente, row.pivaFarma],
-                                function(err, result){
-                                    if(err) reject(err)
-                                    
-                                    var temp = {
-                                        session: {
-                                            cfUtente: row.cfUtente,
-                                            pivaFarma: row.pivaFarma,
-                                            time: row.time,
-                                            message: { content: result[0].content}
-                                        }
+                    function(err, sessions) {
+                        if(err) reject (err)
+                        Promise.all(sessions.map(({ cfUtente, pivaFarma, time }) => 
+                            new Promise((resolve, reject) => {
+                                connection.query(sqlMsg, [cfUtente, pivaFarma, time],
+                                    (err, msg) => {
+                                        if (err) reject(err)
+                                        resolve({
+                                            cfUtente,
+                                            pivaFarma,
+                                            time,
+                                            message: msg,
+                                        });
                                     }
-                                    res.push(temp);
-                                    console.log(res)
-                                })
-                            });
+                                );
+                            }
+                        )))
+                        .then(result => resolve(result))
+                        .catch(error => reject(error));
                     })
-                    
-                        
-                        connection.release();
-                        resolve(res);
-                })
+                connection.release();
             })
-        }
+        })
+    }
 
     findByPharma(){
         return new Promise( (resolve, reject) =>{

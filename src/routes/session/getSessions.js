@@ -7,23 +7,13 @@ const router = Router();
 router.get('', (req, res) => {
     const type = req.user.type;
     const id = req.user.id;
-    
-    switch (type) {
-        case 'pharmacy':
-            var session = {
-                pivaFarma: id
-            }
-            break;
-        case 'user':
-            var session = {
-                cfUtente: id
-            }
-            break;
-    }
+    const session = {
+        ...(type === 'user' ? { cfUtente: id } : { pivaFarma: id} )
+    };
 
     new Session( session )
-    .then(session => type == 'user' ? session.findByUser() : session.findByPharma())
-    .then(result => { console.log(result); return res.status(201).json({result: result, message: SUCCESS_ITA.DEFAULT})})
+    .then(session => type === 'user' ? session.findByUser() : session.findByPharma())
+    .then(result => { return res.status(201).json(result); })
     .catch(err => { return res.status(500).json({error: {message: err}})})
 
 })
