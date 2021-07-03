@@ -83,13 +83,7 @@ class Session {
                         .then(result => resolve(result))
                         .catch(error => reject(error));
                     })
-<<<<<<< HEAD
                 connection.release();
-=======
-                        connection.release();
-                        resolve(res);
-                })
->>>>>>> b28a36e337e82e2d3afb51fa9ea57d7d4cf26163
             })
         })
     }
