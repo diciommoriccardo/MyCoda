@@ -7,9 +7,10 @@ const router = Router();
 router.post('/:id', (req, res) => {
 
     new Payment({
-        pivaFarma: req.user.piva,
+        pivaFarma: req.user.id,
         cfUtente: req.params.id,
-        somma: req.body.somma
+        somma: req.body.somma,
+        desc: req.body.desc
     })
     .then(payment => payment.create())
     .then(result => { return res.status(201).json({result: result, message: SUCCESS_ITA.DEFAULT})})
