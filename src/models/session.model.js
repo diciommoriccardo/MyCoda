@@ -14,18 +14,24 @@ class Session {
 
     create(){
         return new Promise( (resolve, reject) =>{
-            let sql = "INSERT INTO session SET ?"
+            pool.getConnection((err, connection) => {
+                if(err) reject(err)
 
-            pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+                let sqlExist = 'SELECT * FROM farma WHERE piva = ?';
 
-                connection.query(sql, [this],
-                    function(err){
-                        if(err) return reject(err)
+                connection.query(sqlExist, this.pivaFarma, 
+                    (err, result)=>{
+                        if(err) reject(err)
+                        if(result.length==0) reject(new Error("Farmacia non esistente"))
 
-                        connection.release()
-                        resolve(this.values)
-                    })
+                        connection.query('INSERT INTO session SET ?', [this],
+                            (err) => {
+                                if(err) reject(err)
+
+                                resolve(this)
+                            });
+                    });
+                    connection.release()
             })
         })
     }
@@ -77,7 +83,13 @@ class Session {
                         .then(result => resolve(result))
                         .catch(error => reject(error));
                     })
+<<<<<<< HEAD
                 connection.release();
+=======
+                        connection.release();
+                        resolve(res);
+                })
+>>>>>>> b28a36e337e82e2d3afb51fa9ea57d7d4cf26163
             })
         })
     }
