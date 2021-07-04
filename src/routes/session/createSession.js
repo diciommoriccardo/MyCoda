@@ -1,6 +1,5 @@
 import Router from 'express';
 import Session from '../../models/session.model.js';
-import {SUCCESS_ITA} from '../../config/constants.js';
 
 const router = Router();
 
