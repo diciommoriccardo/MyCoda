@@ -68,13 +68,15 @@ class Session {
                         Promise.all(sessions.map(({ cfUtente, pivaFarma, time }) => 
                             new Promise((resolve, reject) => {
                                 connection.query(sqlMsg, [cfUtente, pivaFarma, time],
-                                    (err, msg) => {
+                                    (err, [lastMessage]) => {
                                         if (err) reject(err)
                                         resolve({
                                             cfUtente,
                                             pivaFarma,
-                                            time,
-                                            message: msg,
+                                            lastMessage: !lastMessage ? {} : {
+                                                time: lastMessage.time,
+                                                content: lastMessage.content
+                                            },
                                         });
                                     }
                                 );
@@ -88,12 +90,12 @@ class Session {
         })
     }
 
-    findByUser(){
+    findByPharma(){
         return new Promise( (resolve, reject) =>{
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
 
-                let sqlSession = "SELECT cfUtente, pivaFarma, time FROM session WHERE cfUtente = ? GROUP BY cfUtente, pivaFarma, time ORDER BY time DESC"
+                let sqlSession = "SELECT cfUtente, pivaFarma, time FROM session WHERE pivaFarma = ? GROUP BY cfUtente, pivaFarma, time ORDER BY time DESC"
                 let sqlMsg = "SELECT * FROM msg WHERE cfUtente = ? AND pivaFarma = ? ORDER BY time DESC LIMIT 1";
 
                 connection.query(sqlSession, [this.pivaFarma], 
@@ -102,13 +104,15 @@ class Session {
                         Promise.all(sessions.map(({ cfUtente, pivaFarma, time }) => 
                             new Promise((resolve, reject) => {
                                 connection.query(sqlMsg, [cfUtente, pivaFarma, time],
-                                    (err, msg) => {
+                                    (err, [lastMessage]) => {
                                         if (err) reject(err)
                                         resolve({
                                             cfUtente,
                                             pivaFarma,
-                                            time,
-                                            message: msg,
+                                            lastMessage: !lastMessage ? {} : { 
+                                                time: lastMessage.time, 
+                                                content: lastMessage.content 
+                                            },
                                         });
                                     }
                                 );
