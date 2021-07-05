@@ -1,5 +1,6 @@
 import Router from 'express';
 import Session from '../../models/session.model.js';
+import { SUCCESS_ITA } from '../../config/constants.js';
 
 const router = Router();
 
@@ -9,8 +10,8 @@ router.post('/:id', (req, res) => {
         cfUtente: req.user.id
     })
     .then(session => session.create())
-    .then(result => { return res.status(201).json({result, message: SUCCESS_ITA.DEFAULT})})
-    .catch(err => { return res.status(500).json({error: {message: err}})})
+    .then(result => res.status(201).json({result, message: SUCCESS_ITA.DEFAULT}))
+    .catch(err => res.status(500).json({error}))
 
 })
 
