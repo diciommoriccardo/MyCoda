@@ -5,15 +5,17 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 const router = Router();
 
 router.post('/:id', (req, res) => {
-
-    new Payment({
+    if(!req.body.somma || !req.body.somma == '' || !req.body.desc || !req.body.desc == '') return res.status(400).json({ error: { message: 'Content cannot be empty' } });
+    const payment = {
         pivaFarma: req.user.id,
         cfUtente: req.params.id,
         somma: req.body.somma,
         desc: req.body.desc
-    })
+    }
+    
+    new Payment(payment)
     .then(payment => payment.create())
-    .then(result => { return res.status(201).json({result: result, message: SUCCESS_ITA.DEFAULT})})
+    .then(result => { return res.status(201).json({result, message: SUCCESS_ITA.DEFAULT})})
     .catch(err => { return res.status(500).json({error: {message: err}})})
 
 })
