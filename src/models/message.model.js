@@ -9,6 +9,7 @@ class Message {
             this.content = message.content
             this.stato = 'non letto' // stato = non letto || stato = letto
             this.mittente = message.mittente //mittente = pharmacy || mittente = user
+            this.tipo = message.tipo || 2 // immagine = 1, messaggio = 2, pagamento = 3
             this.idSession = message.idSession
             resolve(this)
         })  
@@ -57,7 +58,7 @@ class Message {
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
 
-                connection.query(sql, connection.escape(this.cfUtente), 
+                connection.query(sql, [this.cfUtente], 
                     function(err, result){
                         if(err) return reject(err)
 
@@ -75,7 +76,7 @@ class Message {
             pool.getConnection((err, connection) =>{
                 if(err) return reject(err)
 
-                connection.query(sql, connection.escape(this.pivaFarm),
+                connection.query(sql, [this.pivaFarma],
                     function(err, result){
                         if(err) return reject(err)
 
