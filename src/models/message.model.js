@@ -7,6 +7,9 @@ class Message {
             this.pivaFarma = message.pivaFarma
             this.time = new Date(Date.now())
             this.content = message.content
+            this.stato = 'non letto' // stato = non letto || stato = letto
+            this.mittente = message.mittente //mittente = pharmacy || mittente = user
+            this.idSession = message.idSession
             resolve(this)
         })  
     }
@@ -31,12 +34,12 @@ class Message {
 
     findById(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM msg WHERE cfUtente = ? AND pivaFarma = ?";
+            let sql = "SELECT * FROM msg WHERE id = ?";
 
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err);
 
-                connection.query(sql, [this.cfUtente, this.pivaFarma], 
+                connection.query(sql, [this.id], 
                     function(err, result){
                         if(err) return reject(err);
                         
