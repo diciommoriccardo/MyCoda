@@ -5,12 +5,16 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 
 const router = Router();
 
-router.post('/:id/message', (req, res) => {
+router.post('/:idSessione/:id/message', (req, res) => {
     if (!req.body.content || req.body.content == '') return res.status(400).json({ error: { message: 'Content cannot be empty' } });
-    const type = req.user.type;
-    const id = req.user.id;
+    
+    const {senderId, type} = req.user;
+    const id = req.params.id;
+    const content = req.body.content;
+    const sessionId = req.params.idSessione;
+    
     const session = {
-        ...(type === 'user' ? { cfUtente: id, pivaFarma: req.params.id } : { pivaFarma: id, cfUtente: req.params.id} )
+        ...(type === 'user' ? {id: sessionId, cfUtente: senderId, pivaFarma: id} : {id: sessionId, pivaFarma: senderId, cfUtente: id})
     };
 
     new Session( session )
@@ -19,7 +23,7 @@ router.post('/:id/message', (req, res) => {
         .then(result => new Message({
             cfUtente: result[0].cfUtente,
             pivaFarma: result[0].pivaFarma,
-            content: req.body.content
+            content: content
         }))
         .then((message) => { console.log(message); return message.create() })
         .then((result) => res.status(201).json(result))
