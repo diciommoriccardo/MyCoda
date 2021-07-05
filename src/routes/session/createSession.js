@@ -9,7 +9,7 @@ router.post('/:id', (req, res) => {
         cfUtente: req.user.id
     })
     .then(session => session.create())
-    .then(result => { return res.status(201).json({result: result, message: SUCCESS_ITA.DEFAULT})})
+    .then(result => { return res.status(201).json({result, message: SUCCESS_ITA.DEFAULT})})
     .catch(err => { return res.status(500).json({error: {message: err}})})
 
 })
