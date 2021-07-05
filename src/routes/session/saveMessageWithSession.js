@@ -15,7 +15,7 @@ router.post('/:id/message', (req, res) => {
 
     new Session( session )
         .then(session => session.findOpenSessionById())
-        .then(result => result.length === 0 ? new Session(session).create() : result)
+        .then(result => result.length === 0 ? new Session(session).then(session => session.create()) : result)
         .then(result => new Message({
             cfUtente: result[0].cfUtente,
             pivaFarma: result[0].pivaFarma,
