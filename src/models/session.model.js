@@ -7,7 +7,7 @@ class Session {
             this.cfUtente = session.cfUtente
             this.time = new Date(Date.now())
             this.pivaFarma = session.pivaFarma
-            this.status = "open"
+            this.stato = "open"
             resolve(this)
         })
         
@@ -16,13 +16,16 @@ class Session {
     create(){
         return new Promise( (resolve, reject) =>{
             pool.getConnection((err, connection) => {
-                if(err) reject(err)
+                if(err) {console.log(err); reject(err)}
 
-                connection.query('INSERT INTO session SET ?', [this],
-                    (err) => {
-                        if(err) reject(err)
+                let sql = "INSERT INTO session SET ?";
+
+                connection.query(sql, [this],
+                    (err, result) => {
+                        if(err) {console.log(err);reject(err)}
 
                         connection.release()
+                        this.id = result.insertId;
                         resolve(this)
                 });
             })
@@ -59,9 +62,9 @@ class Session {
                     function(err, sessions) {
                         if(err) reject (err)
                         console.log(sessions)
-                        Promise.all(sessions.map(({ cfUtente, pivaFarma, time }) => 
+                        Promise.all(sessions.map(({ cfUtente, pivaFarma }) => 
                             new Promise((resolve, reject) => {
-                                connection.query(sqlMsg, [cfUtente, pivaFarma, time],
+                                connection.query(sqlMsg, [cfUtente, pivaFarma],
                                     (err, [lastMessage]) => {
                                         if (err) reject(err)
                                         resolve({
@@ -95,9 +98,9 @@ class Session {
                 connection.query(sqlSession, [this.pivaFarma], 
                     function(err, sessions) {
                         if(err) reject (err)
-                        Promise.all(sessions.map(({ cfUtente, pivaFarma, time }) => 
+                        Promise.all(sessions.map(({ cfUtente, pivaFarma }) => 
                             new Promise((resolve, reject) => {
-                                connection.query(sqlMsg, [cfUtente, pivaFarma, time],
+                                connection.query(sqlMsg, [cfUtente, pivaFarma],
                                     (err, [lastMessage]) => {
                                         if (err) reject(err)
                                         resolve({
@@ -122,7 +125,7 @@ class Session {
 
     findOpenSessionById(){
         return new Promise( (resolve, reject) => {
-            let sql = "SELECT * FROM session WHERE id = ? AND status = 'open'";
+            let sql = "SELECT * FROM session WHERE id = ? AND stato = 'open'";
 
             pool.getConnection( (err, connection) => {
                 if(err) reject(err)
@@ -140,7 +143,7 @@ class Session {
 
     findOpenSessionByUser(){
         return new Promise((resolve, reject) => {
-            let sql = "SELECT * FROM session WHERE cfUtente = ? AND status = 'open'";
+            let sql = "SELECT * FROM session WHERE cfUtente = ? AND stato = 'open'";
 
 
             pool.getConnection((err, connection) => {
@@ -161,7 +164,7 @@ class Session {
 
     findOpenSessionByPharma(){
         return new Promise((resolve, reject)=>{
-            let sql = "SELECT * FROM session WHERE pivaFarma = ? AND status = 'open'";
+            let sql = "SELECT * FROM session WHERE pivaFarma = ? AND stato = 'open'";
 
             pool.getConnection((err, connection)=>{
                 if(err) return reject(err)
