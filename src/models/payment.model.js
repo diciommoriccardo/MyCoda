@@ -3,11 +3,13 @@ import pool from '../helpers/mysql.js';
 class Payment {
     constructor(payment){
         return new Promise((resolve, reject) => {
+            this.id = payment.id
             this.somma = payment.somma
             this.time = new Date(Date.now())
             this.cfUtente = payment.cfUtente
             this.pivaFarma = payment.pivaFarma
             this.desc = payment.desc
+            this.stato = 'in attesa'
             resolve(this)
         })
     }
