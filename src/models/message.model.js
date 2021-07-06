@@ -3,12 +3,10 @@ import pool from '../helpers/mysql.js';
 class Message {
     constructor(message){
         return new Promise( (resolve) =>{
-            this.cfUtente = message.cfUtente
-            this.pivaFarma = message.pivaFarma
+            this.mittente = message.mittente
             this.time = new Date(Date.now())
             this.content = message.content
             this.stato = 'non letto' // stato = non letto || stato = letto
-            this.mittente = message.mittente //mittente = pharmacy || mittente = user
             this.tipo = message.tipo || 2 // immagine = 1, messaggio = 2, pagamento = 3
             this.idSession = message.idSession
             resolve(this)
@@ -79,6 +77,24 @@ class Message {
                 connection.query(sql, [this.pivaFarma],
                     function(err, result){
                         if(err) return reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
+            })
+        })
+    }
+
+    findBySession(){
+        return new Promise((resolve, reject) => {
+            let sql = "SELECT content, time, stato FROM msg WHERE idSession = ?";
+
+            pool.getConnection((err, connection) => {
+                if(err) reject(err)
+
+                connection.query(sql, [this.idSession],
+                    function(err, result){
+                        if(err) reject(err)
 
                         connection.release()
                         resolve(result)
