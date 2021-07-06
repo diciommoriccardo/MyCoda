@@ -8,14 +8,12 @@ import pharmacyLogin from '../routes/pharmacy/login.js';
 import pharmacyRegister from '../routes/pharmacy/register.js';
 import notFoundMiddleware from '../middlewares/notFound.js';
 import getAll from '../routes/pharmacy/getAll.js';
-import createSession from '../routes/session/createSession.js';
-// import getUserPayments from '../routes/user/getPayments.js';
-// import getPharmacyPayment from '../routes/pharmacy/getPayments.js';
 import createPayment from '../routes/payment/createPayment.js';
 import getOpenSession from '../routes/session/getOpenSession.js';
 import getSessions from '../routes/session/getSessions.js';
-import saveMsgAndSession from '../routes/session/saveMessageWithSession.js';
 import getPayments from '../routes/payment/getPayments.js';
+import sendMessage from '../routes/messages/saveMessages.js';
+import getMessages from '../routes/messages/getMessages.js';
 
 
 class Router {
@@ -28,7 +26,8 @@ class Router {
                     '/users': [userLogin, userRegister, authMiddleware, userMe],
                     '/pharmacies': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, pharmacyMe],
                     '/payments' : [authMiddleware, createPayment, getPayments],
-                    '/sessions' : [authMiddleware, createSession, getOpenSession, getSessions, saveMsgAndSession]           
+                    '/sessions' : [authMiddleware, getOpenSession, getSessions],
+                    '/messages' : [authMiddleware, sendMessage, getMessages]       
                 }
             ],
             '*': notFoundMiddleware,
