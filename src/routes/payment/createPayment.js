@@ -5,7 +5,8 @@ import {SUCCESS_ITA} from '../../config/constants.js';
 const router = Router();
 
 router.post('/:id', (req, res) => {
-    if(!req.body.somma || !req.body.somma == '' || !req.body.desc || !req.body.desc == '') return res.status(400).json({ error: { message: 'Content cannot be empty' } });
+    if(!req.body.somma || req.body.somma == '') return res.status(400).json({ error: { message: 'Somma cannot be empty' }});
+    if( !req.body.desc || req.body.desc == '') return res.status(400).json({error: {message: "Description must be send"}});
     const payment = {
         pivaFarma: req.user.id,
         cfUtente: req.params.id,
