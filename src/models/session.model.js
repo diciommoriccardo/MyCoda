@@ -15,19 +15,42 @@ class Session {
 
     create(){
         return new Promise( (resolve, reject) =>{
-            pool.getConnection((err, connection) => {
-                if(err) {console.log(err); reject(err)}
+            this.exist()
+            .then((result)=>{
+                if(result.length != 0) return resolve(result[0])
 
-                let sql = "INSERT INTO session SET ?";
+                pool.getConnection((err, connection) => {
+                    if(err) {console.log(err); reject(err)}
+    
+                    let sql = "INSERT INTO session SET ?";
+    
+                    connection.query(sql, [this],
+                        (err, result) => {
+                            if(err) {console.log(err);reject(err)}
+    
+                            connection.release()
+                            this.id = result.insertId;
+                            resolve(this)
+                    });
+                })
+            })
+        })
+    }
 
-                connection.query(sql, [this],
-                    (err, result) => {
-                        if(err) {console.log(err);reject(err)}
+    exist(){
+        return new Promise((resolve, reject) =>{
+            pool.getConnection((err, connection)=>{
+                if(err) reject(err)
 
-                        connection.release()
-                        this.id = result.insertId;
-                        resolve(this)
-                });
+                let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? AND  `stato` = 'open'";
+
+                connection.query(sql, [this.cfUtente, this.pivaFarma],
+                    (err, result)=>{
+                        if(err) reject(err)
+
+                        connection.release();
+                        resolve(result)
+                    })
             })
         })
     }
@@ -45,6 +68,24 @@ class Session {
                         
                         connection.release();
                         resolve(result);
+                    })
+            })
+        })
+    }
+
+    findByBoth(){
+        return new Promise((resolve, reject)=>{
+            let sql = "SELECT id FROM session WHERE cfUtente = ? AND pivaFarma = ?";
+
+            pool.getConnection((err, connection) =>{
+                if(err) reject(err)
+
+                connection.query(sql, [this.cfUtente, this.pivaFarma],
+                    function(err, result){
+                        if(err) reject(err)
+
+                        connection.release();
+                        resolve(result)
                     })
             })
         })
