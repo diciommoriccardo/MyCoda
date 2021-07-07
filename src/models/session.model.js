@@ -99,7 +99,7 @@ class Session {
                 let sqlSession = "SELECT id, cfUtente, pivaFarma FROM session WHERE cfUtente = ? GROUP BY id, cfUtente, pivaFarma ORDER BY time DESC"
                 let sqlMsg = "SELECT * FROM msg WHERE idSession = ?  ORDER BY time DESC LIMIT 1";
 
-                connection.query(sqlSession, [this.pivaFarma],
+                connection.query(sqlSession, [this.cfUtente],
                     function (err, sessions) {
                         if (err) reject(err)
                         Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) =>
