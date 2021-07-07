@@ -237,7 +237,7 @@ class Session {
 
     findOpenSessionByBoth(){
         return new Promise((resolve, reject) =>{
-            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? AND stato = ?";
+            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? AND stato = 'open'";
 
             pool.getConnection((err, connection)=>{
                 if(err) reject(err)
