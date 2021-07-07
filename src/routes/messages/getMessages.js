@@ -17,17 +17,6 @@ router.get('/:id', (req, res) => {
     .then(result => new Message({ idSession: result.id }))
     .then(message => message.findBySession())
     .then(messages => res.status(201).json({messages}))
-    // .then(result => {
-    //     return Promise.all(result.map(({id}) => 
-    //         new Promise((resolve, reject) => {
-    //             new Message({ idSession: id })
-    //             .then(message => {console.log("message: ");console.log(message); return message.findBySession()})
-    //             .then(result => {console.log("result: ");console.log(result); return resolve(result)})
-    //             .catch(err => reject(err))
-    //         })
-    //     ))
-    // })
-    // .then(messages => {console.log("messages: ");console.log(messages); return res.status(201).json({messages})})
     .catch(err => res.status(500).json(err))
 })
 
