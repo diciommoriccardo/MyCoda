@@ -180,6 +180,7 @@ class Session {
                                     (err, [lastMessage]) => {
                                         if (err) reject(err)
                                         resolve({
+                                            id,
                                             cfUtente,
                                             pivaFarma,
                                             lastMessage: !lastMessage ? {} : {
@@ -216,6 +217,7 @@ class Session {
                                     (err, [lastMessage]) => {
                                         if (err) reject(err)
                                         resolve({
+                                            id,
                                             cfUtente,
                                             pivaFarma,
                                             lastMessage: !lastMessage ? {} : {
@@ -248,6 +250,25 @@ class Session {
 
                         connection.release()
                         resolve(result)
+                    })
+            })
+        })
+    }
+
+    sessionClose(){
+        return new Promise((resolve, reject) => {
+            let sql = "UPDATE session SET stato = 'closed' WHERE id = ?";
+
+            pool.getConnection((err, connection)=>{
+                if(err) reject(err)
+
+                connection.query(sql, [this.id],
+                    (err)=>{
+                        if(err) reject(err)
+
+                        connection.release()
+                        this.stato = 'closed';
+                        resolve(this)
                     })
             })
         })
