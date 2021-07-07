@@ -18,19 +18,16 @@ router.post('/:id', (req,res) => {
     }
 
     new Session( session )
-    .then(session => session.create())
-    .then(result => {
-        console.log(result)
-        return new Message({
+        .then(session => session.create())
+        .then(result => new Message({
             mittente: id,
             content: content,
             tipo: msgType,
             idSession: result.id
-        })
-    })
-    .then(message => {console.log(message); return message.create()})
-    .then(result => res.status(200).json({result, message: SUCCESS_ITA.DEFAULT}))
-    .catch(err => {console.log(err); return res.status(500).json(err)})
+        }))
+        .then(message => message.create())
+        .then(result => res.status(200).json(result))
+        .catch(err => { return res.status(500).json(err); });
 })
 
 export default router

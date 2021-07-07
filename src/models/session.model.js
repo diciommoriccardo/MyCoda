@@ -20,13 +20,13 @@ class Session {
                 if(result.length != 0) return resolve(result[0])
 
                 pool.getConnection((err, connection) => {
-                    if(err) {console.log(err); reject(err)}
+                    if (err) reject(err);
     
                     let sql = "INSERT INTO session SET ?";
     
                     connection.query(sql, [this],
                         (err, result) => {
-                            if(err) {console.log(err);reject(err)}
+                            if (err) reject(err);
     
                             connection.release()
                             this.id = result.insertId;
@@ -99,11 +99,10 @@ class Session {
                 let sqlSession = "SELECT id, cfUtente, pivaFarma FROM session WHERE cfUtente = ? GROUP BY id, cfUtente, pivaFarma ORDER BY time DESC"
                 let sqlMsg = "SELECT * FROM msg WHERE idSession = ?  ORDER BY time DESC LIMIT 1";
 
-                connection.query(sqlSession, [this.cfUtente], 
-                    function(err, sessions) {
-                        if(err) reject (err)
-                        console.log(sessions)
-                        Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) => 
+                connection.query(sqlSession, [this.pivaFarma],
+                    function (err, sessions) {
+                        if (err) reject(err)
+                        Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) =>
                             new Promise((resolve, reject) => {
                                 connection.query(sqlMsg, [id],
                                     (err, [lastMessage]) => {
@@ -119,10 +118,11 @@ class Session {
                                     }
                                 );
                             }
-                        )))
-                        .then(result => resolve(result))
-                        .catch(error => reject(error));
-                    })
+                            )))
+                            .then(result => resolve(result))
+                            .catch(error => reject(error));
+                    }
+                )
                 connection.release();
             })
         })
@@ -158,26 +158,9 @@ class Session {
                         )))
                         .then(result => resolve(result))
                         .catch(error => reject(error));
-                    })
+                    }
+                )
                 connection.release();
-            })
-        })
-    }
-
-    findOpenSessionById(){
-        return new Promise( (resolve, reject) => {
-            let sql = "SELECT * FROM session WHERE id = ? AND stato = 'open'";
-
-            pool.getConnection( (err, connection) => {
-                if(err) reject(err)
-
-                connection.query(sql, [this.id],
-                    function(err, result){
-                        if(err) reject(err)
-
-                        connection.release()
-                        resolve(result)
-                    })
             })
         })
     }
@@ -185,40 +168,70 @@ class Session {
     findOpenSessionByUser(){
         return new Promise((resolve, reject) => {
             let sql = "SELECT * FROM session WHERE cfUtente = ? AND stato = 'open'";
-
-
+            let sqlMsg = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
             pool.getConnection((err, connection) => {
                 if(err) return reject(err)
-                
                 connection.query(sql, [this.cfUtente],
-                    function(err, result){
-                        if(err) return reject(err)
-
-                        console.log(result)
-                        connection.release()
-                        resolve(result)
-                })
+                    function (err, sessions) {
+                        if (err) reject(err)
+                        Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) =>
+                            new Promise((resolve, reject) => {
+                                connection.query(sqlMsg, [id],
+                                    (err, [lastMessage]) => {
+                                        if (err) reject(err)
+                                        resolve({
+                                            cfUtente,
+                                            pivaFarma,
+                                            lastMessage: !lastMessage ? {} : {
+                                                time: lastMessage.time,
+                                                content: lastMessage.content,
+                                                type: lastMessage.tipo,
+                                            },
+                                        });
+                                    }
+                                );
+                            }
+                            )))
+                            .then(result => resolve(result))
+                            .catch(error => reject(error));
+                    }
+                )
             })
-                
         })
     }
 
     findOpenSessionByPharma(){
         return new Promise((resolve, reject)=>{
             let sql = "SELECT * FROM session WHERE pivaFarma = ? AND stato = 'open'";
+            let sqlMsg = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
 
             pool.getConnection((err, connection)=>{
                 if(err) return reject(err)
-
                 connection.query(sql, [this.pivaFarma],
-                    function(err, result){
-                        if(err) return reject(err)
-
-                        connection.release()
-                        resolve(result)
-                })
-            })
-                
+                    function (err, sessions) {
+                        if (err) reject(err)
+                        Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) =>
+                            new Promise((resolve, reject) => {
+                                connection.query(sqlMsg, [id],
+                                    (err, [lastMessage]) => {
+                                        if (err) reject(err)
+                                        resolve({
+                                            cfUtente,
+                                            pivaFarma,
+                                            lastMessage: !lastMessage ? {} : {
+                                                time: lastMessage.time,
+                                                content: lastMessage.content
+                                            },
+                                        });
+                                    }
+                                );
+                            }
+                            )))
+                            .then(result => resolve(result))
+                            .catch(error => reject(error));
+                    }
+                )
+            }) 
         })
     }
 

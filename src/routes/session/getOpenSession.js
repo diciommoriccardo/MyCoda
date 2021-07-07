@@ -12,8 +12,10 @@ router.get('/open', (req, res) => {
     new Session( session )
     .then(session => type === 'user' ? session.findOpenSessionByUser() : session.findOpenSessionByPharma())
     .then(result => { return res.status(201).json(result)})
-    .catch(err => { return res.status(500).json({error: { message: err }})})
-
+    .catch(err => { 
+        console.log(err);
+        return res.status(500).json({error: { message: err }})
+    })
 })
 
 export default router
