@@ -87,7 +87,7 @@ class Message {
 
     findBySession(){
         return new Promise((resolve, reject) => {
-            let sql = "SELECT content, time, stato FROM msg WHERE idSession = ?";
+            let sql = "SELECT * FROM msg WHERE idSession = ?";
 
             pool.getConnection((err, connection) => {
                 if(err) reject(err)
