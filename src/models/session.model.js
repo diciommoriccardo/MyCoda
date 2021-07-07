@@ -96,16 +96,16 @@ class Session {
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
 
-                let sqlSession = "SELECT cfUtente, pivaFarma FROM session WHERE cfUtente = ? GROUP BY cfUtente, pivaFarma ORDER BY time DESC"
-                let sqlMsg = "SELECT * FROM msg WHERE cfUtente = ? AND pivaFarma = ? ORDER BY time DESC LIMIT 1";
+                let sqlSession = "SELECT id, cfUtente, pivaFarma FROM session WHERE cfUtente = ? GROUP BY id, cfUtente, pivaFarma ORDER BY time DESC"
+                let sqlMsg = "SELECT * FROM msg WHERE idSession = ?  ORDER BY time DESC LIMIT 1";
 
                 connection.query(sqlSession, [this.cfUtente], 
                     function(err, sessions) {
                         if(err) reject (err)
                         console.log(sessions)
-                        Promise.all(sessions.map(({ cfUtente, pivaFarma }) => 
+                        Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) => 
                             new Promise((resolve, reject) => {
-                                connection.query(sqlMsg, [cfUtente, pivaFarma],
+                                connection.query(sqlMsg, [id],
                                     (err, [lastMessage]) => {
                                         if (err) reject(err)
                                         resolve({
@@ -133,15 +133,15 @@ class Session {
             pool.getConnection( (err, connection) =>{
                 if(err) return reject(err)
 
-                let sqlSession = "SELECT cfUtente, pivaFarma, time FROM session WHERE pivaFarma = ? GROUP BY cfUtente, pivaFarma, time ORDER BY time DESC"
-                let sqlMsg = "SELECT * FROM msg WHERE cfUtente = ? AND pivaFarma = ? ORDER BY time DESC LIMIT 1";
+                let sqlSession = "SELECT id, cfUtente, pivaFarma FROM session WHERE pivaFarma = ? GROUP BY id, cfUtente, pivaFarma ORDER BY time DESC"
+                let sqlMsg = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
 
                 connection.query(sqlSession, [this.pivaFarma], 
                     function(err, sessions) {
                         if(err) reject (err)
-                        Promise.all(sessions.map(({ cfUtente, pivaFarma }) => 
+                        Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) => 
                             new Promise((resolve, reject) => {
-                                connection.query(sqlMsg, [cfUtente, pivaFarma],
+                                connection.query(sqlMsg, [id],
                                     (err, [lastMessage]) => {
                                         if (err) reject(err)
                                         resolve({
