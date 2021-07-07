@@ -221,6 +221,24 @@ class Session {
                 
         })
     }
+
+    findOpenSessionByBoth(){
+        return new Promise((resolve, reject) =>{
+            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? AND stato = ?";
+
+            pool.getConnection((err, connection)=>{
+                if(err) reject(err)
+
+                connection.query(sql, [this.cfUtente, this.pivaFarma],
+                    function(err, result){
+                        if(err) reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
+            })
+        })
+    }
 }
 
 export default Session
