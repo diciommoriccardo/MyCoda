@@ -11,7 +11,7 @@ router.post('/login', function(req, res){
     new User ( req.body )
     .then(user => user.login())
     .then(row => {
-        const { cf, nome, cognome, numTel, email } = row;
+        const { cf, nome, cognome, numTel, email, refresh_token } = row;
         var accessToken = jwt.signAccessToken({ id: cf, type: "user" })
         return res.status(201).json({ 
             cf,
@@ -20,6 +20,7 @@ router.post('/login', function(req, res){
             numTel,
             email,
             accessToken,
+            refresh_token
         });
     })
     .catch(err => { return res.status(500).json({error: {message: err}}) })

@@ -12,14 +12,15 @@ router.post('/login', function(req, res){
     new Pharmacy ( req.body )
         .then(pharmacy => pharmacy.login())
         .then(row => {
-            const { pIva, ragSociale, indirizzo, email } = row;
+            const { pIva, ragSociale, indirizzo, email, refresh_token } = row;
             var accessToken = jwt.signAccessToken({ id: pIva, type: "pharmacy" });
             return res.status(201).json({
                 pIva,
                 ragSociale,
                 indirizzo,
                 email,
-                accessToken
+                accessToken,
+                refresh_token
             });
         })
         .catch(err => { return res.status(500).json({error: {message: err}}); });
