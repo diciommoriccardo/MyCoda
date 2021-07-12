@@ -92,75 +92,41 @@ class Session {
     }
 
     findByUser(){
-        return new Promise( (resolve, reject) =>{
-            pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+        return new Promise((resolve, reject) => {
+            pool.getConnection((err, connection) =>{
+                if(err) reject(err)
 
-                let sqlSession = "SELECT id, cfUtente, pivaFarma FROM session WHERE cfUtente = ? GROUP BY id, cfUtente, pivaFarma ORDER BY time DESC"
-                let sqlMsg = "SELECT * FROM msg WHERE idSession = ?  ORDER BY time DESC LIMIT 1";
+                console.log("connected as: " + connection.threadId)
 
-                connection.query(sqlSession, [this.cfUtente],
-                    function (err, sessions) {
-                        if (err) reject(err)
-                        Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) =>
-                            new Promise((resolve, reject) => {
-                                connection.query(sqlMsg, [id],
-                                    (err, [lastMessage]) => {
-                                        if (err) reject(err)
-                                        resolve({
-                                            cfUtente,
-                                            pivaFarma,
-                                            lastMessage: !lastMessage ? {} : {
-                                                time: lastMessage.time,
-                                                content: lastMessage.content
-                                            },
-                                        });
-                                    }
-                                );
-                            }
-                            )))
-                            .then(result => resolve(result))
-                            .catch(error => reject(error));
-                    }
-                )
-                connection.release();
+                let sql = "SELECT * FROM session WHERE cfUtente = ? ORDER BY time DESC";
+
+                connection.query(sql, [this.cfUtente],
+                    function(err, result){
+                        if(err) reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
             })
         })
     }
 
     findByPharma(){
-        return new Promise( (resolve, reject) =>{
-            pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+        return new Promise((resolve, reject) => {
+            pool.getConnection((err, connection) =>{
+                if(err) reject(err)
 
-                let sqlSession = "SELECT id, cfUtente, pivaFarma FROM session WHERE pivaFarma = ? GROUP BY id, cfUtente, pivaFarma ORDER BY time DESC"
-                let sqlMsg = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
+                console.log("connected as: " + connection.threadId)
 
-                connection.query(sqlSession, [this.pivaFarma], 
-                    function(err, sessions) {
-                        if(err) reject (err)
-                        Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) => 
-                            new Promise((resolve, reject) => {
-                                connection.query(sqlMsg, [id],
-                                    (err, [lastMessage]) => {
-                                        if (err) reject(err)
-                                        resolve({
-                                            cfUtente,
-                                            pivaFarma,
-                                            lastMessage: !lastMessage ? {} : { 
-                                                time: lastMessage.time, 
-                                                content: lastMessage.content 
-                                            },
-                                        });
-                                    }
-                                );
-                            }
-                        )))
-                        .then(result => resolve(result))
-                        .catch(error => reject(error));
-                    }
-                )
-                connection.release();
+                let sql = "SELECT id, cfUtente, pivaFarma FROM session WHERE pivaFarma = ? ORDER BY time DESC";
+
+                connection.query(sql, [this.pivaFarma],
+                    function(err, result){
+                        if(err) reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
             })
         })
     }
