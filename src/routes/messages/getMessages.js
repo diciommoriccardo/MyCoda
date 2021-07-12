@@ -7,6 +7,8 @@ const router = Router();
 router.get('/:id', (req, res) => {
     const { id, type } = req.user;
     const receiverId = req.params.id;
+    const limit = req.body.limit || 0;
+    const offset = req.body.offset || 10;
 
     const session = {
         ...(type === 'user') ? {cfUtente: id, pivaFarma: receiverId} : {cfUtente: receiverId, pivaFarma: id}
@@ -15,7 +17,7 @@ router.get('/:id', (req, res) => {
     new Session( session )
     .then(session => session.findOpenSessionByBoth())
     .then(result => new Message({ idSession: result[0].id }))
-    .then(message => message.findBySession())
+    .then(message => message.findBySession(limit, offset))
     .then(messages => res.status(201).json(messages))
     .catch(err => res.status(500).json(err))
 })
