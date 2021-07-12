@@ -102,6 +102,25 @@ class Message {
             })
         })
     }
+
+    lastMessageBySession(){
+        return new Promise((resolve, reject) => {
+            let sql = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
+
+            pool.getConnection((err, connection) => {
+                if(err) reject(err)
+
+                console.log("connected as: " + connection.threadId);
+                connection.query(sql, [this.idSession],
+                    function(err, result){
+                        if(err) reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
+            })
+        })
+    }
 }
 
 export default Message
