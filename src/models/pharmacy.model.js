@@ -88,11 +88,11 @@ class Pharmacy {
             let sql = "SELECT * FROM farma WHERE piva = ?";
 
             pool.getConnection( (err, connection) => {
-                if(err) return reject(err)
+                if(err) reject(err)
                 
                 connection.query(sql, [this.piva],
                     function(err, result){
-                        if(err) return reject(err)
+                        if(err) reject(err)
 
                         connection.release()
                         resolve(result)
