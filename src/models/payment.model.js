@@ -19,11 +19,11 @@ class Payment {
             let sql = "INSERT INTO payment SET ?";
 
             pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+                if(err) reject(err)
 
                 connection.query(sql, [this],
                     function(err){
-                        if(err) return reject(err)
+                        if(err) reject(err)
 
                         connection.release()
                         resolve(this.values)
@@ -37,11 +37,11 @@ class Payment {
             let sql = "SELECT * FROM payment WHERE `cfUtente` = ?"
 
             pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+                if(err) reject(err)
 
                 connection.query(sql, [this.cfUtente],
                     function(err, result){
-                        if(err) return reject(err)
+                        if(err) reject(err)
 
                         connection.release()
                         resolve(result)
@@ -55,11 +55,11 @@ class Payment {
             let sql = "SELECT * FROM payment WHERE pivaFarm = ?"
 
             pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+                if(err) reject(err)
 
                 connection.query(sql, this.pivaFarm,
                     function(err, result){
-                        if(err) return reject(err)
+                        if(err) reject(err)
 
                         connection.release()
                         resolve(result)

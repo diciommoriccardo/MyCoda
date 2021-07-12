@@ -54,18 +54,18 @@ class User {
                 this.password = hash
                 
                 pool.getConnection( (err, connection) => {
-                    if(err) return reject(err)
+                    if(err) reject(err)
                     
                     connection.query(sql, [this],
                         function(err){
-                            if(err) return reject(err)
+                            if(err) reject(err)
                             
                             connection.release()
                             resolve(this.values)
                     })
                 })
             })
-            .catch( (err) => {console.log(err); return reject(err)})
+            .catch( (err) => {console.log(err); reject(err)})
         });
     }
 
@@ -119,11 +119,11 @@ class User {
             let sql = "SELECT * FROM user WHERE refresh_token = ?";
 
             pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+                if(err) reject(err)
 
                 connection.query(sql, this.refresh_token,
                     function(err, result){
-                        if(err) return reject(err)
+                        if(err) reject(err)
 
                         connection.release()
                         resolve(result)
@@ -137,11 +137,11 @@ class User {
             let sql = "SELECT * FROM user";
 
             pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+                if(err) reject(err)
 
                 connection.query(sql, 
                     function(err, result){
-                        if(err) return reject(err)
+                        if(err) reject(err)
 
                         connection.release()
                         resolve(result)

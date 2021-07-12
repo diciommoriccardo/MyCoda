@@ -18,11 +18,11 @@ class Message {
             let sql = "INSERT INTO msg SET ?"
 
             pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+                if(err) reject(err)
 
                 connection.query(sql, [this],
                     function(err){
-                        if(err) return reject(err)
+                        if(err) reject(err)
 
                         connection.release()
                         resolve(this.values)
@@ -36,11 +36,11 @@ class Message {
             let sql = "SELECT * FROM msg WHERE id = ?";
 
             pool.getConnection( (err, connection) =>{
-                if(err) return reject(err);
+                if(err) reject(err);
 
                 connection.query(sql, [this.id], 
                     function(err, result){
-                        if(err) return reject(err);
+                        if(err) reject(err);
                         
                         connection.release();
                         resolve(result);
@@ -54,11 +54,11 @@ class Message {
             let sql = "SELECT * FROM msg WHERE cfUtente = ?"
 
             pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+                if(err) reject(err)
 
                 connection.query(sql, [this.cfUtente], 
                     function(err, result){
-                        if(err) return reject(err)
+                        if(err) reject(err)
 
                         connection.release()
                         resolve(result)
@@ -72,11 +72,29 @@ class Message {
             let sql = "SELECT * FROM msg WHERE pivaFarma = ?"
 
             pool.getConnection((err, connection) =>{
-                if(err) return reject(err)
+                if(err) reject(err)
 
                 connection.query(sql, [this.pivaFarma],
                     function(err, result){
-                        if(err) return reject(err)
+                        if(err) reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
+            })
+        })
+    }
+
+    findBySession(limit, offset){
+        return new Promise((resolve, reject) => {
+            let sql = "SELECT * FROM msg WHERE idSession = ? LIMIT " + limit + ", "+ offset +"";
+
+            pool.getConnection((err, connection) => {
+                if(err) reject(err)
+
+                connection.query(sql, [this.idSession],
+                    function(err, result){
+                        if(err) reject(err)
 
                         connection.release()
                         resolve(result)

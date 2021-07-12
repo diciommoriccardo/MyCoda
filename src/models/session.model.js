@@ -16,7 +16,7 @@ class Session {
     create(){
         return new Promise( (resolve, reject) =>{
             this.exist()
-            .then((result)=>{
+            .then((result)=> {
                 if(result.length != 0) return resolve(result[0])
 
                 pool.getConnection((err, connection) => {
@@ -60,11 +60,11 @@ class Session {
             let sql = "SELECT * FROM session WHERE id = ?";
 
             pool.getConnection( (err, connection) =>{
-                if(err) return reject(err);
+                if(err) reject(err);
 
                 connection.query(sql, [this.id], 
                     function(err, result){
-                        if(err) return reject(err);
+                        if(err) reject(err);
                         
                         connection.release();
                         resolve(result);
@@ -136,7 +136,7 @@ class Session {
             let sql = "SELECT * FROM session WHERE cfUtente = ? AND stato = 'open'";
             let sqlMsg = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
             pool.getConnection((err, connection) => {
-                if(err) return reject(err)
+                if(err) reject(err)
                 connection.query(sql, [this.cfUtente],
                     function (err, sessions) {
                         if (err) reject(err)
@@ -173,7 +173,7 @@ class Session {
             let sqlMsg = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
 
             pool.getConnection((err, connection)=>{
-                if(err) return reject(err)
+                if(err) reject(err)
                 connection.query(sql, [this.pivaFarma],
                     function (err, sessions) {
                         if (err) reject(err)

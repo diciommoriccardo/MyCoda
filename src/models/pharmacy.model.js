@@ -52,11 +52,11 @@ class Pharmacy {
                 this.password = hash;
                 
                 pool.getConnection( (err, connection) => {
-                    if(err) return reject(err)
+                    if(err) reject(err)
                     
                     connection.query(sql, [this],
                         function(err){
-                            if(err) return reject(err)
+                            if(err) reject(err)
                             
                             connection.release()
                             resolve(this.values)
@@ -124,11 +124,11 @@ class Pharmacy {
         let sql = "SELECT * FROM farma WHERE refresh_token = ?";
 
         pool.getConnection( (err, connection) => {
-            if(err) return reject(err)
+            if(err) reject(err)
 
             connection.query(sql, refresh_token,
                 function(err, result){
-                    if(err) return reject(err)
+                    if(err) reject(err)
 
                     connection.release()
                     resolve(result)
@@ -141,11 +141,12 @@ class Pharmacy {
             let sql = "SELECT * FROM farma";
 
             pool.getConnection( (err, connection) => {
-                if(err) return reject(err)
+                if(err) reject(err)
 
                 connection.query(sql, 
                     function(err, result){
-                        if(err) return reject(err)
+                        if(err) reject(err)
+                        
                         connection.release()
                         resolve(result)
                     })
