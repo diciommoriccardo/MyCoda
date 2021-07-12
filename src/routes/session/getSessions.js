@@ -14,7 +14,6 @@ router.get('', (req, res) => {
     new Session( session )
     .then(session => type === 'user' ? session.findByUserNew() : session.findByPharmaNew())
     .then(result => { 
-        console.log(result)
         return Promise.all(result.map(({id, pivaFarma, cfUtente, time}) => {
             return new Promise((resolve) => {
                 new Message({idSession: id})
