@@ -12,7 +12,7 @@ router.get('', (req, res) => {
     };
     
     new Session( session )
-    .then(session => type === 'user' ? session.findByUserNew() : session.findByPharmaNew())
+    .then(session => type === 'user' ? session.findByUser() : session.findByPharma())
     .then(result => { 
         return Promise.all(result.map(({id, pivaFarma, cfUtente, time}) => {
             return new Promise((resolve) => {
