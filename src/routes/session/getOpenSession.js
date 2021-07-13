@@ -23,15 +23,14 @@ router.get('/open', (req, res) => {
                     (type === 'user' ? new User({ cf: cfUtente }) : new Pharmacy({ piva: pivaFarma }))
                     .then(result => result.findByCf())
                     .then(user => resolve({
-                        id,
-                        cfUtente: cfUtente,
-                        pivaFarma: pivaFarma,
-                        nome: (type === 'user') ? user[0].nome + " " + user[0].cognome : user[0].ragSociale,
-                        time: time,
-                        message: {
+                        sessionId: id,
+                        userId: (type === 'user') ? pivaFarma : cfUtente,
+                        displayName: (type === 'user') ? user[0].nome + " " + user[0].cognome : user[0].ragSociale,
+                        createdAt: time,
+                        lastMessage: {
                             content: last[0].content,
                             time: last[0].time,
-                            mittente: last[0].mittente
+                            sender: last[0].mittente
                         } 
                     }))
                     .catch(err => {console.log(err); return res.status(500).json({err: { message: err }})})
