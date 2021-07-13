@@ -134,72 +134,38 @@ class Session {
     findOpenSessionByUser(){
         return new Promise((resolve, reject) => {
             let sql = "SELECT * FROM session WHERE cfUtente = ? AND stato = 'open'";
-            let sqlMsg = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
+
             pool.getConnection((err, connection) => {
                 if(err) reject(err)
+
+                console.log("connected as: " + connection.threadId);
                 connection.query(sql, [this.cfUtente],
-                    function (err, sessions) {
-                        if (err) reject(err)
-                        Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) =>
-                            new Promise((resolve, reject) => {
-                                connection.query(sqlMsg, [id],
-                                    (err, [lastMessage]) => {
-                                        if (err) reject(err)
-                                        resolve({
-                                            id,
-                                            cfUtente,
-                                            pivaFarma,
-                                            lastMessage: !lastMessage ? {} : {
-                                                time: lastMessage.time,
-                                                content: lastMessage.content,
-                                                type: lastMessage.tipo,
-                                            },
-                                        });
-                                    }
-                                );
-                            }
-                            )))
-                            .then(result => resolve(result))
-                            .catch(error => reject(error));
-                    }
-                )
+                    function(err, result){
+                        if(err) reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
             })
         })
     }
 
     findOpenSessionByPharma(){
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             let sql = "SELECT * FROM session WHERE pivaFarma = ? AND stato = 'open'";
-            let sqlMsg = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
 
-            pool.getConnection((err, connection)=>{
+            pool.getConnection((err, connection) => {
                 if(err) reject(err)
+
+                console.log("connected as: " + connection.threadId);
                 connection.query(sql, [this.pivaFarma],
-                    function (err, sessions) {
-                        if (err) reject(err)
-                        Promise.all(sessions.map(({ id, cfUtente, pivaFarma }) =>
-                            new Promise((resolve, reject) => {
-                                connection.query(sqlMsg, [id],
-                                    (err, [lastMessage]) => {
-                                        if (err) reject(err)
-                                        resolve({
-                                            id,
-                                            cfUtente,
-                                            pivaFarma,
-                                            lastMessage: !lastMessage ? {} : {
-                                                time: lastMessage.time,
-                                                content: lastMessage.content
-                                            },
-                                        });
-                                    }
-                                );
-                            }
-                            )))
-                            .then(result => resolve(result))
-                            .catch(error => reject(error));
-                    }
-                )
-            }) 
+                    function(err, result){
+                        if(err) reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
+            })
         })
     }
 
