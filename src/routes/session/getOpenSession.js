@@ -2,6 +2,7 @@ import Router from 'express';
 import Session from '../../models/session.model.js';
 import Message from '../../models/message.model.js';
 import Pharmacy from '../../models/pharmacy.model.js';
+import User from '../../models/user.model.js';
 
 const router = Router();
 
@@ -19,22 +20,22 @@ router.get('/open', (req, res) => {
                 new Message({idSession: id})
                 .then(message => message.lastMessageBySession())
                 .then(last => {
-                    new Pharmacy({ piva: pivaFarma})
-                    .then(pharmacy => pharmacy.findByCf())
-                    .then(pharma => { resolve({
+                    (type === 'user' ? new User({ cf: cfUtente }) : new Pharmacy({ piva: pivaFarma }))
+                    .then(result => result.findByCf())
+                    .then(user => resolve({
                         id,
                         cfUtente: cfUtente,
                         pivaFarma: pivaFarma,
-                        ragSociale: pharma[0].ragSociale,
+                        nome: (type === 'user') ? user[0].nome + " " + user[0].cognome : user[0].ragSociale,
                         time: time,
                         message: {
                             content: last[0].content,
-                            mittente: last[0].mittente,
-                            time: last[0].time
-                        }
-                    })})    
+                            time: last[0].time,
+                            mittente: last[0].mittente
+                        } 
+                    }))
+                    .catch(err => {console.log(err); return res.status(500).json({err: { message: err }})})
                 })
-                .catch(err => res.status(500).json(err))
             })
         }))
     })
