@@ -1,4 +1,5 @@
 import pool from '../helpers/mysql.js';
+import { InternalError, ResourceNotFound } from '../helpers/Errors.js';
 
 class Session {
     constructor(session){
@@ -26,7 +27,7 @@ class Session {
     
                     connection.query(sql, [this],
                         (err, result) => {
-                            if (err) reject(err);
+                            if(err) reject(err);
     
                             connection.release()
                             this.id = result.insertId;
@@ -65,6 +66,7 @@ class Session {
                 connection.query(sql, [this.id], 
                     function(err, result){
                         if(err) reject(err);
+                        if(result.lenght == 0) reject(new ResourceNotFound("session", sql + ": findById"))
                         
                         connection.release();
                         resolve(result);
@@ -83,6 +85,7 @@ class Session {
                 connection.query(sql, [this.cfUtente, this.pivaFarma],
                     function(err, result){
                         if(err) reject(err)
+                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByBoth"));
 
                         connection.release();
                         resolve(result)
@@ -103,6 +106,7 @@ class Session {
                 connection.query(sql, [this.cfUtente],
                     function(err, result){
                         if(err) reject(err)
+                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByUser"));
 
                         connection.release()
                         resolve(result)
@@ -123,6 +127,7 @@ class Session {
                 connection.query(sql, [this.pivaFarma],
                     function(err, result){
                         if(err) reject(err)
+                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByPharma"));
 
                         connection.release()
                         resolve(result)
@@ -142,6 +147,7 @@ class Session {
                 connection.query(sql, [this.cfUtente],
                     function(err, result){
                         if(err) reject(err)
+                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByUser"));
 
                         connection.release()
                         resolve(result)
@@ -161,6 +167,7 @@ class Session {
                 connection.query(sql, [this.pivaFarma],
                     function(err, result){
                         if(err) reject(err)
+                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByPharma"));
 
                         connection.release()
                         resolve(result)
@@ -179,6 +186,7 @@ class Session {
                 connection.query(sql, [this.cfUtente, this.pivaFarma],
                     function(err, result){
                         if(err) reject(err)
+                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByBoth"));
 
                         connection.release()
                         resolve(result)
