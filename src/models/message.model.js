@@ -85,14 +85,14 @@ class Message {
         })
     }
 
-    findBySession(limit, offset){
+    findBySession(offset, limit){
         return new Promise((resolve, reject) => {
-            let sql = "SELECT * FROM msg WHERE idSession = ? LIMIT " + limit + ", "+ offset +"";
+            let sql = "SELECT * FROM msg WHERE idSession = ? LIMIT ?, ?";
 
             pool.getConnection((err, connection) => {
                 if(err) reject(err)
 
-                connection.query(sql, [this.idSession],
+                connection.query(sql, [this.idSession, limit, offset],
                     function(err, result){
                         if(err) reject(err)
 
