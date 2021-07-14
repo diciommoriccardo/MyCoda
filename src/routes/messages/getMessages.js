@@ -7,8 +7,8 @@ const router = Router();
 router.get('/:id', (req, res) => {
     const { id, type } = req.user;
     const receiverId = req.params.id;
-    const offset = req.query.offset ? req.query.offset : 0;
-    const limit = req.query.limit ? req.query.limit: 10;
+    const offset = req.query.offset && (parseInt(req.query.offset));
+    const limit = req.query.limit && (parseInt(req.query.limit));
 
     const session = {
         ...(type === 'user') ? {cfUtente: id, pivaFarma: receiverId} : {cfUtente: receiverId, pivaFarma: id}
