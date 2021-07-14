@@ -87,7 +87,7 @@ class Message {
 
     findBySession(offset = 0, limit = 10){
         return new Promise((resolve, reject) => {
-            let sql = "SELECT * FROM msg WHERE idSession = ? LIMIT ?, ?";
+            let sql = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT ?, ?";
 
             pool.getConnection((err, connection) => {
                 if(err) reject(err)
