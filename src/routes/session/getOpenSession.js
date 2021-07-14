@@ -20,7 +20,7 @@ router.get('/open', (req, res) => {
                 new Message({idSession: id})
                 .then(message => message.lastMessageBySession())
                 .then(last => {
-                    (type === 'user' ? new User({ cf: cfUtente }) : new Pharmacy({ piva: pivaFarma }))
+                    (type === 'user' ? new Pharmacy({ piva: pivaFarma }) : new User({ cf: cfUtente }))
                     .then(result => result.findByCf())
                     .then(user => resolve({
                         sessionId: id,
