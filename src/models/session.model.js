@@ -96,6 +96,7 @@ class Session {
 
     findByUser(){
         return new Promise((resolve, reject) => {
+
             pool.getConnection((err, connection) =>{
                 if(err) reject(err)
 
