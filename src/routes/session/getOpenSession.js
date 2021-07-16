@@ -20,18 +20,17 @@ router.get('/open', (req, res) => {
                 new Message({idSession: id})
                 .then(message => message.lastMessageBySession())
                 .then(last => {
-                    (type === 'user' ? new User({ cf: cfUtente }) : new Pharmacy({ piva: pivaFarma }))
+                    (type === 'user' ? new Pharmacy({ piva: pivaFarma }) : new User({ cf: cfUtente }))
                     .then(result => result.findByCf())
                     .then(user => resolve({
-                        id,
-                        cfUtente: cfUtente,
-                        pivaFarma: pivaFarma,
-                        nome: (type === 'user') ? user[0].nome + " " + user[0].cognome : user[0].ragSociale,
-                        time: time,
-                        message: {
+                        sessionId: id,
+                        userId: (type === 'user') ? pivaFarma : cfUtente,
+                        displayName: (type === 'user') ? user[0].ragSociale : `${user[0].nome} ${user[0].cognome}`,
+                        createdAt: time,
+                        lastMessage: {
                             content: last[0].content,
                             time: last[0].time,
-                            mittente: last[0].mittente,
+                            sender: last[0].mittente,
                             stato: last[0].stato
                         } 
                     }))
