@@ -85,14 +85,32 @@ class Message {
         })
     }
 
-    findBySession(offset = 0, limit = 10){
+    findBySession(limit, offset){
         return new Promise((resolve, reject) => {
-            let sql = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT ?, ?";
+            let sql = "SELECT * FROM msg WHERE idSession = ? LIMIT " + limit + ", "+ offset +"";
 
             pool.getConnection((err, connection) => {
                 if(err) reject(err)
-            
-                connection.query(sql, [this.idSession, offset, limit],
+
+                connection.query(sql, [this.idSession],
+                    function(err, result){
+                        if(err) reject(err)
+
+                        connection.release()
+                        resolve(result)
+                    })
+            })
+        })
+    }
+
+    findBySession(){
+        return new Promise((resolve, reject) => {
+            let sql = "SELECT * FROM msg WHERE idSession = ?";
+
+            pool.getConnection((err, connection) => {
+                if(err) reject(err)
+
+                connection.query(sql, [this.idSession],
                     function(err, result){
                         if(err) reject(err)
 
@@ -105,18 +123,25 @@ class Message {
 
     lastMessageBySession(){
         return new Promise((resolve, reject) => {
-            let sql = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
+            let sqlMessage = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
+            let sqlCount = "SELECT COUNT(*) AS tot FROM msg WHERE idSession = ? AND stato = 'non letto'";
 
             pool.getConnection((err, connection) => {
                 if(err) reject(err)
 
                 console.log("connected as: " + connection.threadId);
-                connection.query(sql, [this.idSession],
-                    function(err, result){
+                connection.query(sqlMessage, [this.idSession],
+                    (err, message) => {
                         if(err) reject(err)
 
-                        connection.release()
-                        resolve(result)
+                        connection.query(sqlCount, [this.idSession],
+                            (err, result) =>{
+                                if(err) reject(err)
+
+                                message[0].tot = result[0].tot;
+                                connection.release()
+                                resolve(message)  
+                            })
                     })
             })
         })
