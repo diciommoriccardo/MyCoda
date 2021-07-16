@@ -27,6 +27,7 @@ router.get('/open', (req, res) => {
                         userId: (type === 'user') ? pivaFarma : cfUtente,
                         displayName: (type === 'user') ? user[0].ragSociale : `${user[0].nome} ${user[0].cognome}`,
                         createdAt: time,
+                        newMessages: last[0].tot,
                         lastMessage: {
                             content: last[0].content,
                             time: last[0].time,
