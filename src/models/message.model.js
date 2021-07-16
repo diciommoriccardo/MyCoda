@@ -146,6 +146,26 @@ class Message {
             })
         })
     }
+
+    changeStatusForSession(){
+        return new Promise((resolve, reject) => {
+            let sql = "UPDATE msg SET stato = 'letto' WHERE idSession = ? AND mittente = ?";
+
+            pool.getConnection((err, connection) => {
+                if(err) reject(err)
+
+                console.log("connected as: " + connection.threadId);
+
+                connection.query(sql, [this.idSession, this.mittente],
+                    (err) => {
+                        if(err) reject(err)
+
+                        connection.release()
+                        resolve(this)
+                    })
+            })
+        })
+    }
 }
 
 export default Message
