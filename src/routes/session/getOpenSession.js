@@ -31,7 +31,8 @@ router.get('/open', (req, res) => {
                         message: {
                             content: last[0].content,
                             time: last[0].time,
-                            mittente: last[0].mittente
+                            mittente: last[0].mittente,
+                            stato: last[0].stato
                         } 
                     }))
                     .catch(err => {console.log(err); return res.status(500).json({err: { message: err }})})
