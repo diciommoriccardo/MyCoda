@@ -16,7 +16,8 @@ router.get('/:id', (req, res) => {
 
     new Session( session )
     .then(session => session.findOpenSessionByBoth())
-    .then(result => new Message({ idSession: result[0].id }))
+    .then(result => new Message({ idSession: result[0].id, mittente: receiverId }))
+    .then(message => message.changeStatusForSession())
     .then(message => message.findBySession(offset, limit))
     .then(messages => res.status(201).json(messages))
     .catch(err => res.status(500).json(err))
