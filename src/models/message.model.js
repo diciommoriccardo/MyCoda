@@ -18,11 +18,11 @@ class Message {
             let sql = "INSERT INTO msg SET ?"
 
             pool.getConnection( (err, connection) =>{
-                if(err) reject(err)
+                if(err) return reject(err)
 
                 connection.query(sql, [this],
                     function(err){
-                        if(err) reject(err)
+                        if(err) return reject(err)
 
                         connection.release()
                         resolve(this.values)
@@ -36,11 +36,11 @@ class Message {
             let sql = "SELECT * FROM msg WHERE id = ?";
 
             pool.getConnection( (err, connection) =>{
-                if(err) reject(err);
+                if(err) return reject(err);
 
                 connection.query(sql, [this.id], 
                     function(err, result){
-                        if(err) reject(err);
+                        if(err) return reject(err);
                         
                         connection.release();
                         resolve(result);
@@ -54,11 +54,11 @@ class Message {
             let sql = `SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT ?, ?`;
 
             pool.getConnection((err, connection) => {
-                if(err) reject(err)
+                if(err) return reject(err)
 
                 connection.query(sql, [this.idSession, offset, limit],
                     function(err, result){
-                        if(err) reject(err)
+                        if(err) return reject(err)
                         connection.release()
                         resolve(result)
                     })
@@ -71,7 +71,7 @@ class Message {
             let sqlCount = "SELECT COUNT(*) AS total FROM msg WHERE idSession = ? AND mittente <> ? AND stato = 'non letto'";
 
             pool.getConnection((err, connection) => {
-                if(err) reject(err)
+                if(err) return reject(err)
                 connection.query(sqlCount, [this.idSession, this.mittente],
                     (err, [message]) => {
                         if (err) reject(err);
@@ -90,7 +90,7 @@ class Message {
                 if (err) reject(err);
                 connection.query(sql, [this.idSession, this.mittente],
                     (err) => {
-                        if(err) reject(err);
+                        if(err) return reject(err);
                         connection.release();
                         resolve(this);
                     }
