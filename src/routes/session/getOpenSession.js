@@ -14,33 +14,28 @@ router.get('/open', (req, res) => {
 
     new Session( session )
     .then(session => type === 'user' ? session.findOpenSessionByUser() : session.findOpenSessionByPharma())
-    .then(result => {
-        return Promise.all(result.map(({id, pivaFarma, cfUtente, time}) => {
-            return new Promise((resolve) => {
-                new Message({idSession: id})
-                .then(message => message.lastMessageBySession())
-                .then(last => {
-                    (type === 'user' ? new Pharmacy({ piva: pivaFarma }) : new User({ cf: cfUtente }))
-                    .then(result => result.findByCf())
-                    .then(user => resolve({
-                        sessionId: id,
-                        userId: (type === 'user') ? pivaFarma : cfUtente,
-                        displayName: (type === 'user') ? user[0].ragSociale : `${user[0].nome} ${user[0].cognome}`,
-                        createdAt: time,
-                        newMessages: last[0].tot,
-                        lastMessage: {
-                            content: last[0].content,
-                            time: last[0].time,
-                            sender: last[0].mittente,
-                            stato: last[0].stato
-                        } 
-                    }))
-                    .catch(err => {console.log(err); return res.status(500).json({err: { message: err }})})
+    .then(result => 
+        Promise.all(result.map(({ id: sessionId, pivaFarma, cfUtente, time }) => {
+            return new Promise((resolve, reject) => {
+                return new Message({ idSession: sessionId, mittente: id})
+                    .then(message => Promise.all([message.findBySession(0, 1), message.getNewMessagesCount()]))
+                    .then(([[lastMessage], newMessagesCount]) => {
+                        (type === 'user' ? new Pharmacy({ piva: pivaFarma }) : new User({ cf: cfUtente }))
+                        .then(result => result.findByCf())
+                        .then(user => resolve({
+                            sessionId,
+                            userId: (type === 'user') ? pivaFarma : cfUtente,
+                            displayName: (type === 'user') ? user[0].ragSociale : `${user[0].nome} ${user[0].cognome}`,
+                            createdAt: time,
+                            newMessagesCount,
+                            lastMessage,
+                        }))
+                        .catch(error => reject(error));
                 })
-            })
-        }))
-    })
-    .then(result => res.status(201).json(result))
+            })}
+        ))
+    )
+    .then(result => res.status(200).json(result))
     .catch(err => { 
         console.log(err);
         return res.status(500).json({error: { message: err }})
