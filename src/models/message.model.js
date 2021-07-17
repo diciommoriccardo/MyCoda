@@ -49,53 +49,16 @@ class Message {
         })
     }
 
-    findByUser(){
-        return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM msg WHERE cfUtente = ?"
-
-            pool.getConnection( (err, connection) =>{
-                if(err) reject(err)
-
-                connection.query(sql, [this.cfUtente], 
-                    function(err, result){
-                        if(err) reject(err)
-
-                        connection.release()
-                        resolve(result)
-                    })
-            })
-        })
-    }
-
-    findByPharma(){
-        return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM msg WHERE pivaFarma = ?"
-
-            pool.getConnection((err, connection) =>{
-                if(err) reject(err)
-
-                connection.query(sql, [this.pivaFarma],
-                    function(err, result){
-                        if(err) reject(err)
-
-                        connection.release()
-                        resolve(result)
-                    })
-            })
-        })
-    }
-
-    findBySession(limit, offset){
+    findBySession(offset = 0, limit = 10){
         return new Promise((resolve, reject) => {
-            let sql = "SELECT * FROM msg WHERE idSession = ? LIMIT " + limit + ", "+ offset +"";
+            let sql = `SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT ?, ?`;
 
             pool.getConnection((err, connection) => {
                 if(err) reject(err)
 
-                connection.query(sql, [this.idSession],
+                connection.query(sql, [this.idSession, offset, limit],
                     function(err, result){
                         if(err) reject(err)
-
                         connection.release()
                         resolve(result)
                     })
@@ -103,46 +66,19 @@ class Message {
         })
     }
 
-    findBySession(){
+    getNewMessagesCount(){
         return new Promise((resolve, reject) => {
-            let sql = "SELECT * FROM msg WHERE idSession = ?";
+            let sqlCount = "SELECT COUNT(*) AS total FROM msg WHERE idSession = ? AND mittente <> ? AND stato = 'non letto'";
 
             pool.getConnection((err, connection) => {
                 if(err) reject(err)
-
-                connection.query(sql, [this.idSession],
-                    function(err, result){
-                        if(err) reject(err)
-
-                        connection.release()
-                        resolve(result)
-                    })
-            })
-        })
-    }
-
-    lastMessageBySession(){
-        return new Promise((resolve, reject) => {
-            let sqlMessage = "SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT 1";
-            let sqlCount = "SELECT COUNT(*) AS tot FROM msg WHERE idSession = ? AND stato = 'non letto'";
-
-            pool.getConnection((err, connection) => {
-                if(err) reject(err)
-
-                console.log("connected as: " + connection.threadId);
-                connection.query(sqlMessage, [this.idSession],
-                    (err, message) => {
-                        if(err) reject(err)
-
-                        connection.query(sqlCount, [this.idSession],
-                            (err, result) =>{
-                                if(err) reject(err)
-
-                                message[0].tot = result[0].tot;
-                                connection.release()
-                                resolve(message)  
-                            })
-                    })
+                connection.query(sqlCount, [this.idSession, this.mittente],
+                    (err, [message]) => {
+                        if (err) reject(err);
+                        connection.release();
+                        resolve(message.total);
+                    }
+                )
             })
         })
     }
@@ -150,19 +86,15 @@ class Message {
     changeStatusForSession(){
         return new Promise((resolve, reject) => {
             let sql = "UPDATE msg SET stato = 'letto' WHERE idSession = ? AND mittente = ?";
-
             pool.getConnection((err, connection) => {
-                if(err) reject(err)
-
-                console.log("connected as: " + connection.threadId);
-
+                if (err) reject(err);
                 connection.query(sql, [this.idSession, this.mittente],
                     (err) => {
-                        if(err) reject(err)
-
-                        connection.release()
-                        resolve(this)
-                    })
+                        if(err) reject(err);
+                        connection.release();
+                        resolve(this);
+                    }
+                )
             })
         })
     }
