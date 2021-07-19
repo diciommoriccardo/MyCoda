@@ -3,6 +3,7 @@ import pool from '../helpers/mysql.js';
 class Message {
     constructor(message){
         return new Promise( (resolve) =>{
+            this.id = message.id
             this.mittente = message.mittente
             this.time = new Date(Date.now())
             this.content = message.content
@@ -58,6 +59,7 @@ class Message {
             pool.query(sqlCount, [this.idSession, this.mittente],
                 (err, [message]) => {
                     if (err) reject(err);
+
                     resolve(message.total);
                 }
             )
@@ -74,6 +76,19 @@ class Message {
                     resolve(this);
                 }
             )
+        })
+    }
+
+    changeStatusById(){
+        return new Promise( (resolve, reject) => {
+            let sql = "UPDATE msg SET stato = 'letto' WHERE id = ?";
+
+            pool.query(sql, [this.id],
+                (err) => {
+                    if(err) reject(err)
+
+                    resolve(this)
+                })
         })
     }
 }
