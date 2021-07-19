@@ -51,16 +51,11 @@ class Pharmacy {
             .then(hash => {
                 this.password = hash;
                 
-                pool.getConnection( (err, connection) => {
-                    if(err) reject(err)
-                    
-                    connection.query(sql, [this],
-                        function(err){
-                            if(err) reject(err)
-                            
-                            connection.release()
-                            resolve(this.values)
-                    })
+                pool.query(sql, [this],
+                    function(err){
+                        if(err) reject(err)
+                        
+                        resolve(this.values)
                 })
             })
             .catch( (err) => reject(err))
@@ -87,17 +82,12 @@ class Pharmacy {
         return new Promise ( (resolve, reject) => {
             let sql = "SELECT * FROM farma WHERE piva = ?";
 
-            pool.getConnection( (err, connection) => {
-                if(err) reject(err)
-                
-                connection.query(sql, [this.piva],
-                    function(err, result){
-                        if(err) reject(err)
+            pool.query(sql, [this.piva],
+                function(err, result){
+                    if(err) reject(err)
 
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 
@@ -120,37 +110,32 @@ class Pharmacy {
         })
     }*/
     
-    findByRefreshToken(refresh_token){
-        let sql = "SELECT * FROM farma WHERE refresh_token = ?";
+    // findByRefreshToken(refresh_token){
+    //     let sql = "SELECT * FROM farma WHERE refresh_token = ?";
 
-        pool.getConnection( (err, connection) => {
-            if(err) reject(err)
+    //     pool.getConnection( (err, connection) => {
+    //         if(err) reject(err)
 
-            connection.query(sql, refresh_token,
-                function(err, result){
-                    if(err) reject(err)
+    //         connection.query(sql, refresh_token,
+    //             function(err, result){
+    //                 if(err) reject(err)
 
-                    connection.release()
-                    resolve(result)
-                })
-        })
-    }
+    //                 connection.release()
+    //                 resolve(result)
+    //             })
+    //     })
+    // }
 
     getAll(){
         return new Promise( (resolve, reject) =>{
             let sql = "SELECT * FROM farma";
 
-            pool.getConnection( (err, connection) => {
-                if(err) reject(err)
+            pool.query(sql, 
+                function(err, result){
+                    if(err) reject(err)
 
-                connection.query(sql, 
-                    function(err, result){
-                        if(err) reject(err)
-                        
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 }

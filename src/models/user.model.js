@@ -53,17 +53,13 @@ class User {
             .then(hash => {
                 this.password = hash
                 
-                pool.getConnection( (err, connection) => {
-                    if(err) reject(err)
-                    
-                    connection.query(sql, [this],
-                        function(err){
-                            if(err) reject(err)
-                            
-                            connection.release()
-                            resolve(this.values)
-                    })
+                pool.query(sql, [this],
+                    function(err){
+                        if(err) reject(err)
+                        
+                        resolve(this.values)
                 })
+
             })
             .catch( (err) => {console.log(err); reject(err)})
         });
@@ -100,53 +96,43 @@ class User {
         return new Promise ( (resolve, reject) => {
             let sql = "SELECT * FROM user WHERE cf = ?";
 
-            pool.getConnection( (err, connection) => {
-                if(err) reject(err)
-                
-                connection.query(sql, [this.cf],
-                    function(err, result){
-                        if(err) reject(err)
+            pool.query(sql, [this.cf],
+                function(err, result){
+                    if(err) reject(err)
 
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 
-    findByRefreshToken(){
-        return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM user WHERE refresh_token = ?";
+    // findByRefreshToken(){
+    //     return new Promise( (resolve, reject) =>{
+    //         let sql = "SELECT * FROM user WHERE refresh_token = ?";
 
-            pool.getConnection( (err, connection) =>{
-                if(err) reject(err)
+    //         pool.getConnection( (err, connection) =>{
+    //             if(err) reject(err)
 
-                connection.query(sql, this.refresh_token,
-                    function(err, result){
-                        if(err) reject(err)
+    //             connection.query(sql, this.refresh_token,
+    //                 function(err, result){
+    //                     if(err) reject(err)
 
-                        connection.release()
-                        resolve(result)
-                    })
-            })
-        })
-    }
+    //                     connection.release()
+    //                     resolve(result)
+    //                 })
+    //         })
+    //     })
+    // }
 
     findAll(){
         return new Promise( (resolve, reject) =>{
             let sql = "SELECT * FROM user";
 
-            pool.getConnection( (err, connection) =>{
-                if(err) reject(err)
+            pool.query(sql, 
+                function(err, result){
+                    if(err) reject(err)
 
-                connection.query(sql, 
-                    function(err, result){
-                        if(err) reject(err)
-
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 }

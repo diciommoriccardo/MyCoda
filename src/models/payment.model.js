@@ -18,17 +18,12 @@ class Payment {
         return new Promise( (resolve, reject) =>{
             let sql = "INSERT INTO payment SET ?";
 
-            pool.getConnection( (err, connection) =>{
-                if(err) reject(err)
+            pool.query(sql, [this],
+                function(err){
+                    if(err) reject(err)
 
-                connection.query(sql, [this],
-                    function(err){
-                        if(err) reject(err)
-
-                        connection.release()
-                        resolve(this.values)
-                    })
-            })
+                    resolve(this.values)
+                })
         })
     }
 
@@ -36,35 +31,25 @@ class Payment {
         return new Promise( (resolve, reject) =>{
             let sql = "SELECT * FROM payment WHERE `cfUtente` = ?"
 
-            pool.getConnection( (err, connection) =>{
-                if(err) reject(err)
+            pool.query(sql, [this.cfUtente],
+                function(err, result){
+                    if(err) reject(err)
 
-                connection.query(sql, [this.cfUtente],
-                    function(err, result){
-                        if(err) reject(err)
-
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 
     findByPharma(){
         return new Promise( (resolve, reject) =>{
-            let sql = "SELECT * FROM payment WHERE pivaFarm = ?"
+            let sql = "SELECT * FROM payment WHERE pivaFarma = ?"
 
-            pool.getConnection( (err, connection) =>{
-                if(err) reject(err)
+            pool.query(sql, this.pivaFarma,
+                function(err, result){
+                    if(err) reject(err)
 
-                connection.query(sql, this.pivaFarm,
-                    function(err, result){
-                        if(err) reject(err)
-
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 }

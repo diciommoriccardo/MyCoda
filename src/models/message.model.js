@@ -17,17 +17,12 @@ class Message {
         return new Promise( (resolve, reject) =>{
             let sql = "INSERT INTO msg SET ?"
 
-            pool.getConnection( (err, connection) =>{
-                if(err) return reject(err)
+            pool.query(sql, [this],
+                function(err){
+                    if(err) reject(err)
 
-                connection.query(sql, [this],
-                    function(err){
-                        if(err) return reject(err)
-
-                        connection.release()
-                        resolve(this.values)
-                    })
-            })
+                    resolve(this.values)
+                })
         })
     }
 
@@ -35,17 +30,12 @@ class Message {
         return new Promise( (resolve, reject) =>{
             let sql = "SELECT * FROM msg WHERE id = ?";
 
-            pool.getConnection( (err, connection) =>{
-                if(err) return reject(err);
-
-                connection.query(sql, [this.id], 
-                    function(err, result){
-                        if(err) return reject(err);
-                        
-                        connection.release();
-                        resolve(result);
-                    })
-            })
+            pool.query(sql, [this.id], 
+                function(err, result){
+                    if(err) reject(err);
+                    
+                    resolve(result);
+                })
         })
     }
 
@@ -53,16 +43,11 @@ class Message {
         return new Promise((resolve, reject) => {
             let sql = `SELECT * FROM msg WHERE idSession = ? ORDER BY time DESC LIMIT ?, ?`;
 
-            pool.getConnection((err, connection) => {
-                if(err) return reject(err)
-
-                connection.query(sql, [this.idSession, offset, limit],
-                    function(err, result){
-                        if(err) return reject(err)
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+            pool.query(sql, [this.idSession, offset, limit],
+                function(err, result){
+                    if(err) reject(err)
+                    resolve(result)
+                })
         })
     }
 
@@ -70,32 +55,25 @@ class Message {
         return new Promise((resolve, reject) => {
             let sqlCount = "SELECT COUNT(*) AS total FROM msg WHERE idSession = ? AND mittente <> ? AND stato = 'non letto'";
 
-            pool.getConnection((err, connection) => {
-                if(err) return reject(err)
-                connection.query(sqlCount, [this.idSession, this.mittente],
-                    (err, [message]) => {
-                        if (err) reject(err);
-                        connection.release();
-                        resolve(message.total);
-                    }
-                )
-            })
+            pool.query(sqlCount, [this.idSession, this.mittente],
+                (err, [message]) => {
+                    if (err) reject(err);
+                    resolve(message.total);
+                }
+            )
         })
     }
 
     changeStatusForSession(){
         return new Promise((resolve, reject) => {
             let sql = "UPDATE msg SET stato = 'letto' WHERE idSession = ? AND mittente = ?";
-            pool.getConnection((err, connection) => {
-                if (err) reject(err);
-                connection.query(sql, [this.idSession, this.mittente],
-                    (err) => {
-                        if(err) return reject(err);
-                        connection.release();
-                        resolve(this);
-                    }
-                )
-            })
+            
+            pool.query(sql, [this.idSession, this.mittente],
+                (err) => {
+                    if(err) reject(err);
+                    resolve(this);
+                }
+            )
         })
     }
 }

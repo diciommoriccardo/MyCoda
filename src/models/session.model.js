@@ -20,39 +20,29 @@ class Session {
             .then((result)=> {
                 if(result.length != 0) return resolve(result[0])
 
-                pool.getConnection((err, connection) => {
-                    if (err) reject(err);
+                let sql = "INSERT INTO session SET ?";
     
-                    let sql = "INSERT INTO session SET ?";
+                pool.query(sql, [this],
+                    (err, result) => {
+                        if(err) reject(err);
     
-                    connection.query(sql, [this],
-                        (err, result) => {
-                            if(err) reject(err);
-    
-                            connection.release()
-                            this.id = result.insertId;
-                            resolve(this)
+                        this.id = result.insertId;
+                        resolve(this)
                     });
-                })
             })
         })
     }
 
     exist(){
         return new Promise((resolve, reject) =>{
-            pool.getConnection((err, connection)=>{
-                if(err) reject(err)
+            let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? AND  `stato` = 'open'";
 
-                let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? AND  `stato` = 'open'";
+            pool.query(sql, [this.cfUtente, this.pivaFarma],
+                (err, result)=>{
+                    if(err) reject(err)
 
-                connection.query(sql, [this.cfUtente, this.pivaFarma],
-                    (err, result)=>{
-                        if(err) reject(err)
-
-                        connection.release();
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 
@@ -60,18 +50,13 @@ class Session {
         return new Promise( (resolve, reject) =>{
             let sql = "SELECT * FROM session WHERE id = ?";
 
-            pool.getConnection( (err, connection) =>{
-                if(err) reject(err);
-
-                connection.query(sql, [this.id], 
-                    function(err, result){
-                        if(err) reject(err);
-                        if(result.lenght == 0) reject(new ResourceNotFound("session", sql + ": findById"))
-                        
-                        connection.release();
-                        resolve(result);
-                    })
-            })
+            pool.query(sql, [this.id], 
+                function(err, result){
+                    if(err) reject(err);
+                    if(result.lenght == 0) reject(new ResourceNotFound("session", sql + ": findById"))
+                    
+                    resolve(result);
+                })
         })
     }
 
@@ -79,61 +64,41 @@ class Session {
         return new Promise((resolve, reject)=>{
             let sql = "SELECT id FROM session WHERE cfUtente = ? AND pivaFarma = ?";
 
-            pool.getConnection((err, connection) =>{
-                if(err) reject(err)
+            pool.query(sql, [this.cfUtente, this.pivaFarma],
+                function(err, result){
+                    if(err) reject(err)
+                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByBoth"));
 
-                connection.query(sql, [this.cfUtente, this.pivaFarma],
-                    function(err, result){
-                        if(err) reject(err)
-                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByBoth"));
-
-                        connection.release();
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 
     findByUser(){
         return new Promise((resolve, reject) => {
+            let sql = "SELECT * FROM session WHERE cfUtente = ? ORDER BY time DESC";
 
-            pool.getConnection((err, connection) =>{
-                if(err) reject(err)
+            pool.query(sql, [this.cfUtente],
+                function(err, result){
+                    if(err) reject(err)
+                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByUser"));
 
-                console.log("connected as: " + connection.threadId)
-
-                let sql = "SELECT * FROM session WHERE cfUtente = ? ORDER BY time DESC";
-
-                connection.query(sql, [this.cfUtente],
-                    function(err, result){
-                        if(err) reject(err)
-                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByUser"));
-
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 
     findByPharma(){
         return new Promise((resolve, reject) => {
-            pool.getConnection((err, connection) =>{
-                if(err) reject(err)
+            let sql = "SELECT id, cfUtente, pivaFarma FROM session WHERE pivaFarma = ? ORDER BY time DESC";
 
-                console.log("connected as: " + connection.threadId)
+            pool.query(sql, [this.pivaFarma],
+                function(err, result){
+                    if(err) reject(err)
+                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByPharma"));
 
-                let sql = "SELECT id, cfUtente, pivaFarma FROM session WHERE pivaFarma = ? ORDER BY time DESC";
-
-                connection.query(sql, [this.pivaFarma],
-                    function(err, result){
-                        if(err) reject(err)
-                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByPharma"));
-
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 
@@ -141,19 +106,13 @@ class Session {
         return new Promise((resolve, reject) => {
             let sql = "SELECT * FROM session WHERE cfUtente = ? AND stato = 'open'";
 
-            pool.getConnection((err, connection) => {
-                if(err) reject(err)
+            pool.query(sql, [this.cfUtente],
+                function(err, result){
+                    if(err) reject(err)
+                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByUser"));
 
-                console.log("connected as: " + connection.threadId);
-                connection.query(sql, [this.cfUtente],
-                    function(err, result){
-                        if(err) reject(err)
-                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByUser"));
-
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 
@@ -161,19 +120,13 @@ class Session {
         return new Promise((resolve, reject) => {
             let sql = "SELECT * FROM session WHERE pivaFarma = ? AND stato = 'open'";
 
-            pool.getConnection((err, connection) => {
-                if(err) reject(err)
+            pool.query(sql, [this.pivaFarma],
+                function(err, result){
+                    if(err) reject(err)
+                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByPharma"));
 
-                console.log("connected as: " + connection.threadId);
-                connection.query(sql, [this.pivaFarma],
-                    function(err, result){
-                        if(err) reject(err)
-                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByPharma"));
-
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 
@@ -181,18 +134,14 @@ class Session {
         return new Promise((resolve, reject) =>{
             let sql = "SELECT * FROM session WHERE cfUtente = ? AND pivaFarma = ? AND stato = 'open'";
 
-            pool.getConnection((err, connection)=>{
-                if(err) reject(err)
 
-                connection.query(sql, [this.cfUtente, this.pivaFarma],
-                    function(err, result){
-                        if(err) reject(err)
-                        if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByBoth"));
+            pool.query(sql, [this.cfUtente, this.pivaFarma],
+                function(err, result){
+                    if(err) reject(err)
+                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByBoth"));
 
-                        connection.release()
-                        resolve(result)
-                    })
-            })
+                    resolve(result)
+                })
         })
     }
 
@@ -200,18 +149,13 @@ class Session {
         return new Promise((resolve, reject) => {
             let sql = "UPDATE session SET stato = 'closed' WHERE id = ?";
 
-            pool.getConnection((err, connection)=>{
-                if(err) reject(err)
+            pool.query(sql, [this.id],
+                (err)=>{
+                    if(err) reject(err)
 
-                connection.query(sql, [this.id],
-                    (err)=>{
-                        if(err) reject(err)
-
-                        connection.release()
-                        this.stato = 'closed';
-                        resolve(this)
-                    })
-            })
+                    this.stato = 'closed';
+                    resolve(this)
+                })
         })
     }
 }
