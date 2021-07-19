@@ -15,6 +15,7 @@ import getPayments from '../routes/payment/getPayments.js';
 import sendMessage from '../routes/messages/saveMessages.js';
 import getMessages from '../routes/messages/getMessages.js';
 import closeSession from '../routes/session/sessionClose.js';
+import readMessage from '../routes/messages/readMessage.js';
 
 
 class Router {
@@ -28,7 +29,7 @@ class Router {
                     '/pharmacies': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, pharmacyMe],
                     '/payments' : [authMiddleware, createPayment, getPayments],
                     '/sessions' : [authMiddleware, getOpenSession, getSessions, closeSession],
-                    '/messages' : [authMiddleware, sendMessage, getMessages]       
+                    '/messages' : [authMiddleware, sendMessage, getMessages, readMessage]       
                 }
             ],
             '*': notFoundMiddleware,
