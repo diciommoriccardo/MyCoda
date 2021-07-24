@@ -34,11 +34,17 @@ const SUCCESS_EN = {
   CONNECTION: 'Connection successful'
 }
 
+const PAYPAL = {
+  CLIENT_ID: process.env.CLIENT_ID,
+  SECRET: process.env.PAYPAL_SECRET,
+  API: 'https://api-m.sandbox.paypal.com'
+}
+
 export {
   JWT,
   REFRESH_TOKEN,
   ERRORS,
   SUCCESS_ITA,
-  SUCCESS_EN
-  //SPOTIFY,
+  SUCCESS_EN,
+  PAYPAL
 };
