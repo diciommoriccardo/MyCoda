@@ -9,7 +9,7 @@ class Payment {
             this.cfUtente = payment.cfUtente
             this.pivaFarma = payment.pivaFarma
             this.desc = payment.desc
-            this.stato = 'in attesa'
+            this.stato = payment.stato || 'In attesa'
             resolve(this)
         })
     }
@@ -49,6 +49,20 @@ class Payment {
                     if(err) reject(err)
 
                     resolve(result)
+                })
+        })
+    }
+
+    changeStatus(status){
+        return new Promise((resolve, reject) => {
+            let sql = "UPDATE payment SET stato = ? WHERE id = ?";
+
+            pool.query(sql, [status, this.id],
+                (err) => {
+                    if(err) reject(err)
+
+                    this.stato = status;
+                    resolve(this)
                 })
         })
     }
