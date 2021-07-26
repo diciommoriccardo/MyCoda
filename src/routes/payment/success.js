@@ -7,6 +7,7 @@ const router = Router();
 router.get('/success', (req, res) => {
 
     const { orderId } = req.query.token;
+    console.log(orderId)
 
     Paypal.capture(orderId)
     .then(capture => {
