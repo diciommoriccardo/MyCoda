@@ -6,6 +6,8 @@ const router = Router();
 
 router.get('/success', (req, res) => {
 
+    console.log(req.query)
+
     const { orderId } = req.query.token;
     console.log(orderId)
 
