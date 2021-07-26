@@ -10,6 +10,7 @@ class Payment {
             this.pivaFarma = payment.pivaFarma
             this.desc = payment.desc
             this.stato = payment.stato || 'In attesa'
+            this.paypalId = payment.paypalId
             resolve(this)
         })
     }

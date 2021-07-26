@@ -28,12 +28,12 @@ router.post('/:id', (req, res) => {
     })
     .then(paymentInfo => {
         const payment = {
-            id: paymentInfo.id,
             pivaFarma: req.user.id,
             cfUtente: req.params.id,
             somma,
             desc,
-            stato: paymentInfo.stato
+            stato: paymentInfo.stato,
+            paypalId: paymentInfo.id
         }
         new Payment(payment)
         .then(payment => payment.create())
