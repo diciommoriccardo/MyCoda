@@ -10,6 +10,7 @@ Axios.defaults.baseURL = PAYPAL_API;
 const Payment = {
     getAccessToken: (clientId = CLIENT_ID, clientSecret = SECRET) => {
         return new Promise((resolve, reject) => {
+            console.log(clientId)
             const params = new url.URLSearchParams({ "grant_type": "client_credentials" })
 
             Axios({
