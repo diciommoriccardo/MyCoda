@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/AriciducaZagaria/doq-api#readme",
   "dependencies": {
+    "@paypal/checkout-server-sdk": "^1.0.2",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
@@ -29,6 +30,6 @@
     "validate.js": "^0.13.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.12"
   }
 }
