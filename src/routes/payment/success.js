@@ -5,12 +5,19 @@ import Payment from '../../models/payment.model.js';
 const router = Router();
 
 router.get('/success', (req, res) => {
-    const { paymentId } = req.query 
+    if (!req.headers.authorization || req.headers.authorization.split(' ')[0] !== 'Bearer') 
+        return res.status(403).send({ error:'Forbidden' });
+    
+    const bearer = req.headers.authorization.split(' ')[1];
 
-    Paypal.capture(paymentId)
+    const { orderId } = req.query.token;
+
+    Paypal.capture(orderId, bearer)
     .then(capture => {
+        console.log(capture)
         const id = capture.id;
-        
+        console.log(id)
+
         return new Payment({
             id
         })

@@ -67,7 +67,7 @@ const Payment = {
     },
 
     capture: (orderId, access_token) => {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             const config = {
                 headers: { 
                     Authorization: `Bearer ${access_token}`,

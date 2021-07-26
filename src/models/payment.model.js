@@ -56,9 +56,9 @@ class Payment {
 
     changeStatus(status){
         return new Promise((resolve, reject) => {
-            let sql = "UPDATE payment SET stato = ? WHERE id = ?";
+            let sql = "UPDATE payment SET stato = ? WHERE paypalId = ?";
 
-            pool.query(sql, [status, this.id],
+            pool.query(sql, [status, this.paypalId],
                 (err) => {
                     if(err) reject(err)
 
