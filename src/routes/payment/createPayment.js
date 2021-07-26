@@ -10,16 +10,17 @@ router.post('/:id', (req, res) => {
     if( !req.body.desc || req.body.desc == '') return res.status(400).json({error: {message: "Description must be send"}});
     if(!req.body.payeeEmail || req.body.payeeEmail == '') return res.status(400).json({ error: { message: 'Payee Email must be send' }});
     const { somma, desc, payeeEmail } = req.body
-    
-    Paypal.create(somma, payeeEmail)
+    Paypal.getAccessToken()
+    .then(accessToken => Paypal.create(somma, payeeEmail, accessToken))
     .then(paymentObj => {
-        for(let i = 0; i < paymentObj.result.links.length; i++){
-            if(paymentObj.result.links[i].rel === 'approve'){
+        console.log(paymentObj)
+        for(let i = 0; i < paymentObj.data.links.length; i++){
+            if(paymentObj.data.links[i].rel === 'approve'){
 
               const paymentInfo = {
-                  approvalUrl: paymentObj.result.links[i].href,
-                  id: paymentObj.result.id,
-                  stato: paymentObj.result.status
+                  approvalUrl: paymentObj.data.links[i].href,
+                  id: paymentObj.data.id,
+                  stato: paymentObj.data.status
               }
               return paymentInfo;
             }
