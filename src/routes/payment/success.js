@@ -5,11 +5,11 @@ import Payment from '../../models/payment.model.js';
 const router = Router();
 
 router.get('/success', (req, res) => {
-    console.log(req.headers)
-    if (!req.headers.authorization || req.headers.authorization.split(' ')[0] !== 'Bearer') 
-        return res.status(403).send({ error:'Forbidden' });
+    // console.log(req.)
+    // if (!req.headers.authorization || req.headers.authorization.split(' ')[0] !== 'Bearer') 
+    //     return res.status(403).send({ error:'Forbidden' });
     
-    const bearer = req.headers.authorization.split(' ')[1];
+    // const bearer = req.headers.authorization.split(' ')[1];
 
     const { orderId } = req.query.token;
 
