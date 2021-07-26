@@ -47,7 +47,22 @@ class Message {
             pool.query(sql, [this.idSession, offset, limit],
                 function(err, result){
                     if(err) reject(err)
-                    resolve(result)
+
+                    const messages = [];
+                    result.forEach(row => {
+                        const { id, mittente, content, time, stato, tipo, idSession} = row;
+                        messages.push({
+                            id,
+                            mittente,
+                            content,
+                            time,
+                            readed: (stato === 'letto' ? true : false),
+                            tipo,
+                            idSession
+                        })
+                    });
+
+                    resolve(messages)
                 })
         })
     }
