@@ -71,7 +71,7 @@ const Payment = {
         return new Promise((resolve, reject) => {
             const config = {
                 headers: { 
-                    Authorization: `Bearer ${access_token}`,
+                    //Authorization: `Bearer ${access_token}`,
                     'Content-Type': 'application/json'
                 }
             };
