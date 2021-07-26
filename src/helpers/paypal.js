@@ -10,7 +10,6 @@ Axios.defaults.baseURL = PAYPAL_API;
 const Payment = {
     getAccessToken: (clientId = CLIENT_ID, clientSecret = SECRET) => {
         return new Promise((resolve, reject) => {
-            console.log(clientId)
             const params = new url.URLSearchParams({ "grant_type": "client_credentials" })
 
             Axios({
@@ -67,19 +66,20 @@ const Payment = {
         })
     },
 
-    capture: (orderId, access_token) => {
+    capture: (orderId, clientId = CLIENT_ID, clientSecret = SECRET) => {
         return new Promise((resolve, reject) => {
-            const config = {
-                headers: { 
-                    Authorization: `Bearer ${access_token}`,
-                    'Content-Type': 'application/json'
-                }
-            };
 
-            Axios.post(
-                `/v2/checkout/orders/${orderId}/capture`,
-                config
-            )
+            Axios({
+                method: "POST",
+                url: `/v2/checkout/orders/${orderId}/capture`,  
+                auth: {
+                    username: clientId,
+                    password: clientSecret
+                },
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(order => resolve(order))
+            .catch(err => reject(err))
         })
     },
     

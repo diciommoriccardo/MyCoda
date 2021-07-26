@@ -5,7 +5,6 @@ import Payment from '../../models/payment.model.js';
 const router = Router();
 
 router.get('/success', (req, res) => {
-    console.log(req.headers)
 
     const { orderId } = req.query.token;
 
