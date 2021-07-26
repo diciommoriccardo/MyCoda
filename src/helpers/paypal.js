@@ -16,8 +16,8 @@ const Payment = {
                 method: "POST",
                 url: '/v1/oauth2/token',
                 auth: {
-                    username: clientId,
-                    password: clientSecret
+                    "username": clientId,
+                    "password": clientSecret
                 },
                 data: params
             })
