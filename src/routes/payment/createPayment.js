@@ -15,7 +15,6 @@ router.post('/:id', (req, res) => {
     .then(accessToken => {
         Paypal.create(somma, payeeEmail, accessToken)
         .then(paymentObj => {
-            console.log(paymentObj)
             for(let i = 0; i < paymentObj.data.links.length; i++){
                 if(paymentObj.data.links[i].rel === 'approve'){
     
