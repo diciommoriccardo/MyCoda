@@ -63,7 +63,10 @@ class Payment {
                     if(err) reject(err)
 
                     this.stato = status;
-                    resolve(this)
+                    resolve({
+                        paypalId: this.paypalId,
+                        status: this.stato
+                    })
                 })
         })
     }
