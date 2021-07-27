@@ -13,7 +13,7 @@ router.get('/me', (req, res) => {
 
     new Payment(payment)
     .then(payment => (type === 'user' ? payment.findByUser() : payment.findByPharma()))
-    .then(result => { return res.status(201).json({result, message: SUCCESS_ITA.DEFAULT})})
+    .then(result => { return res.status(200).json({result, message: SUCCESS_ITA.DEFAULT})})
     .catch(err => { return res.status(500).json({error: {message: err}})})
 
 })

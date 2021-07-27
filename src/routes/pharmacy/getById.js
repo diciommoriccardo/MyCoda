@@ -11,7 +11,7 @@ router.get('/me', function(req, res) {
             
             const {ragSociale, indirizzo, email} = result[0]
             
-            return res.status(201).json({
+            return res.status(200).json({
                 ragSociale,
                 indirizzo,
                 email

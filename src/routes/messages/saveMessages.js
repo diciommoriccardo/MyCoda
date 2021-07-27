@@ -26,7 +26,7 @@ router.post('/:id', (req,res) => {
             idSession: result.id
         }))
         .then(message => message.create())
-        .then(result => res.status(200).json(result))
+        .then(result => res.status(201).json(result))
         .catch(err => { return res.status(500).json(err); });
 })
 

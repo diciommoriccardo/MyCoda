@@ -12,7 +12,7 @@ router.patch('/close', (req, res) => {
     .then(session => session.findOpenSessionByUser())
     .then(result => new Session({id:result[0].id}))
     .then(session => session.sessionClose())
-    .then(result => res.status(201).json(result))
+    .then(result => res.status(200).json(result))
     .catch(err => res.status(500).json(err))
 })
 

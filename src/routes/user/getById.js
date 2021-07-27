@@ -14,7 +14,7 @@ router.get('/me', function(req, res) {
         const { cf, nome, cognome, numTel, email } = row[0];
 
         console.log(row.cf)
-        return res.status(201).json({
+        return res.status(200).json({
             cf,
             nome,
             cognome,
