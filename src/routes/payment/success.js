@@ -6,20 +6,17 @@ const router = Router();
 
 router.get('/success', (req, res) => {
 
-    console.log(req.query)
-
     const orderId = req.query.token;
 
     Paypal.capture(orderId)
     .then(capture => {
-        console.log(capture)
-        const id = capture.id;
-        console.log(id)
+        console.log(capture);
+        const id = capture.data.id;
 
         return new Payment({
             paypalId: id
         })
-        .then(payment => payment.changeStatus(capture.state))
+        .then(payment => payment.changeStatus(capture.data.status))
         .then(result => res.status(200).json(result))
         .catch(err => res.status(500).json(err))
     })
