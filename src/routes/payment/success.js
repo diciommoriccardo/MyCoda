@@ -10,7 +10,7 @@ router.get('/success', (req, res) => {
 
     Paypal.capture(orderId)
     .then(capture => {
-        console.log(capture);
+
         const id = capture.data.id;
 
         return new Payment({
