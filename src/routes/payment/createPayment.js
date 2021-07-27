@@ -42,11 +42,7 @@ router.post('/:id', (req, res) => {
             .then(result => { 
                 const access_token = paymentInfo.access_token;
                 const approvalUrl = paymentInfo.approvalUrl;
-                return res.set({
-                    'Authorization': access_token,
-                    'location': approvalUrl
-                })
-                .status(201).json({result: result[0], message: SUCCESS_ITA.DEFAULT})
+                return res.status(201).json({result: result[0], access_token, approvalUrl, message: SUCCESS_ITA.DEFAULT})
             })
         })
     })
