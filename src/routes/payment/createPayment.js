@@ -1,5 +1,7 @@
 import Router from 'express';
 import Payment from '../../models/payment.model.js';
+import Message from '../../models/message.model.js';
+import Session from '../../models/session.model.js';
 import Paypal from '../../helpers/paypal.js';
 import {SUCCESS_ITA} from '../../config/constants.js';
 
@@ -39,10 +41,26 @@ router.post('/:id', (req, res) => {
             }
             new Payment(payment)
             .then(payment => payment.create())
-            .then(result => { 
-                const access_token = paymentInfo.access_token;
-                const approvalUrl = paymentInfo.approvalUrl;
-                return res.status(201).json({result: result[0], access_token, approvalUrl, message: SUCCESS_ITA.DEFAULT})
+            .then(result => {
+                new Session({
+                    cfUtente: result[0].cfUtente,
+                    pivaFarma: result[0].pivaFarma
+                })
+                .then(session => session.findOpenSessionByBoth())
+                .then(openSession => new Message({
+                    mittente: result[0].pivaFarma,
+                    content: `${result[0].desc} - ${result[0].somma}`,
+                    time: result[0].time,
+                    idSession: openSession[0].id,
+                    tipo: 3
+                }))
+                .then(message => message.create())
+                .then(() => {
+                    const access_token = paymentInfo.access_token;
+                    const approvalUrl = paymentInfo.approvalUrl;
+                    return res.status(201).json({result: result[0], access_token, approvalUrl, message: SUCCESS_ITA.DEFAULT})
+                })
+                .catch(err => res.status(500).json(err))
             })
         })
     })
