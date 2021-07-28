@@ -6,7 +6,7 @@ class Session {
         return new Promise( (resolve) =>{
             this.id = session.id
             this.cfUtente = session.cfUtente
-            this.time = new Date(Date.now())
+            this.time = session.time || new Date(Date.now())
             this.pivaFarma = session.pivaFarma
             this.stato = "open"
             resolve(this)
@@ -138,7 +138,7 @@ class Session {
             pool.query(sql, [this.cfUtente, this.pivaFarma],
                 function(err, result){
                     if(err) reject(err)
-                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByBoth"));
+                    //if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByBoth"));
 
                     resolve(result)
                 })

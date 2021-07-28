@@ -5,7 +5,7 @@ class Payment {
         return new Promise((resolve, reject) => {
             this.id = payment.id
             this.somma = payment.somma
-            this.time = new Date(Date.now())
+            this.time = payment.time || new Date(Date.now())
             this.cfUtente = payment.cfUtente
             this.pivaFarma = payment.pivaFarma
             this.desc = payment.desc
@@ -67,6 +67,19 @@ class Payment {
                         paypalId: this.paypalId,
                         status: this.stato
                     })
+                })
+        })
+    }
+
+    find(){
+        return new Promise((resolve, reject) => {
+            let sql = "SELECT * FROM payment WHERE cfUtente = ? AND pivaFarma = ? AND time = ?";
+
+            pool.query(sql, [this.cfUtente, this.pivaFarma, this.time],
+                function(err, result){
+                    if(err) reject(err)
+
+                    resolve(result)
                 })
         })
     }

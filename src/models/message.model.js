@@ -5,7 +5,7 @@ class Message {
         return new Promise( (resolve) =>{
             this.id = message.id
             this.mittente = message.mittente
-            this.time = new Date(Date.now())
+            this.time = message.time || new Date(Date.now())
             this.content = message.content
             this.stato = 'non letto' // stato = non letto || stato = letto
             this.tipo = message.tipo || 2 // immagine = 1, messaggio = 2, pagamento = 3
