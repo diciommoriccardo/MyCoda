@@ -64,9 +64,18 @@ router.post('/:id', (req, res) => {
                     }))
                     .then(message => message.create())
                     .then(() => {
-                        const access_token = paymentInfo.access_token;
                         const approvalUrl = paymentInfo.approvalUrl;
-                        return res.status(201).json({result: result[0], access_token, approvalUrl, message: SUCCESS_ITA.DEFAULT})
+                        return res.status(201).json({
+                            id: result[0].id,
+                            cfUtente: result[0].cfUtente,
+                            pivaFarma: result[0].pivaFarma,
+                            amount: result[0].somma,
+                            description: result[0].desc,
+                            time: result[0].time,
+                            status: result[0].stato,
+                            paypalId: result[0].paypalId,
+                            approvalUrl
+                        })
                     })
                     .catch(err => res.status(500).json(err))
                 })
