@@ -138,7 +138,7 @@ class Session {
             pool.query(sql, [this.cfUtente, this.pivaFarma],
                 function(err, result){
                     if(err) reject(err)
-                    //if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByBoth"));
+                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByBoth"));
 
                     resolve(result)
                 })

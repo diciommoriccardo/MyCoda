@@ -37,6 +37,7 @@ class Pharmacy {
                 this.email = pharma.email
                 this.password = pharma.password
                 this.refresh_token = pharma.refresh_token || getRefreshToken()
+                this.paypalEmail = pharma.paypalEmail
                 resolve(this)
             })
             .catch( (err) => {reject(err)})

@@ -7,7 +7,6 @@ const router = Router();
 router.post('/register', function(req, res){
     if (!req.body) return res.status(400).json({error: {message: 'Content cannot be empty'}});
 
-    console.log(req.body);
     new Pharmacy(req.body)
         .then(pharmacy => pharmacy.register())
         .then(result => { return res.status(201).json({result, message: SUCCESS_ITA.REGISTER}); })
