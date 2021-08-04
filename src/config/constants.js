@@ -40,11 +40,19 @@ const PAYPAL = {
   API: 'https://api-m.sandbox.paypal.com'
 }
 
+const AWS = {
+  ACCESS_KEY_ID: process.env.ACCESS_KEY_ID,
+  ACCESS_SECRET_KEY: process.env.ACCESS_SECRET_KEY,
+  BUCKET_NAME: 'mycodabucket',
+  BUCKET_REGION: 'eu-central-1'
+}
+
 export {
   JWT,
   REFRESH_TOKEN,
   ERRORS,
   SUCCESS_ITA,
   SUCCESS_EN,
-  PAYPAL
+  PAYPAL,
+  AWS
 };
