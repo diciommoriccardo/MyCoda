@@ -36,10 +36,7 @@ router.get('/open', (req, res) => {
         ))
     )
     .then(result => res.status(200).json(result))
-    .catch(err => { 
-        console.log(err);
-        return res.status(500).json({error: { message: err }})
-    })
+    .catch(err => res.status(err.data.status).json({error: err.data}))
 })
 
 export default router
