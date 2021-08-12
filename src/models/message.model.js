@@ -19,10 +19,20 @@ class Message {
             let sql = "INSERT INTO msg SET ?"
 
             pool.query(sql, [this],
-                function(err){
+                (err, result) => {
                     if(err) reject(err)
 
-                    resolve(this.values)
+                    const {mittente, time, stato, content, tipo, idSession} = this;
+                    const id = result.insertId;
+                    resolve({
+                        id,
+                        mittente,
+                        time,
+                        stato,
+                        content,
+                        tipo,
+                        idSession
+                    })
                 })
         })
     }
