@@ -63,17 +63,29 @@ router.post('/:id', (req, res) => {
                         tipo: 3
                     }))
                     .then(message => message.create())
-                    .then(() => {
+                    .then(message => {
+                        const {id, mittente, time, content, stato, tipo, idSession} = message;
                         const approvalUrl = paymentInfo.approvalUrl;
                         return res.status(201).json({
-                            id: result[0].id,
-                            cfUtente: result[0].cfUtente,
-                            pivaFarma: result[0].pivaFarma,
-                            amount: result[0].somma,
-                            description: result[0].desc,
-                            time: result[0].time,
-                            status: result[0].stato,
-                            paypalId: result[0].paypalId,
+                            payment: {
+                                id: result[0].id,
+                                cfUtente: result[0].cfUtente,
+                                pivaFarma: result[0].pivaFarma,
+                                amount: result[0].somma,
+                                description: result[0].desc,
+                                time: result[0].time,
+                                status: result[0].stato,
+                                paypalId: result[0].paypalId,  
+                            },
+                            message: {
+                                id,
+                                mittente,
+                                time,
+                                content,
+                                stato,
+                                tipo,
+                                idSession
+                            },
                             approvalUrl
                         })
                     })

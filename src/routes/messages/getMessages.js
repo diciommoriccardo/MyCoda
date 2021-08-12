@@ -32,11 +32,16 @@ router.get('/:id', (req, res) => {
                         };
                         new Payment(payment)
                         .then(payment => payment.find())
-                        .then(result =>
+                        .then(result => {
+                            const approvalUrl = `https://www.sandbox.paypal.com/checkoutnow?token=${result[0].paypalId}`;
+                            console.log(approvalUrl)
+
                             resolve({
                                 id,
                                 mittente,
                                 stato,
+                                time,
+                                tipo,
                                 idSession,
                                 payment: {
                                     id: result[0].id,
@@ -44,9 +49,10 @@ router.get('/:id', (req, res) => {
                                     somma: result[0].somma,
                                     desc: result[0].desc,
                                     stato: result[0].stato,
-                                    paypalId: result[0].paypalId
+                                    paypalId: result[0].paypalId,
+                                    approvalUrl: (result[0].stato === 'CREATED' ? approvalUrl : null)
                                 }
-                        }))
+                        })})
                         .catch(err => reject(err))
                         break;
                 
