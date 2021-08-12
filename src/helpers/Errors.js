@@ -7,15 +7,15 @@ class Errors extends Error {
 }
 
 export class ResourceNotFound extends Errors {
-    constructor(resource, query) {
+    constructor(resource, status) {
         super(`Resource ${resource} was not found.`);
-        this.data = { resource, query };
+        this.data = { resource, status };
     }
 }
 
 export class InternalError extends Errors {
-    constructor(resource, query){
+    constructor(resource, status = 500){
         super(`Server Internal Error`);
-        this.data = { resource, query };
+        this.data = { resource, status };
     }
 }

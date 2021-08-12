@@ -53,7 +53,7 @@ class Session {
             pool.query(sql, [this.id], 
                 function(err, result){
                     if(err) reject(err);
-                    if(result.lenght == 0) reject(new ResourceNotFound("session", sql + ": findById"))
+                    if(result.lenght == 0) reject(new ResourceNotFound("session", "404"))
                     
                     resolve(result);
                 })
@@ -67,7 +67,7 @@ class Session {
             pool.query(sql, [this.cfUtente, this.pivaFarma],
                 function(err, result){
                     if(err) reject(err)
-                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByBoth"));
+                    if(result.length == 0) reject(new ResourceNotFound("session", "404"));
 
                     resolve(result)
                 })
@@ -81,7 +81,7 @@ class Session {
             pool.query(sql, [this.cfUtente],
                 function(err, result){
                     if(err) reject(err)
-                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByUser"));
+                    if(result.length == 0) reject(new ResourceNotFound("session", "404"));
 
                     resolve(result)
                 })
@@ -95,7 +95,7 @@ class Session {
             pool.query(sql, [this.pivaFarma],
                 function(err, result){
                     if(err) reject(err)
-                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findByPharma"));
+                    if(result.length == 0) reject(new ResourceNotFound("session", "404"));
 
                     resolve(result)
                 })
@@ -109,7 +109,7 @@ class Session {
             pool.query(sql, [this.cfUtente],
                 function(err, result){
                     if(err) reject(err)
-                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByUser"));
+                    if(result.length == 0) reject(new ResourceNotFound("session", "404"));
 
                     resolve(result)
                 })
@@ -123,7 +123,7 @@ class Session {
             pool.query(sql, [this.pivaFarma],
                 function(err, result){
                     if(err) reject(err)
-                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByPharma"));
+                    if(result.length == 0) reject(new ResourceNotFound("session", "404"));
 
                     resolve(result)
                 })
@@ -138,7 +138,7 @@ class Session {
             pool.query(sql, [this.cfUtente, this.pivaFarma],
                 function(err, result){
                     if(err) reject(err)
-                    if(result.length == 0) reject(new ResourceNotFound("session", sql + ": findOpenSessionByBoth"));
+                    if(result.length == 0) reject(new ResourceNotFound("session", "404"));
 
                     resolve(result)
                 })
