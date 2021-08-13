@@ -2,6 +2,7 @@ import Router from 'express';
 import Session from '../../models/session.model.js';
 import Message from '../../models/message.model.js';
 import Payment from '../../models/payment.model.js';
+import { downloadObject } from '../../helpers/aws.js';
 
 const router = Router();
 
@@ -55,7 +56,11 @@ router.get('/:id', (req, res) => {
                         })})
                         .catch(err => reject(err))
                         break;
-                
+                    case 1:
+                        downloadObject(content)
+                        .then(data => resolve(data))
+                        .catch(err => reject(err))
+                        break;
                     default:
                         resolve({
                             id, 
@@ -72,7 +77,7 @@ router.get('/:id', (req, res) => {
         }))   
     )
     .then(result => res.status(200).json(result))
-    .catch(err => res.status(500).json({error : {message: err}}))
+    .catch(err => res.status(500).json({error : err}))
 })
 
 export default router
