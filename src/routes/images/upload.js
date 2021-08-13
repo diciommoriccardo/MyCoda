@@ -7,16 +7,29 @@ const upload = multer({ dest: 'uploads/' });
 const router = Router();
 
 router.post('/upload', upload.single('image'), (req, res) => {
-
+    const {id} = req.user;
     const file = req.file;
-    const data = req.body;
+    const {data, idSession} = req.body;
 
     s3Upload(file)
     .then(data => {
         console.log(data);
-        res.json({
-            message: "ok"
-        })
+
+        const message = {
+            content: data.key,
+            tipo: 1,
+            mittente: id,
+            idSession: idSession
+        }
+
+        new Message(message)
+        .then(message => message.create())
+        .then(result => res.status(201).json({
+            image: {
+                key: data.key
+            },
+            message: result
+        }))
     })
     .catch(err => {
         res.json({
