@@ -26,6 +26,18 @@ const s3Upload = (file) => {
     })
 }
 
+const downloadObject = (key) => {
+    return new Promise((resolve, reject) => {
+        const params = {
+            Key: key,
+            Bucket: AWS.BUCKET_NAME
+        }
+
+        resolve(s3.getObject(params).createReadStream())
+    })
+}
+
 export {
-    s3Upload
+    s3Upload,
+    downloadObject
 }
