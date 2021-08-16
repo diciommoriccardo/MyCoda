@@ -1,4 +1,5 @@
 import pool from '../helpers/mysql.js';
+import { ResourceNotFound } from '../helpers/Errors.js';
 
 class Payment {
     constructor(payment){
@@ -35,7 +36,8 @@ class Payment {
             pool.query(sql, [this.cfUtente],
                 function(err, result){
                     if(err) reject(err)
-
+                    if(result.length === 0) reject(new ResourceNotFound("payment", "404"))
+                
                     resolve(result)
                 })
         })
@@ -48,6 +50,7 @@ class Payment {
             pool.query(sql, this.pivaFarma,
                 function(err, result){
                     if(err) reject(err)
+                    if(result.length === 0) reject(new ResourceNotFound("payment", "404"))
 
                     resolve(result)
                 })
@@ -78,6 +81,7 @@ class Payment {
             pool.query(sql, [this.cfUtente, this.pivaFarma, this.time],
                 function(err, result){
                     if(err) reject(err)
+                    if(result.length === 0) reject(new ResourceNotFound("payment", "404"))
 
                     resolve(result)
                 })

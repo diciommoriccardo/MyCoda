@@ -1,4 +1,5 @@
 import pool from '../helpers/mysql.js';
+import { ResourceNotFound } from '../helpers/Errors.js';
 
 class Message {
     constructor(message){
@@ -44,6 +45,7 @@ class Message {
             pool.query(sql, [this.id], 
                 function(err, result){
                     if(err) reject(err);
+                    if(result.length === 0) reject(new ResourceNotFound("message", "404"))
                     
                     resolve(result);
                 })
@@ -57,6 +59,7 @@ class Message {
             pool.query(sql, [this.idSession, offset, limit],
                 function(err, result){
                     if(err) reject(err)
+                    if(result.length === 0) reject(new ResourceNotFound("message", "404"))
 
                     const messages = [];
                     result.forEach(row => {
@@ -84,6 +87,7 @@ class Message {
             pool.query(sqlCount, [this.idSession, this.mittente],
                 (err, [message]) => {
                     if (err) reject(err);
+                    if(result.length === 0) reject(new ResourceNotFound("message", "404"))
 
                     resolve(message.total);
                 }
