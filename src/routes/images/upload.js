@@ -6,7 +6,7 @@ import { s3Upload } from '../../helpers/aws.js';
 const upload = multer({ dest: 'uploads/' });
 const router = Router();
 
-router.post('/upload', upload.single('image'), (req, res) => {
+router.post('', upload.single('image'), (req, res) => {
     const {id} = req.user;
     const file = req.file;
     const {data, idSession} = req.body;
@@ -14,9 +14,10 @@ router.post('/upload', upload.single('image'), (req, res) => {
     s3Upload(file)
     .then(data => {
         console.log(data);
+        const location = `https://api.server.mycoda.it/api/images/${data.key}`;
 
         const message = {
-            content: data.key,
+            content: location,
             tipo: 1,
             mittente: id,
             idSession: idSession
