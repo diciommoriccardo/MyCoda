@@ -57,9 +57,15 @@ router.get('/:id', (req, res) => {
                         .catch(err => reject(err))
                         break;
                     case 1:
-                        downloadObject(content)
-                        .then(data => resolve(data))
-                        .catch(err => reject(err))
+                        resolve({
+                            id, 
+                            mittente, 
+                            location: content, 
+                            time, 
+                            tipo, 
+                            stato,
+                            idSession
+                        })
                         break;
                     default:
                         resolve({
