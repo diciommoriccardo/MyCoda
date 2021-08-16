@@ -1,5 +1,5 @@
 import pool from '../helpers/mysql.js';
-import { InternalError, ResourceNotFound } from '../helpers/Errors.js';
+import { ResourceNotFound } from '../helpers/Errors.js';
 
 class Session {
     constructor(session){
