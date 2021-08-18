@@ -75,7 +75,8 @@ router.post('/:id', (req, res) => {
                                 description: result[0].desc,
                                 time: result[0].time,
                                 status: result[0].stato,
-                                paypalId: result[0].paypalId,  
+                                paypalId: result[0].paypalId, 
+                                approvalUrl
                             },
                             message: {
                                 id,
@@ -86,7 +87,6 @@ router.post('/:id', (req, res) => {
                                 tipo,
                                 idSession
                             },
-                            approvalUrl
                         })
                     })
                     .catch(err => res.status(500).json(err))

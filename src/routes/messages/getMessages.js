@@ -48,7 +48,7 @@ router.get('/:id', (req, res) => {
                                     id: result[0].id,
                                     receiverId: (type === 'user') ? result[0].cfUtente : result[0].pivaFarma,
                                     somma: result[0].somma,
-                                    desc: result[0].desc,
+                                    description: result[0].desc,
                                     stato: result[0].stato,
                                     paypalId: result[0].paypalId,
                                     approvalUrl: (result[0].stato === 'CREATED' ? approvalUrl : null)
