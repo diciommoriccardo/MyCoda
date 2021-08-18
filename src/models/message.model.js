@@ -87,7 +87,7 @@ class Message {
             pool.query(sqlCount, [this.idSession, this.mittente],
                 (err, [message]) => {
                     if (err) reject(err);
-                    if(result.length === 0) reject(new ResourceNotFound("message", "404"))
+                    if([message].length === 0) reject(new ResourceNotFound("message", "404"))
 
                     resolve(message.total);
                 }
