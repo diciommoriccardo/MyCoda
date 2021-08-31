@@ -28,7 +28,7 @@ const SUCCESS_ITA = {
 }
 
 const SUCCESS_EN = {
-  DEFAULT: 'Operation succesfully complete',
+  DEFAULT: 'Operation succesfully complete!',
   REGISTER: 'Registration was successful',
   PAYMENT: 'Payment successful',
   CONNECTION: 'Connection successful'
