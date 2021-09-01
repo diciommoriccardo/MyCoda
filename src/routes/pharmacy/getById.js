@@ -9,9 +9,10 @@ router.get('/me', function(req, res) {
         .then(pharmacy => pharmacy.findByCf())
         .then(result => {
             
-            const {ragSociale, indirizzo, email} = result[0]
+            const {pIva, ragSociale, indirizzo, email} = result[0]
             
             return res.status(200).json({
+                pIva,
                 ragSociale,
                 indirizzo,
                 email
