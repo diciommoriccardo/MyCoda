@@ -8,11 +8,10 @@ router.get('/me', function(req, res) {
     new Pharmacy({piva: req.user.id})
         .then(pharmacy => pharmacy.findByCf())
         .then(result => {
-            
-            const {piva, ragSociale, indirizzo, email} = result[0]
+            const {pIva, ragSociale, indirizzo, email} = result[0]
             
             return res.status(200).json({
-                piva,
+                pIva,
                 ragSociale,
                 indirizzo,
                 email
