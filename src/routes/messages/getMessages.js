@@ -35,7 +35,6 @@ router.get('/:id', (req, res) => {
                         .then(payment => payment.find())
                         .then(result => {
                             const approvalUrl = `https://www.sandbox.paypal.com/checkoutnow?token=${result[0].paypalId}`;
-                            console.log(approvalUrl)
 
                             resolve({
                                 id,
