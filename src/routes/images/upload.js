@@ -33,13 +33,13 @@ router.post('/:id', upload.single('image'), (req, res) => {
             .then(message => message.create())
             .then(result => res.status(201).json({
                 message: {
-                    id: result[0].id,
-                    mittente: result[0].mittente,
-                    location: result[0].content,
-                    time: result[0].time,
-                    stato: result[0].stato,
-                    idSession: result[0].idSession,
-                    tipo: result[0].tipo
+                    id: result.id,
+                    mittente: result.mittente,
+                    location: result.content,
+                    time: result.time,
+                    stato: result.stato,
+                    idSession: result.idSession,
+                    tipo: result.tipo
                 }
             }))
         })
