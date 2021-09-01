@@ -32,7 +32,15 @@ router.post('/:id', upload.single('image'), (req, res) => {
             new Message(message)
             .then(message => message.create())
             .then(result => res.status(201).json({
-                message: result
+                message: {
+                    id: result[0].id,
+                    mittente: result[0].mittente,
+                    location: result[0].content,
+                    time: result[0].time,
+                    stato: result[0].stato,
+                    idSession: result[0].idSession,
+                    tipo: result[0].tipo
+                }
             }))
         })
         .catch(err => {
