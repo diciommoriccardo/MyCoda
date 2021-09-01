@@ -7,7 +7,7 @@ import Session from '../../models/session.model.js';
 const upload = multer({ dest: 'uploads/' });
 const router = Router();
 
-router.post('/upload/:id', upload.single('image'), (req, res) => {
+router.post('/:id', upload.single('image'), (req, res) => {
     const { id, type } = req.user;
     const receiverId = req.params.id;
     const file = req.file;
