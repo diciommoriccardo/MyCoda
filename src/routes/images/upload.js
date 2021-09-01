@@ -32,9 +32,6 @@ router.post('/:id', upload.single('image'), (req, res) => {
             new Message(message)
             .then(message => message.create())
             .then(result => res.status(201).json({
-                image: {
-                    key: data.key
-                },
                 message: result
             }))
         })
