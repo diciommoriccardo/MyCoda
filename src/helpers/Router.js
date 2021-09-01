@@ -33,7 +33,7 @@ class Router {
                     '/payments' : [successPayment, authMiddleware, createPayment, getPayments],
                     '/sessions' : [authMiddleware, getOpenSession, getSessions, closeSession],
                     '/messages' : [authMiddleware, sendMessage, getMessages, readMessage],
-                    '/images' : [authMiddleware, uploadImages, getImage]     
+                    '/images' : [getImage, authMiddleware, uploadImages]     
                 }
             ],
             '*': notFoundMiddleware,
