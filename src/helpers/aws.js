@@ -33,7 +33,9 @@ const downloadObject = (key) => {
             Bucket: AWS.BUCKET_NAME
         }
 
-        resolve(s3.getObject(params).createReadStream())
+        resolve(s3.getObject(params, (err) => {
+            if(err) reject(err)
+        }).createReadStream())
     })
 }
 
