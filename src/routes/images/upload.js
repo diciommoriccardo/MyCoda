@@ -50,6 +50,7 @@ router.post('/:id', upload.single('image'), (req, res) => {
             })
         })
     })
+    .catch(err => res.status(500).json(err))
 })
 
 export default router;

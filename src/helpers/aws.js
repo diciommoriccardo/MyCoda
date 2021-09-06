@@ -9,7 +9,7 @@ const s3 = new S3({
 })
 
 const s3Upload = (file) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const fileStream = fs.createReadStream(file.path);
     
         const params = {
@@ -19,7 +19,7 @@ const s3Upload = (file) => {
         }
 
         s3.upload(params, (err, result) => {
-            if(err) throw err
+            if(err) reject(err)
 
             resolve(result)
         })
