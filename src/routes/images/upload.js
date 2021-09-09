@@ -1,13 +1,21 @@
 import Router from 'express';
 import Message from '../../models/message.model.js';
-import multer from 'multer';
+import multer, { MulterError } from 'multer';
 import { s3Upload } from '../../helpers/aws.js';
 import Session from '../../models/session.model.js';
 
 const upload = multer({ dest: 'uploads/' });
 const router = Router();
 
-router.post('/:id', upload.single('image'), (req, res) => {
+router.post('/:id', [
+    multer({
+        dest: 'uploads/',
+        onError: function(err, next) {
+            console.log("Multer Error:", err);
+            next(err);
+        }
+    }).single('image')
+], (req, res) => {
     const { id, type } = req.user;
     const receiverId = req.params.id;
     const file = req.file;
