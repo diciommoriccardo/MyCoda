@@ -1,21 +1,40 @@
 import Router from 'express';
+import path from 'path';
 import Message from '../../models/message.model.js';
 import multer, { MulterError } from 'multer';
 import { s3Upload } from '../../helpers/aws.js';
 import Session from '../../models/session.model.js';
+import { FILES } from '../../config/config.js';
 
-const upload = multer({ dest: 'uploads/' });
+function checkFileType(file, cb){
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
+    
+    if(!(mimetype && extname)) cb(new Error("Error: Image only!"))
+
+    return cb(null,true);
+  }
+
+const storage = multer.memoryStorage()
+const upload = multer({ 
+    storage: storage,  
+    //limits: { fileSize: FILES.MAX_SIZE },
+    fileFilter: function(_req, file, cb){
+        checkFileType(file, cb);
+    },
+ }).single('image');
+ 
 const router = Router();
 
-router.post('/:id', [
-    multer({
-        dest: 'uploads/',
-        onError: function(err, next) {
-            console.log("Multer Error:", err);
-            next(err);
-        }
-    }).single('image')
-], (req, res) => {
+router.post('/:id', upload, (req, res) => {
+
+    upload(req, res, (err) => {
+        if(err) res.status(500).json({
+            message: err.message
+        })
+    })
+
     const { id, type } = req.user;
     const receiverId = req.params.id;
     const file = req.file;
@@ -45,7 +64,7 @@ router.post('/:id', [
                     mittente: result.mittente,
                     location: result.content,
                     time: result.time,
-                    stato: result.stato,
+                    readed: (result.stato === 'letto' ? true : false),
                     idSession: result.idSession,
                     tipo: result.tipo
                 }
