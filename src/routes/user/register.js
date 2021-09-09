@@ -6,6 +6,8 @@ const router = Router();
 
 router.post('/register', function(req, res){
     if (!req.body) return res.status(400).json({error: {message: 'Content cannot be empty'}});
+    req.body.cf = req.body.cf.toLowerCase();
+    req.body.email = req.body.email.toLowerCase();
     
     new User (req.body)
     .then(user => user.register())
