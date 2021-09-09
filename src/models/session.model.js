@@ -18,15 +18,16 @@ class Session {
         return new Promise( (resolve, reject) =>{
             this.exist()
             .then((result)=> {
+                console.log("result: ", result)
                 if(result.length != 0) return resolve(result[0])
 
                 let sql = "INSERT INTO session SET ?";
     
                 pool.query(sql, [this],
-                    (err, result) => {
-                        if(err) reject(err);
-    
-                        this.id = result.insertId;
+                    function(err, res){
+                        if(err) return reject(err);
+                        
+                        this.id = res.insertId;
                         resolve(this)
                     });
             })
