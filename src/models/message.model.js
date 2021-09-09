@@ -62,7 +62,7 @@ class Message {
 
                     const messages = [];
 
-                    if(result.length === 0) return resolve(messages)
+                    if(result.length === 0) return resolve([[]])
 
                     
                     result.forEach(row => {
