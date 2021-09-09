@@ -1,4 +1,5 @@
 import S3 from 'aws-sdk/clients/s3.js';
+import path from 'path';
 import { AWS } from '../config/constants.js';
 import fs from 'fs';
 
@@ -9,13 +10,11 @@ const s3 = new S3({
 })
 
 const s3Upload = (file) => {
-    return new Promise((resolve, reject) => {
-        const fileStream = fs.createReadStream(file.path);
-    
+    return new Promise((resolve, reject) => {    
         const params = {
             Bucket: AWS.BUCKET_NAME,
-            Body: fileStream,
-            Key: file.filename
+            Body: file.buffer,
+            Key: file.originalname + Date.now() + path.extname(file.originalname)
         }
 
         s3.upload(params, (err, result) => {
