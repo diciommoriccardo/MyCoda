@@ -59,9 +59,12 @@ class Message {
             pool.query(sql, [this.idSession, offset, limit],
                 function(err, result){
                     if(err) reject(err)
-                    if(result.length === 0) reject(new ResourceNotFound("message", "404"))
 
                     const messages = [];
+
+                    if(result.length === 0) return resolve(messages)
+
+                    
                     result.forEach(row => {
                         const { id, mittente, content, time, stato, tipo, idSession} = row;
                         messages.push({
