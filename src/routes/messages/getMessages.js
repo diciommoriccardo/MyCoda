@@ -39,7 +39,7 @@ router.get('/:id', (req, res) => {
                             resolve({
                                 id,
                                 mittente,
-                                stato,
+                                readed: (stato === 'letto' ? true : false),
                                 time,
                                 tipo,
                                 idSession,
@@ -62,7 +62,7 @@ router.get('/:id', (req, res) => {
                             location: content, 
                             time, 
                             tipo, 
-                            stato,
+                            readed: (stato === 'letto' ? true : false),
                             idSession
                         })
                         break;
@@ -73,7 +73,7 @@ router.get('/:id', (req, res) => {
                             content, 
                             time, 
                             tipo, 
-                            stato,
+                            readed: (stato === 'letto' ? true : false),
                             idSession
                         })
                         break;
