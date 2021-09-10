@@ -39,8 +39,6 @@ router.post('/:id', upload, (req, res) => {
     const receiverId = req.params.id;
     const file = req.file;
 
-    console.log("file", file)
-
     const session = {
         ...(type === 'user') ? { cfUtente: id, pivaFarma: receiverId} : {cfUtente: receiverId, pivaFarma: id}
     }
@@ -50,7 +48,6 @@ router.post('/:id', upload, (req, res) => {
     .then(session => {
         s3Upload(file)
         .then(data => {
-            console.log(data)
             const location = `https://api.server.mycoda.it/api/images/${data.Key}`;
     
             const message = {
