@@ -14,7 +14,7 @@ const s3Upload = (file) => {
         const params = {
             Bucket: AWS.BUCKET_NAME,
             Body: file.buffer,
-            Key: file.originalname + Date.now() + path.extname(file.originalname)
+            Key: Date.now() + path.extname(file.originalname)
         }
 
         s3.upload(params, (err, result) => {
