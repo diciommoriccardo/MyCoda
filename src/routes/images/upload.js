@@ -47,8 +47,8 @@ router.post('/:id', upload, (req, res) => {
     .then(session => session.create())
     .then(session => {
         s3Upload(file)
-        .then(data => {
-            const location = `https://api.server.mycoda.it/api/images/${data.Key}`;
+        .then(url => {
+            const location = url;
     
             const message = {
                 content: location,
