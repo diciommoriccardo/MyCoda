@@ -18,7 +18,7 @@ class Session {
         return new Promise( (resolve, reject) =>{
             this.exist()
             .then((result)=> {
-                if(result.length != 0) resolve(result[0])
+                if(result.length != 0) return resolve(result[0])
 
                 let sql = "INSERT INTO session SET ?";
     
