@@ -20,7 +20,10 @@ const s3Upload = (file) => {
         s3.upload(params, (err, result) => {
             if(err) reject(err)
 
-            resolve(result)
+
+            var config = {Bucket: AWS.BUCKET_NAME, Key: result.Key};
+            var promise = s3.getSignedUrlPromise('getObject', config);
+            promise.then(url => resolve(url))
         })
     })
 }
