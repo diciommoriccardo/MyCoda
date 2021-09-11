@@ -7,7 +7,7 @@ router.get('/:key', (req, res) => {
     const imageKey = req.params.key;
 
     downloadObject(imageKey)
-    .then(image => res.write(image.Body))
+    .then(image => res.pipe(image))
     .catch(err => res.status(500).json(err))
 
 })
