@@ -36,7 +36,7 @@ router.post('/:id', upload, (req, res) => {
     })
 
     const { id, type } = req.user;
-    const receiverId = req.params.id;
+    const receiverId = req.params.id.toLowerCase();
     const file = req.file;
 
     const session = {
