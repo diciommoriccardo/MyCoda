@@ -72,7 +72,6 @@ router.post('/:id', upload, (req, res) => {
             }))
         })
         .catch(err => {
-            console.log(err)
             res.json({
                 message: err
             })
