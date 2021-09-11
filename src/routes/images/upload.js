@@ -56,6 +56,7 @@ router.post('/:id', upload, (req, res) => {
                 mittente: id,
                 idSession: session.id
             }
+
             new Message(message)
             .then(message => message.create())
             .then(result => res.status(201).json({
