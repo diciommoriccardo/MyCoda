@@ -4,26 +4,7 @@ import Message from '../../models/message.model.js';
 import multer, { MulterError } from 'multer';
 import { s3Upload } from '../../helpers/aws.js';
 import Session from '../../models/session.model.js';
-import { FILES } from '../../config/config.js';
-
-function checkFileType(file, cb){
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
-    
-    if(!(mimetype && extname)) cb(new Error("Error: Image only!"))
-
-    return cb(null,true);
-  }
-
-const storage = multer.memoryStorage()
-const upload = multer({ 
-    storage: storage,  
-    limits: { fileSize: FILES.MAX_SIZE },
-    fileFilter: function(_req, file, cb){
-        checkFileType(file, cb);
-    },
- }).single('image');
+import upload from '../../middlewares/upload.js';
  
 const router = Router();
 
