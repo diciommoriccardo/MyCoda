@@ -1,5 +1,5 @@
 import multer from 'multer';
-import { FILES } from '../../config/config.js';
+import { FILES } from '../config/config.js';
 
 function checkFileType(file, cb){
     const filetypes = /jpeg|jpg|png|gif/;

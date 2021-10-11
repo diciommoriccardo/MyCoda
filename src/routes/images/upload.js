@@ -4,7 +4,7 @@ import Message from '../../models/message.model.js';
 import multer, { MulterError } from 'multer';
 import { s3Upload } from '../../helpers/aws.js';
 import Session from '../../models/session.model.js';
-import upload from '../../middlewares/upload.js';
+import { upload } from '../../middlewares/upload.js';
  
 const router = Router();
 
