@@ -26,7 +26,7 @@ const DATABASE = {
 };
 
 const FILES = {
-  MAX_SIZE: 5 * 1024 * 1024
+  MAX_SIZE: 15 * 1024 * 1024
 };
 
 export {
