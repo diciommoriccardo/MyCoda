@@ -10,8 +10,9 @@ class Payment {
             this.cfUtente = payment.cfUtente
             this.pivaFarma = payment.pivaFarma
             this.desc = payment.desc
-            this.stato = payment.stato || 'In attesa'
+            this.stato = payment.stato || 'pending'
             this.paypalId = payment.paypalId
+            this.qrLink = payment.qrLink
             resolve(this)
         })
     }
