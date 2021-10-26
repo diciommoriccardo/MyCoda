@@ -1,4 +1,4 @@
-class Errors extends Error {
+export class customError extends Error {
     constructor(message){
         super(message)
         this.name = this.constructor.name
@@ -6,14 +6,14 @@ class Errors extends Error {
     }
 }
 
-export class ResourceNotFound extends Errors {
+export class ResourceNotFound extends customError {
     constructor(resource, status) {
         super(`Resource ${resource} was not found.`);
         this.data = { resource, status };
     }
 }
 
-export class InternalError extends Errors {
+export class InternalError extends customError {
     constructor(resource, status = 500){
         super(`Server Internal Error`);
         this.data = { resource, status };
