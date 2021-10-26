@@ -3,8 +3,13 @@ import randomString from '../utils/string/random.js';
 import pool from '../helpers/mysql.js';
 import { REFRESH_TOKEN } from '../config/constants.js';
 import Validate from '../helpers/InputValidator.js';
+import notification from '../helpers/notifications.js';
 
 const validate = new Validate();
+
+const getNotificationToken = () => {
+    return notification.getToken();
+}
 
 const getRefreshToken = () => {
     return randomString(REFRESH_TOKEN.LENGTH);
@@ -39,6 +44,7 @@ class User {
                 this.email = user.email;
                 this.password = user.password;
                 this.refresh_token = user.refresh_token || getRefreshToken();
+                this.notificationToken = user.notificationToken || getNotificationToken();
                 resolve(this)
             })
             .catch(err => reject(err))
@@ -132,6 +138,19 @@ class User {
                     if(err) reject(err)
 
                     resolve(result)
+                })
+        })
+    }
+
+    setNotificationToken(){
+        return new Promise((resolve, reject) => {
+            let sql = "UPDATE user SET ? WHERE piva = ?";
+
+            pool.query(sql, [this.notificationToken, this.cf],
+                (err) => {
+                    if(err) reject(err)
+
+                    resolve(this)
                 })
         })
     }

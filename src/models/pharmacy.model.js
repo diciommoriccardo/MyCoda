@@ -38,6 +38,8 @@ class Pharmacy {
                 this.password = pharma.password
                 this.refresh_token = pharma.refresh_token || getRefreshToken()
                 this.paypalEmail = pharma.paypalEmail
+                this.propic = pharma.propic
+                this.notificationToken = user.notificationToken || getNotificationToken();
                 resolve(this)
             })
             .catch( (err) => {reject(err)})
@@ -136,6 +138,19 @@ class Pharmacy {
                     if(err) reject(err)
 
                     resolve(result)
+                })
+        })
+    }
+
+    setNotificationToken(){
+        return new Promise((resolve, reject) => {
+            let sql = "UPDATE farma SET ? WHERE piva = ?";
+
+            pool.query(sql, [this.notificationToken, this.piva],
+                (err) => {
+                    if(err) {console.log(err); return reject(err)}
+
+                    resolve(this)
                 })
         })
     }
