@@ -2,7 +2,6 @@ import S3 from 'aws-sdk/clients/s3.js';
 import CloudFront from 'aws-sdk/clients/cloudfront.js';
 import path from 'path';
 import { AWS } from '../config/constants.js';
-import fs from 'fs';
 
 
 
