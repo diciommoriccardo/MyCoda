@@ -39,13 +39,6 @@ const notification = {
             }
         })
     },
-    getToken: () => {
-        return new Promise((resolve, reject) => {
-            expo.getDevicePushTokenAsync()
-            .then(token => resolve(token))
-            .catch(err => {console.log(err); return reject(err)})
-        })
-    }
 }
 
 export default notification
