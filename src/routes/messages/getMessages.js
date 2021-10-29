@@ -2,7 +2,6 @@ import Router from 'express';
 import Session from '../../models/session.model.js';
 import Message from '../../models/message.model.js';
 import Payment from '../../models/payment.model.js';
-import { downloadObject } from '../../helpers/aws.js';
 
 const router = Router();
 
