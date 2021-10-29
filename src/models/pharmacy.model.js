@@ -39,7 +39,7 @@ class Pharmacy {
                 this.refresh_token = pharma.refresh_token || getRefreshToken()
                 this.paypalEmail = pharma.paypalEmail
                 this.propic = pharma.propic
-                this.notificationToken = user.notificationToken || getNotificationToken();
+                this.notificationToken = pharma.notificationToken;
                 resolve(this)
             })
             .catch( (err) => {reject(err)})
