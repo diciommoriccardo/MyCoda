@@ -3,13 +3,8 @@ import randomString from '../utils/string/random.js';
 import pool from '../helpers/mysql.js';
 import { REFRESH_TOKEN } from '../config/constants.js';
 import Validate from '../helpers/InputValidator.js';
-import notification from '../helpers/notifications.js';
 
 const validate = new Validate();
-
-const getNotificationToken = () => {
-    return notification.getToken();
-}
 
 const getRefreshToken = () => {
     return randomString(REFRESH_TOKEN.LENGTH);
@@ -44,7 +39,7 @@ class User {
                 this.email = user.email;
                 this.password = user.password;
                 this.refresh_token = user.refresh_token || getRefreshToken();
-                this.notificationToken = user.notificationToken || getNotificationToken();
+                this.notificationToken = user.notificationToken;
                 resolve(this)
             })
             .catch(err => reject(err))
