@@ -44,7 +44,10 @@ const AWS = {
   ACCESS_KEY_ID: process.env.ACCESS_KEY_ID,
   ACCESS_SECRET_KEY: process.env.ACCESS_SECRET_KEY,
   BUCKET_NAME: 'mycodabucket',
-  BUCKET_REGION: 'eu-central-1'
+  BUCKET_REGION: 'eu-central-1',
+  CLOUDFRONT_ACCESS_KEY_ID: process.env.CF_ACCESS_KEY_ID,
+  CLOUDFRONT_PRIVATE_KEY: `-----BEGIN RSA PRIVATE KEY-----\n${process.env.CF_PRIVATE_KEY}\n-----END RSA PRIVATE KEY-----`,
+  CLOUDFRONT_PATH: process.env.CF_PATH
 }
 
 export {
