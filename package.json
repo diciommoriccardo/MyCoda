@@ -25,6 +25,7 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
+    "expo-notifications": "^0.13.3",
     "expo-server-sdk": "^3.6.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
