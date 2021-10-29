@@ -6,9 +6,7 @@ import fs from 'fs';
 
 
 
-const signer = new CloudFront.Signer({
-    keyPairId: AWS.CLOUDFRONT_ACCESS_KEY_ID, 
-    privateKey: AWS.CLOUDFRONT_PRIVATE_KEY}); 
+const signer = new CloudFront.Signer(AWS.CLOUDFRONT_ACCESS_KEY_ID, AWS.CLOUDFRONT_PRIVATE_KEY); 
 
 const s3 = new S3({
     region: AWS.BUCKET_REGION,
