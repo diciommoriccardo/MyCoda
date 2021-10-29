@@ -1,7 +1,12 @@
 import S3 from 'aws-sdk/clients/s3.js';
+import CloudFront from 'aws-sdk/clients/cloudfront.js';
 import path from 'path';
 import { AWS } from '../config/constants.js';
 import fs from 'fs';
+
+
+
+const signer = new CloudFront.Signer(AWS.CLOUDFRONT_ACCESS_KEY_ID, AWS.CLOUDFRONT_PRIVATE_KEY); 
 
 const s3 = new S3({
     region: AWS.BUCKET_REGION,
@@ -20,10 +25,10 @@ const s3Upload = (file) => {
         s3.upload(params, (err, result) => {
             if(err) reject(err)
 
-
             var config = {Bucket: AWS.BUCKET_NAME, Key: result.Key};
-            var promise = s3.getSignedUrlPromise('getObject', config);
-            promise.then(url => resolve(url))
+            resolve(signer.getSignedUrl({
+                url: `https://${AWS.CLOUDFRONT_PATH}/${config.Bucket}/${config.Key}` 
+            }))
         })
     })
 }
