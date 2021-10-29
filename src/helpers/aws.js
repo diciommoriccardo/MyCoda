@@ -4,7 +4,8 @@ import path from 'path';
 import { AWS } from '../config/constants.js';
 
 
-
+console.log(AWS.CLOUDFRONT_ACCESS_KEY_ID);
+console.log(AWS.CLOUDFRONT_PRIVATE_KEY);
 const signer = new CloudFront.Signer(AWS.CLOUDFRONT_ACCESS_KEY_ID, AWS.CLOUDFRONT_PRIVATE_KEY); 
 
 const s3 = new S3({
