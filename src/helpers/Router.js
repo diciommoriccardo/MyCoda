@@ -19,6 +19,7 @@ import readMessage from '../routes/messages/readMessage.js';
 import successPayment from '../routes/payment/success.js';
 import uploadImages from '../routes/images/upload.js';
 import getImage from '../routes/images/getImage.js';
+import addToken from '../routes/pushNotifications/addToken.js';
 
 
 class Router {
@@ -33,7 +34,8 @@ class Router {
                     '/payments' : [successPayment, authMiddleware, createPayment, getPayments],
                     '/sessions' : [authMiddleware, getOpenSession, getSessions, closeSession],
                     '/messages' : [authMiddleware, sendMessage, getMessages, readMessage],
-                    '/images' : [getImage, authMiddleware, uploadImages]     
+                    '/images' : [getImage, authMiddleware, uploadImages],
+                    '/notifications' : [authMiddleware, addToken]   
                 }
             ],
             '*': notFoundMiddleware,
