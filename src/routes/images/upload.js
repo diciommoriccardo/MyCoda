@@ -1,7 +1,5 @@
 import Router from 'express';
-import path from 'path';
 import Message from '../../models/message.model.js';
-import multer, { MulterError } from 'multer';
 import { s3Upload } from '../../helpers/aws.js';
 import Session from '../../models/session.model.js';
 import { upload } from '../../middlewares/upload.js';
@@ -23,6 +21,7 @@ router.post('/:id', upload, (req, res) => {
     const session = {
         ...(type === 'user') ? { cfUtente: id, pivaFarma: receiverId} : {cfUtente: receiverId, pivaFarma: id}
     }
+
 
     new Session( session )
     .then(session => session.create())
