@@ -137,9 +137,9 @@ class User {
         })
     }
 
-    setNotificationToken(){
+    addToken(){
         return new Promise((resolve, reject) => {
-            let sql = "UPDATE user SET ? WHERE piva = ?";
+            let sql = "UPDATE user SET notificationToken = ? WHERE cf = ?";
 
             pool.query(sql, [this.notificationToken, this.cf],
                 (err) => {

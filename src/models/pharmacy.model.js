@@ -142,7 +142,7 @@ class Pharmacy {
         })
     }
 
-    setNotificationToken(){
+    addToken(){
         return new Promise((resolve, reject) => {
             let sql = "UPDATE farma SET ? WHERE piva = ?";
 
