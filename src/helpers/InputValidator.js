@@ -34,6 +34,9 @@ class InputValidator {
             },
             refresh_token: {
                 type: "string"
+            },
+            notificationToken: {
+                type: "string"
             }
         }
         
@@ -65,6 +68,9 @@ class InputValidator {
                 }*/
             },
             refresh_token: {
+                type: "string"
+            },
+            notificationToken: {
                 type: "string"
             }
         }
