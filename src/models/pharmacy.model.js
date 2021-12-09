@@ -144,7 +144,7 @@ class Pharmacy {
 
     addToken(){
         return new Promise((resolve, reject) => {
-            let sql = "UPDATE farma SET ? WHERE piva = ?";
+            let sql = "UPDATE farma SET notificationToken = ? WHERE piva = ?";
 
             pool.query(sql, [this.notificationToken, this.piva],
                 (err) => {
