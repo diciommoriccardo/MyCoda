@@ -1,6 +1,9 @@
 import Router from 'express';
 import Session from '../../models/session.model.js';
 import Message from '../../models/message.model.js';
+import User from '../../models/user.model.js';
+import Pharmacy from '../../models/pharmacy.model.js';
+import notification from '../../helpers/notifications.js';
 
 const router = Router();
 
@@ -25,7 +28,42 @@ router.post('/:id', (req,res) => {
             idSession: result.id
         }))
         .then(message => message.create())
-        .then(result => res.status(201).json(result))
+        .then(result => {
+            let data = []
+            switch(type){
+                case 'user':
+                    new Pharmacy({
+                        piva: receiverId
+                    }).then(pharmacy => pharmacy.findByCf())
+                    .then(row => {
+                        data.push({
+                            pushToken: row[0].notificationToken,
+                            body: result.content,
+                            sender: result.mittente
+                        });
+
+                        notification.setData(data)
+                        .then(messages => notification.sendNotifications(messages))
+                    })
+                    break;
+                case 'pharmacy':
+                    new User({
+                        cf: receiverId
+                    }).then(user => user.findByCf())
+                    .then(row => {
+                        data.push({
+                            pushToken: row[0].notificationToken,
+                            body: result.content,
+                            sender: result.mittente
+                        });
+
+                        notification.setData(data)
+                        .then(messages => notification.sendNotifications(messages))
+                    })
+                    break;
+            }
+            return res.status(201).json(result);
+        })
         .catch(err => { return res.status(500).json(err); });
 })
 
