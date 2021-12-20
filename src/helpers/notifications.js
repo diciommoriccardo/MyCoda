@@ -8,18 +8,18 @@ const notification = {
         return new Promise((resolve, reject) => {
             let messages = [];
 
-            for(let row of data){
+            data.forEach(element => {
                 if(!expo.isExpoPushToken(row.pushToken)) reject(new customError('Invalid Push Token!'))
 
                 messages.push({
-                    to: row.pushToken,
+                    to: element.pushToken,
                     sound: 'default',
-                    body: row.body,
+                    body: element.body,
                     data: {
-                        sender: row.sender
+                        sender: element.sender
                     },
                 })
-            }
+            });
 
             resolve(messages)
         })
