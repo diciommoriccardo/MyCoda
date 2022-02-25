@@ -24,7 +24,7 @@ class Session {
     
                 pool.query(sql, [this],
                     function(err, res){
-                        if(err) reject(err);
+                        if(err) return reject(err);
                         
                         this.id = res.insertId;
                         resolve(this)
