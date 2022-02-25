@@ -9,7 +9,7 @@ const notification = {
             let messages = [];
 
             data.forEach(element => {
-                if(!expo.isExpoPushToken(element.pushToken)) reject(new customError('Invalid Push Token!'))
+                //if(!expo.isExpoPushToken(element.pushToken)) reject(new customError('Invalid Push Token!'))
 
                 messages.push({
                     to: element.pushToken,
