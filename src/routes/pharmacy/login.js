@@ -15,7 +15,7 @@ router.post('/login', function(req, res){
             const { piva, ragSociale, indirizzo, email, refresh_token } = row;
             var accessToken = jwt.signAccessToken({ id: piva, type: "pharmacy" });
             return res.status(200).json({
-                piva,
+                pIva,
                 ragSociale,
                 indirizzo,
                 email,
