@@ -7,8 +7,8 @@ router.get('', (req, res) => {
     new Pharmacy()
         .then(pharmacy => pharmacy.getAll())
         .then(result => res.status(200).json(result.map(pharmacy => {
-            const { pIva, email, indirizzo, ragSociale } = pharmacy;
-            return { pIva, email, indirizzo, ragSociale };
+            const { piva, email, indirizzo, ragSociale } = pharmacy;
+            return { piva, email, indirizzo, ragSociale };
         })) )
         .catch(err => { return res.status(500).json({ error: { message: err } }); });
 })
