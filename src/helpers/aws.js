@@ -4,6 +4,7 @@ import { AWS } from '../config/constants.js';
 import fs from 'fs';
 
 const s3 = new S3({
+    signatureVersion: 'v4',
     region: AWS.BUCKET_REGION,
     accessKeyId: AWS.ACCESS_KEY_ID,
     secretAccessKey: AWS.ACCESS_SECRET_KEY
