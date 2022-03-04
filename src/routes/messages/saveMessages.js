@@ -43,7 +43,7 @@ router.post('/:id', (req,res) => {
                                 pushToken: row[0].notificationToken,
                                 body: result.content,
                                 senderId: result.mittente,
-                                sender: sender[0].nome + " " + sender[0].cognome
+                                sender: `${sender[0].nome} ${sender[0].cognome}`
                             });
     
                             notification.setData(data)
