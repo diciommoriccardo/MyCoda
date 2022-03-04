@@ -43,7 +43,7 @@ router.post('/:id', (req,res) => {
                                 pushToken: row[0].notificationToken,
                                 body: result.content,
                                 senderId: result.mittente,
-                                sender: sender.nome + " " + sender.cognome
+                                sender: sender[0].nome + " " + sender[0].cognome
                             });
     
                             notification.setData(data)
@@ -63,7 +63,7 @@ router.post('/:id', (req,res) => {
                                 pushToken: row[0].notificationToken,
                                 body: result.content,
                                 senderId: result.mittente,
-                                sender: sender.ragSociale
+                                sender: sender[0].ragSociale
                             });
     
                             notification.setData(data)
