@@ -14,7 +14,7 @@ const notification = {
                 messages.push({
                     to: element.pushToken,
                     sound: 'default',
-                    title: 'TEST',
+                    title: element.sender,
                     body: element.body,
                     data: {
                         sender: element.sender
