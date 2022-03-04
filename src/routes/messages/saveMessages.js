@@ -34,6 +34,7 @@ router.post('/:id', (req,res) => {
                 case 'user':
                     new User({ cf: result.mittente }).then(user => user.findByCf())
                     .then(sender => {
+                        console.log(sender)
                         new Pharmacy({
                             piva: receiverId
                         }).then(pharmacy => pharmacy.findByCf())
@@ -53,6 +54,7 @@ router.post('/:id', (req,res) => {
                 case 'pharmacy':
                     new Pharmacy({ pIva: result.mittente }).then(pharmacy => pharmacy.findByCf())
                     .then(sender => {
+                        console.log(sender);
                         new User({
                             cf: receiverId
                         }).then(user => user.findByCf())
