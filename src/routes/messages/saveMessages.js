@@ -52,7 +52,7 @@ router.post('/:id', (req,res) => {
                     })
                     break;
                 case 'pharmacy':
-                    new Pharmacy({ pIva: result.mittente }).then(pharmacy => pharmacy.findByCf())
+                    new Pharmacy({ piva: result.mittente }).then(pharmacy => pharmacy.findByCf())
                     .then(sender => {
                         console.log(sender);
                         new User({
