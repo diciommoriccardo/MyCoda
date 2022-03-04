@@ -17,7 +17,7 @@ const notification = {
                     title: element.sender,
                     body: element.body,
                     data: {
-                        sender: element.sender
+                        sender: element.senderId
                     },
                 })
             });

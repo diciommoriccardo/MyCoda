@@ -32,33 +32,41 @@ router.post('/:id', (req,res) => {
             let data = []
             switch(type){
                 case 'user':
-                    new Pharmacy({
-                        piva: receiverId
-                    }).then(pharmacy => pharmacy.findByCf())
-                    .then(row => {
-                        data.push({
-                            pushToken: row[0].notificationToken,
-                            body: result.content,
-                            sender: result.mittente
-                        });
-
-                        notification.setData(data)
-                        .then(messages => notification.sendNotifications(messages))
+                    new User({ cf: result.mittente }).then(user => user.findByCf())
+                    .then(sender => {
+                        new Pharmacy({
+                            piva: receiverId
+                        }).then(pharmacy => pharmacy.findByCf())
+                        .then(row => {
+                            data.push({
+                                pushToken: row[0].notificationToken,
+                                body: result.content,
+                                senderId: result.mittente,
+                                sender: sender.nome + " " + sender.cognome
+                            });
+    
+                            notification.setData(data)
+                            .then(messages => notification.sendNotifications(messages))
+                        })
                     })
                     break;
                 case 'pharmacy':
-                    new User({
-                        cf: receiverId
-                    }).then(user => user.findByCf())
-                    .then(row => {
-                        data.push({
-                            pushToken: row[0].notificationToken,
-                            body: result.content,
-                            sender: result.mittente
-                        });
-
-                        notification.setData(data)
-                        .then(messages => notification.sendNotifications(messages))
+                    new Pharmacy({ pIva: result.mittente }).then(pharmacy => pharmacy.findByCf())
+                    .then(sender => {
+                        new User({
+                            cf: receiverId
+                        }).then(user => user.findByCf())
+                        .then(row => {
+                            data.push({
+                                pushToken: row[0].notificationToken,
+                                body: result.content,
+                                senderId: result.mittente,
+                                sender: sender.ragSociale
+                            });
+    
+                            notification.setData(data)
+                            .then(messages => notification.sendNotifications(messages))
+                        })
                     })
                     break;
             }
