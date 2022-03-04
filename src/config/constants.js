@@ -3,7 +3,7 @@ dotenv.config();
 
 const JWT = {
   SECRET_KEY: process.env.ACCESS_TOKEN_SECRET,
-  EXPIRES_IN: 3600,
+  EXPIRES_IN: 10.800,
 };
 
 const REFRESH_TOKEN = {
