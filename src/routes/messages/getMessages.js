@@ -21,9 +21,8 @@ router.get('/:id', (req, res) => {
     .then(result => new Message({ idSession: result[0].id, mittente: receiverId }))
     .then(message => message.changeStatusForSession())
     .then(message => message.findBySession(offset, limit))
-    .then(messages => { console.log(messages);
-
-        return Promise.all(messages.map(({id, mittente, content, time, tipo, stato, idSession}) => {
+    .then(messages => { 
+        return Promise.all(messages.map(({id, mittente, content, time, tipo, readed, idSession}) => {
             return new Promise((resolve, reject) => {
                 switch (tipo) {
                     case 3:
@@ -39,7 +38,7 @@ router.get('/:id', (req, res) => {
                             resolve({
                                 id,
                                 mittente,
-                                readed: (stato == 'letto') ? true : false,
+                                readed,
                                 time,
                                 tipo,
                                 idSession,
@@ -62,7 +61,7 @@ router.get('/:id', (req, res) => {
                             location: content, 
                             time, 
                             tipo, 
-                            readed: (stato == 'letto') ? true : false,
+                            readed,
                             idSession
                         })
                         break;
@@ -73,7 +72,7 @@ router.get('/:id', (req, res) => {
                             content, 
                             time, 
                             tipo, 
-                            readed: (stato == 'letto') ? true : false,
+                            readed,
                             idSession
                         })
                         break;
