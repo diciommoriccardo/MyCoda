@@ -21,8 +21,9 @@ router.get('/:id', (req, res) => {
     .then(result => new Message({ idSession: result[0].id, mittente: receiverId }))
     .then(message => message.changeStatusForSession())
     .then(message => message.findBySession(offset, limit))
-    .then(messages => 
-        Promise.all(messages.map(({id, mittente, content, time, tipo, stato, idSession}) => {
+    .then(messages => { console.log(messages);
+
+        return Promise.all(messages.map(({id, mittente, content, time, tipo, stato, idSession}) => {
             return new Promise((resolve, reject) => {
                 switch (tipo) {
                     case 3:
@@ -38,7 +39,7 @@ router.get('/:id', (req, res) => {
                             resolve({
                                 id,
                                 mittente,
-                                readed: (stato === 'letto' ? true : false),
+                                readed: stato === 'letto' ? true : false,
                                 time,
                                 tipo,
                                 idSession,
@@ -61,7 +62,7 @@ router.get('/:id', (req, res) => {
                             location: content, 
                             time, 
                             tipo, 
-                            readed: (stato === 'letto' ? true : false),
+                            readed: stato === 'letto' ? true : false,
                             idSession
                         })
                         break;
@@ -72,14 +73,14 @@ router.get('/:id', (req, res) => {
                             content, 
                             time, 
                             tipo, 
-                            readed: (stato === 'letto' ? true : false),
+                            readed: stato === 'letto' ? true : false,
                             idSession
                         })
                         break;
                 }
             })
         }))   
-    )
+    })
     .then(result => res.status(200).json(result))
     .catch(err => res.status(500).json({error : err}))
 })
