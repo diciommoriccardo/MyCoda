@@ -12,7 +12,7 @@ class Payment {
             this.desc = payment.desc
             this.stato = payment.stato || 'pending'
             this.paypalId = payment.paypalId
-            this.qrLink = payment.qrLink
+            this.storageKey = payment.storageKey
             resolve(this)
         })
     }

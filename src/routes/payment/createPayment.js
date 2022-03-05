@@ -45,7 +45,8 @@ router.post('/:id', (req, res) => {
                     somma,
                     desc,
                     stato: paymentInfo.stato,
-                    paypalId: paymentInfo.id
+                    paypalId: paymentInfo.id,
+                    storageKey: 3,
                 }
                 new Payment(payment)
                 .then(payment => payment.create())
