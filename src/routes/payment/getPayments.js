@@ -13,15 +13,7 @@ router.get('', (req, res) => {
 
     new Payment(payment)
     .then(payment => (type === 'user' ? payment.findByUser() : payment.findByPharma()))
-    .then(result => res.status(200).json({
-        id: result[0].id,
-        cfUtente: result[0].cfUtente,
-        pivaFarma: result[0].pivaFarma,
-        time: result[0].time,
-        somma: result[0].somma,
-        desc: result[0].desc,
-        stato: result[0].stato
-    }))
+    .then(result => res.status(200).json(result))
     .catch(err => { return res.status(500).json({error: {message: err}})})
 
 })
