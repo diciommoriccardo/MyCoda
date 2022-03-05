@@ -49,6 +49,7 @@ router.get('/:id', (req, res) => {
                                     description: result[0].desc,
                                     stato: result[0].stato,
                                     paypalId: result[0].paypalId,
+                                    storageKey: result[0].storageKey,
                                     approvalUrl: (result[0].stato === 'CREATED' ? approvalUrl : null)
                                 }
                         })})
