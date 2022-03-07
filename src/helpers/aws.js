@@ -22,7 +22,7 @@ const s3Upload = (file) => {
             if(err) reject(err)
 
 
-            var config = {Bucket: AWS.BUCKET_NAME, Key: result.Key};
+            var config = {Bucket: AWS.BUCKET_NAME, Key: result.Key, Expires: 60 * 60 * 24 * 2};
             var promise = s3.getSignedUrlPromise('getObject', config);
             promise.then(url => resolve(url))
         })
