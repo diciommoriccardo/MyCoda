@@ -20,6 +20,8 @@ import successPayment from '../routes/payment/success.js';
 import uploadImages from '../routes/images/upload.js';
 import getImage from '../routes/images/getImage.js';
 import addToken from '../routes/pushNotifications/addToken.js';
+import getByPiva from '../routes/pharmacy/getByPiva.js';
+import getByCf from '../routes/user/getByCf.js';
 
 
 class Router {
@@ -29,8 +31,8 @@ class Router {
             '/api': [
                 tokenRenewal,
                 {
-                    '/users': [userLogin, userRegister, authMiddleware, userMe],
-                    '/pharmacies': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, pharmacyMe],
+                    '/users': [userLogin, userRegister, authMiddleware, userMe, getByCf],
+                    '/pharmacies': [pharmacyLogin, pharmacyRegister, authMiddleware, getAll, pharmacyMe, getByPiva],
                     '/payments' : [successPayment, authMiddleware, createPayment, getPayments],
                     '/sessions' : [authMiddleware, getOpenSession, getSessions, closeSession],
                     '/messages' : [authMiddleware, sendMessage, getMessages, readMessage],
