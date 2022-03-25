@@ -17,10 +17,10 @@ router.post('/:id', (req, res) => {
     .then(accessToken => {
 
         const pharmacy = {
-            pivaFarma: req.user.id
+            piva: req.user.id
         }
 
-        new Pharmacy(pharmacy)
+        new Pharmacy(pharmacy).then(pharmacy => pharmacy.findByCf())
         .then(pharmacy => {
             const payeeEmail = pharmacy.paypalEmail;
             Paypal.create(somma, payeeEmail, accessToken)
