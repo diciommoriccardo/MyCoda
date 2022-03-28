@@ -41,7 +41,7 @@ router.post('/:id', (req,res) => {
                         .then(row => {
                             data.push({
                                 pushToken: row[0].notificationToken,
-                                body: result.content,
+                                body: (result.tipo == 1 ) ? "📷 Foto" : result.content,
                                 senderId: result.mittente,
                                 sender: `${sender[0].nome} ${sender[0].cognome}`
                             });
