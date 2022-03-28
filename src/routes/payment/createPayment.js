@@ -3,6 +3,8 @@ import Payment from '../../models/payment.model.js';
 import Message from '../../models/message.model.js';
 import Session from '../../models/session.model.js';
 import Pharmacy from '../../models/pharmacy.model.js';
+import User from '../../models/user.model.js';
+import notification from '../../helpers/notifications.js';
 import Paypal from '../../helpers/paypal.js';
 import {SUCCESS_ITA} from '../../config/constants.js';
 
@@ -65,8 +67,25 @@ router.post('/:id', (req, res) => {
                     }))
                     .then(message => message.create())
                     .then(message => {
+                        let data = [];
                         const {id, mittente, time, content, stato, tipo, idSession} = message;
                         const approvalUrl = paymentInfo.approvalUrl;
+
+                        new User({cf: req.params.id}).then(user => user.findByCf())
+                        .then(receiver => {
+                            console.log(receiver)
+                            data.push({
+                                pushToken: receiver[0].notificationToken,
+                                body: `Nuovo pagamento richiesto: ${content}`,
+                                senderId: pharmacy[0].piva,
+                                sender: `${pharmacy[0].ragSociale}`
+                            });
+                            console.log(data)
+
+                            notification.setData(data)
+                            .then(messages => notification.sendNotifications(messages))
+                        })
+                        
                         return res.status(201).json({
                             payment: {
                                 id: result[0].id,

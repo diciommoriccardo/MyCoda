@@ -29,6 +29,7 @@ router.post('/:id', (req,res) => {
         }))
         .then(message => message.create())
         .then(result => {
+            console.log(result)
             let data = []
             switch(type){
                 case 'user':
@@ -45,7 +46,8 @@ router.post('/:id', (req,res) => {
                                 senderId: result.mittente,
                                 sender: `${sender[0].nome} ${sender[0].cognome}`
                             });
-    
+                            
+                            console.log(data)
                             notification.setData(data)
                             .then(messages => notification.sendNotifications(messages))
                         })
