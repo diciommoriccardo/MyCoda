@@ -22,7 +22,7 @@ router.post('/:id', (req, res) => {
 
         new Pharmacy(pharmacy).then(pharmacy => pharmacy.findByCf())
         .then(pharmacy => {
-            const payeeEmail = pharmacy.paypalEmail;
+            const payeeEmail = pharmacy[0].paypalEmail;
             Paypal.create(somma, payeeEmail, accessToken)
             .then(paymentObj => {
                 for(let i = 0; i < paymentObj.data.links.length; i++){
