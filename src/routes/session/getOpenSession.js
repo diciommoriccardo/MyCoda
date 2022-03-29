@@ -29,6 +29,7 @@ router.get('/open', (req, res) => {
                             createdAt: time,
                             newMessagesCount,
                             lastMessage,
+                            propic: user[0].propic
                         }))
                         .catch(error => reject(error));
                 })
