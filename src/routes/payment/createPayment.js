@@ -91,7 +91,7 @@ router.post('/:id', (req, res) => {
                                 id: result[0].id,
                                 cfUtente: result[0].cfUtente,
                                 pivaFarma: result[0].pivaFarma,
-                                amount: result[0].somma,
+                                somma: result[0].somma,
                                 description: result[0].desc,
                                 time: result[0].time,
                                 status: result[0].stato,
