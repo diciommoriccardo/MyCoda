@@ -12,7 +12,7 @@ router.post('/register', function(req, res){
     new User (req.body)
     .then(user => user.register())
     .then(result => { return res.status(201).json({result, message: SUCCESS_ITA.REGISTER}) }) 
-    .catch(err => { return res.status(500).json({error: {message: err}})})      
+    .catch(err => { console.log(err); return res.status(500).json({error: {message: err}})})      
 });
 
 export default router;
