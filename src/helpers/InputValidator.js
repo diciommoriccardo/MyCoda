@@ -23,7 +23,7 @@ class InputValidator {
             },
             email: {
                 type: "string",
-                email: true
+                //email: true
             },
             password: {
                 type: "string",
