@@ -50,6 +50,10 @@ const AWS = {
   CLOUDFRONT_PATH: process.env.CF_PATH
 }
 
+const REG = {
+  EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+}
+
 export {
   JWT,
   REFRESH_TOKEN,
@@ -57,5 +61,6 @@ export {
   SUCCESS_ITA,
   SUCCESS_EN,
   PAYPAL,
-  AWS
+  AWS,
+  REG
 };
